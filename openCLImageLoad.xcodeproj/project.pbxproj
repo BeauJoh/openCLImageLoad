@@ -1,0 +1,201 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8B0443231367A8EC00D919D5 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 8B0443221367A8EC00D919D5 /* main.c */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		8B04431C1367A8EC00D919D5 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		8B04431E1367A8EC00D919D5 /* openCLImageLoad */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = openCLImageLoad; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B0443221367A8EC00D919D5 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		8B0443241367A8EC00D919D5 /* openCLImageLoad.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = openCLImageLoad.1; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8B04431B1367A8EC00D919D5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		8B0443131367A8EC00D919D5 = {
+			isa = PBXGroup;
+			children = (
+				8B0443211367A8EC00D919D5 /* openCLImageLoad */,
+				8B04431F1367A8EC00D919D5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		8B04431F1367A8EC00D919D5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8B04431E1367A8EC00D919D5 /* openCLImageLoad */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8B0443211367A8EC00D919D5 /* openCLImageLoad */ = {
+			isa = PBXGroup;
+			children = (
+				8B0443221367A8EC00D919D5 /* main.c */,
+				8B0443241367A8EC00D919D5 /* openCLImageLoad.1 */,
+			);
+			path = openCLImageLoad;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8B04431D1367A8EC00D919D5 /* openCLImageLoad */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8B0443271367A8EC00D919D5 /* Build configuration list for PBXNativeTarget "openCLImageLoad" */;
+			buildPhases = (
+				8B04431A1367A8EC00D919D5 /* Sources */,
+				8B04431B1367A8EC00D919D5 /* Frameworks */,
+				8B04431C1367A8EC00D919D5 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = openCLImageLoad;
+			productName = openCLImageLoad;
+			productReference = 8B04431E1367A8EC00D919D5 /* openCLImageLoad */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8B0443151367A8EC00D919D5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				ORGANIZATIONNAME = "University Of New England";
+			};
+			buildConfigurationList = 8B0443181367A8EC00D919D5 /* Build configuration list for PBXProject "openCLImageLoad" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 8B0443131367A8EC00D919D5;
+			productRefGroup = 8B04431F1367A8EC00D919D5 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8B04431D1367A8EC00D919D5 /* openCLImageLoad */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8B04431A1367A8EC00D919D5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8B0443231367A8EC00D919D5 /* main.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		8B0443251367A8EC00D919D5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		8B0443261367A8EC00D919D5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		8B0443281367A8EC00D919D5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		8B0443291367A8EC00D919D5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8B0443181367A8EC00D919D5 /* Build configuration list for PBXProject "openCLImageLoad" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8B0443251367A8EC00D919D5 /* Debug */,
+				8B0443261367A8EC00D919D5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8B0443271367A8EC00D919D5 /* Build configuration list for PBXNativeTarget "openCLImageLoad" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8B0443281367A8EC00D919D5 /* Debug */,
+				8B0443291367A8EC00D919D5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 8B0443151367A8EC00D919D5 /* Project object */;
+}
