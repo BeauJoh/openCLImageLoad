@@ -63,12 +63,15 @@ int main(int argc, char *argv[])
         cleanKill(EXIT_FAILURE);
     }
     
+    // Load kernel source code
+    //
 	char *source = load_program_source("sobel_opt1.cl");
     if(!source)
     {
         cout << "Error: Failed to load compute program from file!" << endl;
         cleanKill(EXIT_FAILURE);
     }
+    
 	// Create the compute program from the source buffer
 	//
 	if(!(program = clCreateProgramWithSource(context, 1, (const char **) &source, NULL, &err))){
@@ -83,10 +86,9 @@ int main(int argc, char *argv[])
 	{
 		size_t len;
 		char buffer[2048];
-		
-		printf("Error: Failed to build program executable!\n");
+		cout << "Error: Failed to build program executable!" << endl;
 		clGetProgramBuildInfo(program, device_id, CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
-		printf("%s\n", buffer);
+		cout << buffer << endl;
         cleanKill(EXIT_FAILURE);
 	}
     
@@ -97,15 +99,12 @@ int main(int argc, char *argv[])
 	// Create the compute kernel in the program we wish to run
 	//
 	kernel = clCreateKernel(program, "sobel", &err);
-	if (!kernel || err != CL_SUCCESS)
-		FATAL("Failed to create compute kernel!");
-	
-	// Create the input and output arrays in device memory for our calculation
-	//
     
-	//input = clCreateBuffer(context,  CL_MEM_READ_ONLY,  dib.image_size, NULL, NULL);
-	//output = clCreateBuffer(context, CL_MEM_WRITE_ONLY, dib.image_size, NULL, NULL);
-
+	if (!kernel || err != CL_SUCCESS){
+		cout << "Failed to create compute kernel!" << endl;
+        cleanKill(EXIT_FAILURE);
+    }
+	
 //    getGPUUnitSupportedImageFormats(context);
     
     // specify the image format that the images a represented with
@@ -130,7 +129,7 @@ int main(int argc, char *argv[])
     //CL_UNSIGNED_INT16 would be ideal Each channel component is an unnormalized unsigned 16-bit integer value. But not compatible for image_channel_order of  CL_INTENSITY
     
     if(!data){
-        printf("the input image is empty\n");
+        cout << "The input image is empty" << endl;
         cleanKill(EXIT_FAILURE);
     }
     
@@ -163,12 +162,13 @@ int main(int argc, char *argv[])
                                 &err);
 
     if(there_was_an_error(err)){
-        printf("Output Image Buffer creation error!\n");
+        cout << "Output Image Buffer creation error!" << endl;
         cleanKill(EXIT_FAILURE);
     }    
     
 	if (!input || !output ){
-		FATAL("Failed to allocate device memory!");
+		cout << "Failed to allocate device memory!" << endl;
+        cleanKill(EXIT_FAILURE);
 	}
     
 	// Write our data set into the input array in device memory
@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
                                 &err);
     
     if(there_was_an_error(err)){
-        printf("Error creating CL sampler object.");
+        cout << "Error creating CL sampler object." << endl;
         cleanKill(EXIT_FAILURE);
     }
     
@@ -192,8 +192,8 @@ int main(int argc, char *argv[])
 //
 //	if (err != CL_SUCCESS)
 //	{
-//		printf("Error: Failed to write to source array!\n");
-//		exit(1);
+//		cout << "Error: Failed to write to source array!" << endl;
+//		cleanKill(EXIT_FAILURE);
 //	}
 //    
     
@@ -208,39 +208,39 @@ int main(int argc, char *argv[])
     err |= clSetKernelArg(kernel, 4, sizeof(cl_int), &height);
     
     if(there_was_an_error(err)){
-        printf("Error: Failed to set kernel arguments! %d\n", err);
+        cout << "Error: Failed to set kernel arguments! " << err << endl;
         cleanKill(EXIT_FAILURE);
     }    
     
 	// Get the maximum work group size for executing the kernel on the device
 	//
-//	err = clGetKernelWorkGroupInfo(kernel, device_id, CL_KERNEL_WORK_GROUP_SIZE, sizeof(int) * 4 + sizeof(float) * 2, &local, NULL);
+    //  err = clGetKernelWorkGroupInfo(kernel, device_id, CL_KERNEL_WORK_GROUP_SIZE, sizeof(int) * 4 + sizeof(float) * 2, &local, NULL);
 
 	err = clGetKernelWorkGroupInfo(kernel, device_id, CL_KERNEL_WORK_GROUP_SIZE, sizeof(unsigned short)* getImageLength()*getImageWidth(), &local, NULL);
 
 	if (err != CL_SUCCESS)
 	{
-        printf("%s\n", print_cl_errstring(err));
+        cout << print_cl_errstring(err) << endl;
         if(err == CL_INVALID_VALUE){
-            printf("if param_name is not valid, or if size in bytes specified by param_value_size \n");
-            printf("is less than the size of return type as described in the table above and \n");
-            printf("param_value is not NULL.");
+            cout << "if param_name is not valid, or if size in bytes specified by param_value_size "
+            << "is less than the size of return type as described in the table above and "
+            << "param_value is not NULL." << endl;
         }
-		printf("Error: Failed to retrieve kernel work group info! %d\n", err);
+		cout << "Error: Failed to retrieve kernel work group info!" << err << endl;
 		cleanKill(EXIT_FAILURE);
 	}
 	
 	// Execute the kernel over the entire range of our 1d input data set
 	// using the maximum number of work group items for this device
 	//
-	global =sizeof(unsigned short)* getImageLength()*getImageWidth();
-	//local = 64;
+    global = sizeof(unsigned short)* getImageLength()*getImageWidth();
+	local = 64;
     
 	err = clEnqueueNDRangeKernel(commands, kernel, 2, NULL, &global, &local, 0, NULL, NULL);
 	if (err)
 	{
-        printf("%s\n", print_cl_errstring(err));
-		printf("Failed to execute kernel!, %d\n", err);
+        cout << print_cl_errstring(err) << endl;
+		cout << "Failed to execute kernel!, " << err << endl;
         cleanKill(EXIT_FAILURE);
 	}
 	
@@ -268,8 +268,8 @@ int main(int argc, char *argv[])
 	//err = clEnqueueReadImage(commands, output, CL_TRUE, origin, region, getImageRowPitch(), getImageSlicePitch(), out, 0, NULL, NULL);  
 	if (err != CL_SUCCESS)
 	{
-		printf("Error: Failed to read output array! %d\n", err);
-		printf("%s\n", print_cl_errstring(err));
+		cout << "Error: Failed to read output array! " << err << endl;
+		cout << print_cl_errstring(err) << endl;
         cleanKill(EXIT_FAILURE);
 	}
 	
