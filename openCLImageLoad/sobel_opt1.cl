@@ -1,9 +1,7 @@
 const int order = 1;
 
-__kernel void sobel(__global uint8_t* data, __global uint8_t* out)
+__kernel void sobel(__read_only image2d_t srcImg, __write_only image2d_t dstImg, sampler_t sampler, int width, int height))
 {
-	gid = get_global_id(0);	
-	out[gid] = data[gid];
-    
+	gid = get_global_id(0);	    
 }
 

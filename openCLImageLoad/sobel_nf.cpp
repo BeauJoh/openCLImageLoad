@@ -1,58 +1,81 @@
 #include "io_tiff.h"
 #include "openCLUtilities.h"
+#include <iostream>
+using namespace std;
+
+uint16 *data = NULL, *out = NULL;
+
+// OpenCL variables
+int err, gpu;                            // error code returned from api calls
+
+size_t global;                      // global domain size for our calculation
+size_t local;                       // local domain size for our calculation
+
+cl_device_id device_id;             // compute device id 
+cl_context context;                 // compute context
+cl_command_queue commands;          // compute command queue
+cl_program program;                 // compute program
+cl_kernel kernel;                   // compute kernel
+cl_sampler sampler;
+cl_mem input;                       // device memory used for the input array
+cl_mem output;                      // device memory used for the output array
+int width, height;                  //input and output image specs
+
+void cleanKill(int errNumber){
+    clReleaseMemObject(input);
+	clReleaseMemObject(output);
+	clReleaseProgram(program);
+    clReleaseSampler(sampler);
+	clReleaseKernel(kernel);
+	clReleaseCommandQueue(commands);
+	clReleaseContext(context);
+    exit(errNumber);
+}
 
 int main(int argc, char *argv[])
 {
-
-	uint16 *data = NULL, *out = NULL;
-	
-	// OpenCL variables
-	int err, gpu;                            // error code returned from api calls
-	
-	size_t global;                      // global domain size for our calculation
-	size_t local;                       // local domain size for our calculation
-	
-	cl_device_id device_id;             // compute device id 
-	cl_context context;                 // compute context
-	cl_command_queue commands;          // compute command queue
-	cl_program program;                 // compute program
-	cl_kernel kernel;                   // compute kernel
-	
-	cl_mem input;                       // device memory used for the input array
-	cl_mem output;                      // device memory used for the output array
 	
     data = read_tiff((char*)"GMARBLES.tif");
     
     //data = normalizeData(data);
     
-	out = new uint16[getSamplesPerPixel() * getImageWidth() * getImageLength()];
+	//out = new uint16[getSamplesPerPixel() * getImageWidth() * getImageLength()];
 	
 	// Connect to a compute device
 	//
 	gpu = 1;
-	if(clGetDeviceIDs(NULL, gpu ? CL_DEVICE_TYPE_GPU : CL_DEVICE_TYPE_CPU, 1, &device_id, NULL) != CL_SUCCESS)
-		FATAL("Failed to create a device group!");
+	if(clGetDeviceIDs(NULL, gpu ? CL_DEVICE_TYPE_GPU : CL_DEVICE_TYPE_CPU, 1, &device_id, NULL) != CL_SUCCESS)  {
+		cout << "Failed to create a device group!" << endl;
+        cleanKill(EXIT_FAILURE);
+    }
 	
 	// Create a compute context 
 	//
-	if(!(context = clCreateContext(0, 1, &device_id, NULL, NULL, &err)))
-		FATAL("Failed to create a compute context!");
+	if(!(context = clCreateContext(0, 1, &device_id, NULL, NULL, &err))){
+		cout << "Failed to create a compute context!" << endl;
+        cleanKill(EXIT_FAILURE);
+    }
 	
 	// Create a command commands
 	//
-	if(!(commands = clCreateCommandQueue(context, device_id, 0, &err)))
-		FATAL("Failed to create a command commands!");
+	if(!(commands = clCreateCommandQueue(context, device_id, 0, &err))) {
+		cout << "Failed to create a command commands!" << endl;
+        cleanKill(EXIT_FAILURE);
+    }
+    
 	char *source = load_program_source("sobel_opt1.cl");
     if(!source)
     {
-        printf("Error: Failed to load compute program from file!\n");
-        return EXIT_FAILURE;    
+        cout << "Error: Failed to load compute program from file!" << endl;
+        cleanKill(EXIT_FAILURE);
     }
 	// Create the compute program from the source buffer
 	//
-	if(!(program = clCreateProgramWithSource(context, 1, (const char **) &source, NULL, &err)))
-		FATAL("Failed to create compute program!");
-	
+	if(!(program = clCreateProgramWithSource(context, 1, (const char **) &source, NULL, &err))){
+		cout << "Failed to create compute program!" << endl;
+        cleanKill(EXIT_FAILURE);
+    }
+    
 	// Build the program executable
 	//
 	err = clBuildProgram(program, 0, NULL, NULL, NULL, NULL);
@@ -64,8 +87,12 @@ int main(int argc, char *argv[])
 		printf("Error: Failed to build program executable!\n");
 		clGetProgramBuildInfo(program, device_id, CL_PROGRAM_BUILD_LOG, sizeof(buffer), buffer, &len);
 		printf("%s\n", buffer);
-		exit(1);
+        cleanKill(EXIT_FAILURE);
 	}
+    
+    if(!doesGPUSupportImageObjects){
+        cleanKill(EXIT_FAILURE);
+    }
 	
 	// Create the compute kernel in the program we wish to run
 	//
@@ -79,12 +106,17 @@ int main(int argc, char *argv[])
 	//input = clCreateBuffer(context,  CL_MEM_READ_ONLY,  dib.image_size, NULL, NULL);
 	//output = clCreateBuffer(context, CL_MEM_WRITE_ONLY, dib.image_size, NULL, NULL);
 
-    getGPUUnitSupportedImageFormats(context);
+//    getGPUUnitSupportedImageFormats(context);
     
     // specify the image format that the images a represented with
 	cl_image_format format;
-	format.image_channel_data_type = CL_UNORM_INT16;
-	format.image_channel_order = CL_INTENSITY;
+	format.image_channel_data_type = CL_UNSIGNED_INT16;
+	format.image_channel_order = CL_A;
+    
+    // Create ouput image object 
+    cl_image_format alternateImageFormat; 
+    alternateImageFormat.image_channel_order = CL_RGBA; 
+    alternateImageFormat.image_channel_data_type = CL_UNORM_INT8;
     
 //    format.image_channel_data_type = CL_UNSIGNED_INT8;
 //	format.image_channel_order = CL_RGBA;
@@ -99,53 +131,87 @@ int main(int argc, char *argv[])
     
     if(!data){
         printf("the input image is empty\n");
-        return -1;
+        cleanKill(EXIT_FAILURE);
     }
     
-//    input = clCreateImage2D(context, CL_MEM_READ_ONLY|CL_MEM_USE_HOST_PTR, &format, getImageWidth(), getImageLength(), getImageRowPitch(), data, &err); 
-    input = clCreateImage2D(context, CL_MEM_ALLOC_HOST_PTR, &format, getImageWidth(), getImageLength(), 0, NULL, &err); 
+    width = getImageWidth();
+    height = getImageLength();
+    
+    input = clCreateImage2D(context, 
+                            CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 
+                            &format, 
+                            width, 
+                            height, 
+                            getImageRowPitch(), 
+                            data, 
+                                &err); 
     
     if(there_was_an_error(err)){
-        printf("clCreateImage2D for input failed\n");
-        return -1;
+        cleanKill(EXIT_FAILURE);
     }
     
-//    output = clCreateImage2D(context, CL_MEM_WRITE_ONLY|CL_MEM_USE_HOST_PTR, &format, getImageWidth(), getImageLength(), getImageRowPitch(), out, &err);
-//
-//    if(there_was_an_error(err)){
-//        printf("clCreateImage2D for output failed\n");
-//        return -1;
-//    }
-
     
-	if (!input || !output )
+    //getGPUUnitSupportedImageFormats(context);
+
+    output = clCreateImage2D(context, 
+                             CL_MEM_WRITE_ONLY, 
+                             &format, 
+                             width, 
+                             height,
+                             getImageRowPitch(), 
+                             NULL, 
+                                &err);
+
+    if(there_was_an_error(err)){
+        printf("Output Image Buffer creation error!\n");
+        cleanKill(EXIT_FAILURE);
+    }    
+    
+	if (!input || !output ){
 		FATAL("Failed to allocate device memory!");
-	
+	}
     
 	// Write our data set into the input array in device memory
-    const size_t origin[3] = {0, 0, 0};
-    const size_t region[3] = {getImageWidth(), getImageLength(), 1}; 
+//    const size_t origin[3] = {0, 0, 0};
+//    const size_t region[3] = {getImageWidth(), getImageLength(), 1}; 
+//    
     
-    err = clEnqueueWriteImage(commands, input, CL_TRUE, origin, region, 0, 0, data, 0, NULL, NULL);
-
-	if (err != CL_SUCCESS)
-	{
-		printf("Error: Failed to write to source array!\n");
-		exit(1);
-	}
-	
+    // Create sampler for sampling image object 
+    sampler = clCreateSampler(context,
+                              CL_FALSE, // Non-normalized coordinates 
+                              CL_ADDRESS_CLAMP_TO_EDGE, 
+                              CL_FILTER_NEAREST, 
+                                &err);
+    
+    if(there_was_an_error(err)){
+        printf("Error creating CL sampler object.");
+        cleanKill(EXIT_FAILURE);
+    }
+    
+//    err = clEnqueueWriteImage(commands, input, CL_TRUE, origin, region, 0, 0, data, 0, NULL, NULL);
+//
+//	if (err != CL_SUCCESS)
+//	{
+//		printf("Error: Failed to write to source array!\n");
+//		exit(1);
+//	}
+//    
+    
+    
 	// Set the arguments to our compute kernel
 	//
 	err = 0;
 	err  = clSetKernelArg(kernel, 0, sizeof(cl_mem), &input);
 	err |= clSetKernelArg(kernel, 1, sizeof(cl_mem), &output);
-
-	if (err != CL_SUCCESS)
-	{
-		printf("Error: Failed to set kernel arguments! %d\n", err);
-		exit(1);
-	}
-
+    err |= clSetKernelArg(kernel, 2, sizeof(cl_sampler), &sampler); 
+    err |= clSetKernelArg(kernel, 3, sizeof(cl_int), &width);
+    err |= clSetKernelArg(kernel, 4, sizeof(cl_int), &height);
+    
+    if(there_was_an_error(err)){
+        printf("Error: Failed to set kernel arguments! %d\n", err);
+        cleanKill(EXIT_FAILURE);
+    }    
+    
 	// Get the maximum work group size for executing the kernel on the device
 	//
 //	err = clGetKernelWorkGroupInfo(kernel, device_id, CL_KERNEL_WORK_GROUP_SIZE, sizeof(int) * 4 + sizeof(float) * 2, &local, NULL);
@@ -161,7 +227,7 @@ int main(int argc, char *argv[])
             printf("param_value is not NULL.");
         }
 		printf("Error: Failed to retrieve kernel work group info! %d\n", err);
-		exit(1);
+		cleanKill(EXIT_FAILURE);
 	}
 	
 	// Execute the kernel over the entire range of our 1d input data set
@@ -175,7 +241,7 @@ int main(int argc, char *argv[])
 	{
         printf("%s\n", print_cl_errstring(err));
 		printf("Failed to execute kernel!, %d\n", err);
-        exit(1);
+        cleanKill(EXIT_FAILURE);
 	}
 	
 	// Wait for the command commands to get serviced before reading back results
@@ -199,29 +265,17 @@ int main(int argc, char *argv[])
 //                                 NULL,           //              const cl_event *event_wait_list,
 //                                 NULL            //              cl_event *event)
 //                                 
-	err = clEnqueueReadImage(commands, output, CL_TRUE, origin, region, getImageRowPitch(), getImageSlicePitch(), out, 0, NULL, NULL);  
+	//err = clEnqueueReadImage(commands, output, CL_TRUE, origin, region, getImageRowPitch(), getImageSlicePitch(), out, 0, NULL, NULL);  
 	if (err != CL_SUCCESS)
 	{
 		printf("Error: Failed to read output array! %d\n", err);
 		printf("%s\n", print_cl_errstring(err));
-        clReleaseMemObject(input);
-        clReleaseMemObject(output);
-        clReleaseProgram(program);
-        clReleaseKernel(kernel);
-        clReleaseCommandQueue(commands);
-        clReleaseContext(context);
-        exit(1);
+        cleanKill(EXIT_FAILURE);
 	}
 	
 	// Shutdown and cleanup
 	//
-	clReleaseMemObject(input);
-	clReleaseMemObject(output);
-	clReleaseProgram(program);
-	clReleaseKernel(kernel);
-	clReleaseCommandQueue(commands);
-	clReleaseContext(context);
+	cleanKill(EXIT_SUCCESS);
 	
 //write image here	
-	return 0;
 }

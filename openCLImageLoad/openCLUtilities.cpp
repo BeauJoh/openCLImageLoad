@@ -69,6 +69,16 @@ cl_bool there_was_an_error(cl_int err){
     return 0;
 }
 
+cl_bool doesGPUSupportImageObjects(cl_device_id device_id){
+    // Make sure the device supports images, otherwise exit 
+    cl_bool imageSupport = CL_FALSE; 
+    clGetDeviceInfo(device_id, CL_DEVICE_IMAGE_SUPPORT, sizeof(cl_bool), &imageSupport, NULL); 
+    if (imageSupport != CL_TRUE){
+        printf("OpenCL device does not support images.");
+    }
+    return imageSupport;
+}
+
 void getGPUUnitSupportedImageFormats(cl_context context){
     
     cl_image_format supported_image_formats[1000];

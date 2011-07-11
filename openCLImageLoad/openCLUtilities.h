@@ -45,7 +45,8 @@ assert(0); \
 char *print_cl_errstring(cl_int err);
 cl_bool there_was_an_error(cl_int err);
 void getGPUUnitSupportedImageFormats(cl_context context);
+cl_bool doesGPUSupportImageObjects(cl_device_id device_id);
 char *load_program_source(const char *filename);
-
+cl_bool cleanupAndKill();
 
 #endif
