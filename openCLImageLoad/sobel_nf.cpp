@@ -3,7 +3,7 @@
 #include <iostream>
 using namespace std;
 
-uint16 *data = NULL, *out = NULL;
+uint16 *inData = NULL, *outData = NULL;
 
 // OpenCL variables
 int err, gpu;                            // error code returned from api calls
@@ -35,7 +35,7 @@ void cleanKill(int errNumber){
 int main(int argc, char *argv[])
 {
 	
-    data = read_tiff((char*)"GMARBLES.tif");
+    inData = read_tiff((char*)"GMARBLES.tif");
     
     //data = normalizeData(data);
     
@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
     
     //CL_UNSIGNED_INT16 would be ideal Each channel component is an unnormalized unsigned 16-bit integer value. But not compatible for image_channel_order of  CL_INTENSITY
     
-    if(!data){
+    if(!inData){
         cout << "The input image is empty" << endl;
         cleanKill(EXIT_FAILURE);
     }
@@ -142,16 +142,16 @@ int main(int argc, char *argv[])
                             width, 
                             height, 
                             getImageRowPitch(), 
-                            data, 
+                            inData, 
                                 &err); 
     
     if(there_was_an_error(err)){
+        cout << "Input Image Buffer creation error!" << endl;
         cleanKill(EXIT_FAILURE);
     }
     
     
     //getGPUUnitSupportedImageFormats(context);
-
     output = clCreateImage2D(context, 
                              CL_MEM_WRITE_ONLY, 
                              &format, 
