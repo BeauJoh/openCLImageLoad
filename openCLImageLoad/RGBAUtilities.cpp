@@ -20,7 +20,7 @@ void abort_(const char * s, ...)
 
 int x, y;
 
-int width, height;
+int imageWidth, imageHeight;
 png_byte color_type;
 png_byte bit_depth;
 
@@ -63,8 +63,8 @@ void read_png_file(char* file_name)
     
     png_read_info(png_ptr, info_ptr);
     
-    width = png_get_image_width(png_ptr, info_ptr);
-    height = png_get_image_height(png_ptr, info_ptr);
+    imageWidth = png_get_image_width(png_ptr, info_ptr);
+    imageHeight = png_get_image_height(png_ptr, info_ptr);
     color_type = png_get_color_type(png_ptr, info_ptr);
     bit_depth = png_get_bit_depth(png_ptr, info_ptr);
 
@@ -84,8 +84,8 @@ void read_png_file(char* file_name)
     if (setjmp(png_jmpbuf(png_ptr)))
         abort_("[read_png_file] Error during read_image");
     
-    row_pointers = (png_bytep*) malloc(sizeof(png_bytep) * height);
-    for (y=0; y<height; y++)
+    row_pointers = (png_bytep*) malloc(sizeof(png_bytep) * imageHeight);
+    for (y=0; y<imageHeight; y++)
         row_pointers[y] = (png_byte*) malloc(png_get_rowbytes(png_ptr,info_ptr));
     
     png_read_image(png_ptr, row_pointers);
@@ -122,7 +122,7 @@ void write_png_file(char* file_name)
     if (setjmp(png_jmpbuf(png_ptr)))
         abort_("[write_png_file] Error during writing header");
     
-    png_set_IHDR(png_ptr, info_ptr, width, height,
+    png_set_IHDR(png_ptr, info_ptr, imageWidth, imageHeight,
                  bit_depth, color_type, PNG_INTERLACE_NONE,
                  PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
     
@@ -143,7 +143,7 @@ void write_png_file(char* file_name)
     png_write_end(png_ptr, NULL);
     
     /* cleanup heap allocation */
-    for (y=0; y<height; y++)
+    for (y=0; y<imageHeight; y++)
         free(row_pointers[y]);
     free(row_pointers);
     
@@ -161,9 +161,9 @@ void process_file(void)
         abort_("[process_file] color_type of input file must be PNG_COLOR_TYPE_RGBA (%d) (is %d)",
                PNG_COLOR_TYPE_RGBA, png_get_color_type(png_ptr, info_ptr));
     
-    for (y=0; y<height; y++) {
+    for (y=0; y<imageHeight; y++) {
         png_byte* row = row_pointers[y];
-        for (x=0; x<width; x++) {
+        for (x=0; x<imageWidth; x++) {
             png_byte* ptr = &(row[x*4]);
             //printf("Pixel at position [ %d - %d ] has RGBA values: %d - %d - %d - %d\n",
             //       x, y, ptr[0], ptr[1], ptr[2], ptr[3]);
@@ -182,9 +182,9 @@ uint8* getImage(void){
         abort_("[process_file] color_type of input file must be PNG_COLOR_TYPE_RGBA (%d) (is %d)",
                PNG_COLOR_TYPE_RGBA, png_get_color_type(png_ptr, info_ptr));
     
-    for (y=0; y<height; y++) {
+    for (y=0; y<imageHeight; y++) {
         uint8* row = row_pointers[y];
-        for (x=0; x<width; x++) {
+        for (x=0; x<imageWidth; x++) {
             uint8* ptr = &(row[x*4]);
             image[y*x+x+0]=ptr[0];
             image[y*x+x+1]=ptr[1];
@@ -220,4 +220,3 @@ uint32 getSamplesPerPixel(void){
 uint32 getImageRowPitch(void){
     return _samplesPerPixel * _imageWidth;
 };
-
