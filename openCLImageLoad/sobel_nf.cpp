@@ -1,9 +1,11 @@
-#include "io_tiff.h"
+//#include "io_tiff.h"
 #include "openCLUtilities.h"
+#include "RGBAUtilities.h"
+
 #include <iostream>
 using namespace std;
 
-uint16 *inData = NULL, *outData = NULL;
+uint8 *inData = NULL, *outData = NULL;
 
 // OpenCL variables
 int err, gpu;                            // error code returned from api calls
@@ -34,8 +36,10 @@ void cleanKill(int errNumber){
 
 int main(int argc, char *argv[])
 {
-	
-    inData = read_tiff((char*)"GMARBLES.tif");
+    read_png_file((char*)"rgba.png");
+    inData = getImage();
+
+    //inData = read_tiff((char*)"GMARBLES.tif");
     
     //data = normalizeData(data);
     
@@ -108,14 +112,14 @@ int main(int argc, char *argv[])
 //    getGPUUnitSupportedImageFormats(context);
     
     // specify the image format that the images a represented with
-	cl_image_format format;
-	format.image_channel_data_type = CL_UNSIGNED_INT16;
-	format.image_channel_order = CL_A;
+	cl_image_format alternateImageFormat;
+	alternateImageFormat.image_channel_data_type = CL_UNSIGNED_INT16;
+	alternateImageFormat.image_channel_order = CL_A;
     
     // Create ouput image object 
-    cl_image_format alternateImageFormat; 
-    alternateImageFormat.image_channel_order = CL_RGBA; 
-    alternateImageFormat.image_channel_data_type = CL_UNORM_INT8;
+    cl_image_format format; 
+    format.image_channel_order = CL_RGBA; 
+    format.image_channel_data_type = CL_UNORM_INT8;
     
 //    format.image_channel_data_type = CL_UNSIGNED_INT8;
 //	format.image_channel_order = CL_RGBA;
@@ -136,6 +140,12 @@ int main(int argc, char *argv[])
     width = getImageWidth();
     height = getImageLength();
     
+//    uint16 *realInData[4];
+//    realInData[0]=inData;
+//    realInData[1]=inData;
+//    realInData[2]=inData;
+//    realInData[3]=inData;
+
     input = clCreateImage2D(context, 
                             CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 
                             &format, 
@@ -149,7 +159,6 @@ int main(int argc, char *argv[])
         cout << "Input Image Buffer creation error!" << endl;
         cleanKill(EXIT_FAILURE);
     }
-    
     
     //getGPUUnitSupportedImageFormats(context);
     output = clCreateImage2D(context, 
@@ -203,9 +212,9 @@ int main(int argc, char *argv[])
 	err = 0;
 	err  = clSetKernelArg(kernel, 0, sizeof(cl_mem), &input);
 	err |= clSetKernelArg(kernel, 1, sizeof(cl_mem), &output);
-    err |= clSetKernelArg(kernel, 2, sizeof(cl_sampler), &sampler); 
-    err |= clSetKernelArg(kernel, 3, sizeof(cl_int), &width);
-    err |= clSetKernelArg(kernel, 4, sizeof(cl_int), &height);
+    //err |= clSetKernelArg(kernel, 2, sizeof(cl_sampler), &sampler); 
+    //err |= clSetKernelArg(kernel, 3, sizeof(cl_int), &width);
+    //err |= clSetKernelArg(kernel, 4, sizeof(cl_int), &height);
     
     if(there_was_an_error(err)){
         cout << "Error: Failed to set kernel arguments! " << err << endl;

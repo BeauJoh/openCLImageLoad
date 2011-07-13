@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <string.h>
 
+
 //    //logical error in reading / writing in 8 bit
 //unsigned char * read_tiff_rgb_8_bit_from_file(char* fileName);
 //void write_tiff_rgb_8_bit_from_file(char* fileName, unsigned char * image);

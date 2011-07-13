@@ -5,6 +5,7 @@ cCheck dependencies
 cCompileC DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/sobel_nf.o /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/sobel_nf.cpp normal x86_64 c++ com.apple.compilers.gcc.4_2
 cCompileC DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/io_tiff.o /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/io_tiff.cpp normal x86_64 c++ com.apple.compilers.gcc.4_2
 cCompileC DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/openCLUtilities.o /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/openCLUtilities.cpp normal x86_64 c++ com.apple.compilers.gcc.4_2
+cCompileC DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/RGBAUtilities.o /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/RGBAUtilities.cpp normal x86_64 c++ com.apple.compilers.gcc.4_2
 cLd /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug/openCLImageLoad normal x86_64
 
 N/Developer/SDKs/MacOSX10.6.sdk
@@ -21,6 +22,16 @@ N/Developer/SDKs/MacOSX10.6.sdk/Library/Frameworks/UnixImageIO.framework/UnixIma
 c000000004DA4603A000000000025C210
 t1302618170
 s2474512
+
+N/Developer/SDKs/MacOSX10.6.sdk/Library/Frameworks/libpng.framework/Headers/png.h
+c000000004D1168E1000000000001CEAA
+t1292986593
+s118442
+
+N/Developer/SDKs/MacOSX10.6.sdk/Library/Frameworks/libpng.framework/libpng
+c000000004D1168F600000000000AF1B8
+t1292986614
+s717240
 
 N/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks/OpenCL.framework/Headers/opencl.h
 c000000004B45127B000000000000022A
@@ -82,18 +93,31 @@ c000000004BBD2CE9000000000000563E
 t1270689001
 s22078
 
+N/Developer/SDKs/MacOSX10.6.sdk/usr/lib/gcc/i686-apple-darwin10/4.2.1/include/stdarg.h
+c000000004AC59DB700000000000010DD
+t1254464951
+s4317
+
+N/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/RGBAUtilities.o
+t2
+s0
+
 N/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/io_tiff-AC8D20279BC77B8D.o
 t2
 s0
 
 N/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/io_tiff.o
-t1310344955
+t1310449631
 s21348
 
+N/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/libpngUtilities.o
+t1310449356
+s1912
+
 N/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/openCLImageLoad.LinkFileList
-c000000004DFAF1B80000000000000249
-t1308291512
-s585
+c000000004E1CFAF2000000000000030F
+t1310522098
+s783
 
 N/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/openCLUtilities.o
 t1310342288
@@ -104,31 +128,65 @@ t2
 s0
 
 N/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/sobel_nf.o
-t2
-s0
+t1310523988
+s76892
 
 N/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug/openCLImageLoad
-t1310368958
-s36504
+t2
+s0
 
 N/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug/openCLImageLoad.dSYM
 t2
 s0
 
+N/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/RGBAUtilities.cpp
+c000000004E1D0481000000000000185A
+t1310524545
+s6234
+i"RGBAUtilities.h"
+
+N/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/RGBAUtilities.h
+c000000004E1D02940000000000000410
+t1310524052
+s1040
+i<unistd.h>
+i<stdlib.h>
+i<stdio.h>
+i<string.h>
+i<stdarg.h>
+i<libpng/png.h>
+
 N/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/io_tiff.cpp
-c000000004DF9863700000000000046C0
-t1308198455
+c000000004E1BDFDD00000000000046C0
+t1310449629
 s18112
 i"io_tiff.h"
 
 N/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/io_tiff.h
-c000000004E1A46F90000000000000453
-t1310344953
-s1107
+c000000004E1BDFD50000000000000454
+t1310449621
+s1108
 i<UnixImageIO/tiffio.h>
 i<stdlib.h>
 i<stdio.h>
 i<string.h>
+
+N/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/libpngUtilities.cpp
+c000000004E1BDCF300000000000000C0
+t1310448883
+s192
+i"libpngUtilities.h"
+
+N/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/libpngUtilities.h
+c000000004E1BDECC00000000000001BA
+t1310449356
+s442
+i<unistd.h>
+i<stdlib.h>
+i<stdio.h>
+i<string.h>
+i<stdarg.h>
+i<libpng/png.h>
 
 N/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/openCLUtilities.c
 c000000004DFAF62B000000000000219C
@@ -176,13 +234,20 @@ i<OpenCL/opencl.h>
 i"io_tiff.h"
 
 N/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/sobel_nf.cpp
-c000000004E1AB2F800000000000026A0
-t1310372600
-s9888
+c000000004E1CFECF000000000000278C
+t1310523087
+s10124
 i"io_tiff.h"
 i"openCLUtilities.h"
+i<iostream>
+
+CBuild AST from /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/RGBAUtilities.cpp
+r0
 
 CBuild AST from /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/io_tiff.cpp
+r0
+
+CBuild AST from /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/libpngUtilities.cpp
 r0
 
 CBuild AST from /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/openCLUtilities.c
@@ -199,14 +264,27 @@ r0
 
 CCheck dependencies
 r0
-lSLF03#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection18"Check dependenciesa92ebc7beacab341^19c7c07beacab341^---0#1#0#--18"Check dependencies
+lSLF03#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection18"Check dependencies828b95013ccdb341^0a9f99013ccdb341^---0#1#0#--18"Check dependencies
+
+CCompileC DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/RGBAUtilities.o /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/RGBAUtilities.cpp normal x86_64 c++ com.apple.compilers.gcc.4_2
+s332217345.594616
+e332217345.763371
+r1
+xCompileC
+xDerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/RGBAUtilities.o
+x/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/RGBAUtilities.cpp
+xnormal
+xx86_64
+xc++
+xcom.apple.compilers.gcc.4_2
+lSLF03#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection103"Compile /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/RGBAUtilities.cpp68589c013ccdb341^d196c3013ccdb341^---0#0#0#-19%DVTDocumentLocation2@111"file://localhost/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/RGBAUtilities.cpp0000000000000000^2387"CompileC DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/RGBAUtilities.o openCLImageLoad/RGBAUtilities.cpp normal x86_64 c++ com.apple.compilers.gcc.4_2    cd /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch x86_64 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -Wshorten-64-to-32 -DDEBUG -isysroot /Developer/SDKs/MacOSX10.6.sdk -fasm-blocks -mmacosx-version-min=10.6 -gdwarf-2 -fvisibility-inlines-hidden -iquote /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-generated-files.hmap -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-own-target-headers.hmap -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-all-target-headers.hmap -iquote /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-project-headers.hmap -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug/include -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/DerivedSources/x86_64 -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/DerivedSources -F/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug -F/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad -c /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/RGBAUtilities.cpp -o /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/RGBAUtilities.o
 
 CCompileC DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/io_tiff-AC8D20279BC77B8D.o /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/io_tiff.cpp normal x86_64 c++ com.apple.compilers.gcc.4_2
 r0
 
 CCompileC DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/io_tiff.o /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/io_tiff.cpp normal x86_64 c++ com.apple.compilers.gcc.4_2
-s332037755.423035
-e332037755.553326
+s332142431.041073
+e332142431.183020
 r1
 xCompileC
 xDerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/io_tiff.o
@@ -215,7 +293,20 @@ xnormal
 xx86_64
 xc++
 xcom.apple.compilers.gcc.4_2
-lSLF03#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection97"Compile /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/io_tiff.cpp6a676c7b7ecab341^56bc8d7b7ecab341^---0#0#0#-19%DVTDocumentLocation2@105"file://localhost/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/io_tiff.cpp0000000000000000^2363"CompileC DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/io_tiff.o openCLImageLoad/io_tiff.cpp normal x86_64 c++ com.apple.compilers.gcc.4_2    cd /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch x86_64 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -Wshorten-64-to-32 -DDEBUG -isysroot /Developer/SDKs/MacOSX10.6.sdk -fasm-blocks -mmacosx-version-min=10.6 -gdwarf-2 -fvisibility-inlines-hidden -iquote /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-generated-files.hmap -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-own-target-headers.hmap -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-all-target-headers.hmap -iquote /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-project-headers.hmap -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug/include -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/DerivedSources/x86_64 -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/DerivedSources -F/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug -F/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad -c /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/io_tiff.cpp -o /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/io_tiff.o
+lSLF03#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection97"Compile /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/io_tiff.cpp069f0a5f17ccb341^f8fa2e5f17ccb341^---0#0#0#-19%DVTDocumentLocation2@105"file://localhost/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/io_tiff.cpp0000000000000000^2363"CompileC DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/io_tiff.o openCLImageLoad/io_tiff.cpp normal x86_64 c++ com.apple.compilers.gcc.4_2    cd /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch x86_64 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -Wshorten-64-to-32 -DDEBUG -isysroot /Developer/SDKs/MacOSX10.6.sdk -fasm-blocks -mmacosx-version-min=10.6 -gdwarf-2 -fvisibility-inlines-hidden -iquote /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-generated-files.hmap -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-own-target-headers.hmap -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-all-target-headers.hmap -iquote /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-project-headers.hmap -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug/include -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/DerivedSources/x86_64 -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/DerivedSources -F/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug -F/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad -c /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/io_tiff.cpp -o /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/io_tiff.o
+
+CCompileC DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/libpngUtilities.o /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/libpngUtilities.cpp normal x86_64 c++ com.apple.compilers.gcc.4_2
+s332142156.255732
+e332142156.388619
+r1
+xCompileC
+xDerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/libpngUtilities.o
+x/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/libpngUtilities.cpp
+xnormal
+xx86_64
+xc++
+xcom.apple.compilers.gcc.4_2
+lSLF03#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection105"Compile /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/libpngUtilities.cpp868e414c16ccb341^6189634c16ccb341^---0#0#0#-19%DVTDocumentLocation2@113"file://localhost/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/libpngUtilities.cpp0000000000000000^2395"CompileC DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/libpngUtilities.o openCLImageLoad/libpngUtilities.cpp normal x86_64 c++ com.apple.compilers.gcc.4_2    cd /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch x86_64 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -Wshorten-64-to-32 -DDEBUG -isysroot /Developer/SDKs/MacOSX10.6.sdk -fasm-blocks -mmacosx-version-min=10.6 -gdwarf-2 -fvisibility-inlines-hidden -iquote /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-generated-files.hmap -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-own-target-headers.hmap -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-all-target-headers.hmap -iquote /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-project-headers.hmap -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug/include -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/DerivedSources/x86_64 -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/DerivedSources -F/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug -F/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad -c /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/libpngUtilities.cpp -o /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/libpngUtilities.o
 
 CCompileC DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/openCLUtilities.o /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/openCLUtilities.c normal x86_64 c com.apple.compilers.gcc.4_2
 s329985689.142285
@@ -260,8 +351,8 @@ xcom.apple.compilers.gcc.4_2
 lSLF03#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection96"Compile /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/sobel_nf.c514be330f76cb341^705f1b31f76cb341^---0#0#0#-19%DVTDocumentLocation2@104"file://localhost/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/sobel_nf.c0000000000000000^2342"CompileC DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/sobel_nf.o openCLImageLoad/sobel_nf.c normal x86_64 c com.apple.compilers.gcc.4_2    cd /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c -arch x86_64 -fmessage-length=0 -pipe -std=gnu99 -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -Wshorten-64-to-32 -DDEBUG -isysroot /Developer/SDKs/MacOSX10.6.sdk -fasm-blocks -mmacosx-version-min=10.6 -gdwarf-2 -iquote /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-generated-files.hmap -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-own-target-headers.hmap -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-all-target-headers.hmap -iquote /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-project-headers.hmap -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug/include -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/DerivedSources/x86_64 -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/DerivedSources -F/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug -F/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad -c /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/sobel_nf.c -o /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/sobel_nf.o
 
 CCompileC DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/sobel_nf.o /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/sobel_nf.cpp normal x86_64 c++ com.apple.compilers.gcc.4_2
-s332065403.745726
-e332065404.345601
+s332216787.800920
+e332216788.688398
 r1
 xCompileC
 xDerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/sobel_nf.o
@@ -270,18 +361,20 @@ xnormal
 xx86_64
 xc++
 xcom.apple.compilers.gcc.4_2
-lSLF03#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection98"Compile /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/sobel_nf.cppa302bf7beacab341^5b7a587ceacab341^---0#0#0#-19%DVTDocumentLocation2@106"file://localhost/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/sobel_nf.cpp0000000000000000^2367"CompileC DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/sobel_nf.o openCLImageLoad/sobel_nf.cpp normal x86_64 c++ com.apple.compilers.gcc.4_2    cd /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch x86_64 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -Wshorten-64-to-32 -DDEBUG -isysroot /Developer/SDKs/MacOSX10.6.sdk -fasm-blocks -mmacosx-version-min=10.6 -gdwarf-2 -fvisibility-inlines-hidden -iquote /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-generated-files.hmap -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-own-target-headers.hmap -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-all-target-headers.hmap -iquote /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-project-headers.hmap -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug/include -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/DerivedSources/x86_64 -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/DerivedSources -F/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug -F/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad -c /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/sobel_nf.cpp -o /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/sobel_nf.o
+lSLF03#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection98"Compile /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/sobel_nf.cpp3e23cdd339cdb341^2365b3d439cdb341^---0#0#0#-19%DVTDocumentLocation2@106"file://localhost/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/sobel_nf.cpp0000000000000000^2367"CompileC DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/sobel_nf.o openCLImageLoad/sobel_nf.cpp normal x86_64 c++ com.apple.compilers.gcc.4_2    cd /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch x86_64 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -O0 -Wreturn-type -Wunused-variable -Wshorten-64-to-32 -DDEBUG -isysroot /Developer/SDKs/MacOSX10.6.sdk -fasm-blocks -mmacosx-version-min=10.6 -gdwarf-2 -fvisibility-inlines-hidden -iquote /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-generated-files.hmap -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-own-target-headers.hmap -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-all-target-headers.hmap -iquote /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad-project-headers.hmap -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug/include -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/DerivedSources/x86_64 -I/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/DerivedSources -F/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug -F/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad -c /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad/sobel_nf.cpp -o /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/sobel_nf.o
 
 CGenerateDSYMFile /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug/openCLImageLoad.dSYM /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug/openCLImageLoad
 r0
 
 CLd /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug/openCLImageLoad normal x86_64
-s332065404.346318
-e332065404.467939
-r1
+s332217345.763561
+e332217346.125262
+r0
 xLd
 x/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug/openCLImageLoad
 xnormal
 xx86_64
-lSLF03#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection131"Link /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug/openCLImageLoad1fbe587ceacab341^08cc777ceacab341^---0#0#0#--985"Ld DerivedData/openCLImageLoad/Build/Products/Debug/openCLImageLoad normal x86_64    cd /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad    setenv MACOSX_DEPLOYMENT_TARGET 10.6    /Developer/usr/bin/g++-4.2 -arch x86_64 -isysroot /Developer/SDKs/MacOSX10.6.sdk -L/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug -F/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug -F/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad -filelist /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/openCLImageLoad.LinkFileList -mmacosx-version-min=10.6 -framework UnixImageIO -framework OpenCL -o /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug/openCLImageLoad
+old: duplicate symbol getImageLength()     in /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/RGBAUtilities.o and /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/io_tiff.o for architecture x86_64
+ocollect2: ld returned 1 exit status
+lSLF03#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection131"Link /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug/openCLImageLoadde8fc3013ccdb341^af0a20023ccdb341^-558"ld: duplicate symbol getImageLength()     in /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/RGBAUtilities.o and /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/io_tiff.o for architecture x86_64collect2: ld returned 1 exit statusCommand /Developer/usr/bin/g++-4.2 failed with exit code 12(21%IDEActivityLogMessage2@458"Duplicate symbol getImageLength()     in /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/RGBAUtilities.o and /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/io_tiff.o for architecture x86_64-332217346#0#463#-0#-23%DVTTextDocumentLocation3@-0000000000000000^18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#18446744073709551615#0#31"Apple Mach-O Linker (ld) Notice--2@58"Command /Developer/usr/bin/g++-4.2 failed with exit code 1-332217346#18446744073709551615#0#-2#--30"Apple Mach-O Linker (ld) Error--0#0#0#--1003"Ld DerivedData/openCLImageLoad/Build/Products/Debug/openCLImageLoad normal x86_64    cd /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad    setenv MACOSX_DEPLOYMENT_TARGET 10.6    /Developer/usr/bin/g++-4.2 -arch x86_64 -isysroot /Developer/SDKs/MacOSX10.6.sdk -L/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug -F/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug -F/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad -filelist /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/Objects-normal/x86_64/openCLImageLoad.LinkFileList -mmacosx-version-min=10.6 -framework libpng -framework UnixImageIO -framework OpenCL -o /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/DerivedData/openCLImageLoad/Build/Products/Debug/openCLImageLoad
 
