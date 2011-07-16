@@ -2,8 +2,13 @@
 //  RGBAUtilities.cpp
 //  RGBAUtilities
 //
-//  Created by Beau Johnston on 13/07/11.
-//  Copyright 2011 University Of New England. All rights reserved.
+//  Initially created by Guillaume Cottenceau. 
+//  Copyright 2002-2010 Guillaume Cottenceau.
+//
+//  Modified by Beau Johnston on 13/07/11.
+//  Copyright 2011 Beau Johnston
+//  This software may be freely redistributed under the terms
+//  of the X11 license.
 //
 
 #include "RGBAUtilities.h"
@@ -41,9 +46,9 @@ void read_png_file(char* file_name)
     if (!fp)
         abort_("[read_png_file] File %s could not be opened for reading", file_name);
     fread(header, 1, 8, fp);
-//    if (png_sig_cmp(header, 0, 8))
-//        abort_("[read_png_file] File %s is not recognized as a PNG file", file_name);
-//    
+    //    if (png_sig_cmp(header, 0, 8))
+    //        abort_("[read_png_file] File %s is not recognized as a PNG file", file_name);
+    //    
     
     /* initialize stuff */
     png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
@@ -67,7 +72,7 @@ void read_png_file(char* file_name)
     imageHeight = png_get_image_height(png_ptr, info_ptr);
     color_type = png_get_color_type(png_ptr, info_ptr);
     bit_depth = png_get_bit_depth(png_ptr, info_ptr);
-
+    
     number_of_passes = png_set_interlace_handling(png_ptr);
     png_read_update_info(png_ptr, info_ptr);
     
@@ -76,14 +81,14 @@ void read_png_file(char* file_name)
     _config = png_get_color_type(png_ptr, info_ptr);
     _bitsPerSample = png_get_bit_depth(png_ptr, info_ptr); // = 8 bits
     _samplesPerPixel = png_get_channels(png_ptr, info_ptr); // = 4 bytes
-
+    
     _bitsPerPixel = _samplesPerPixel*_bitsPerSample;
     _linebytes = _samplesPerPixel * _imageWidth; // = 640
     //_linebytes = png_get_rowbytes(png_ptr, info_ptr); = 640
     
     //printf("linebytes = %i, expected %i\n",_linebytes,png_get_rowbytes(png_ptr, info_ptr));
     //printf("Image Height is %d", sizeof(png_bytep) * imageHeight);
-
+    
     
     /* read file */
     if (setjmp(png_jmpbuf(png_ptr)))
@@ -181,21 +186,21 @@ void process_file(void)
 }
 
 uint8* getImage(void){
-    uint8* image = (uint8*) malloc(sizeof(uint8) * imageHeight);
-
+    uint8* image = new uint8[(sizeof(uint8) * imageHeight)];
+    
     if (png_get_color_type(png_ptr, info_ptr) != PNG_COLOR_TYPE_RGBA)
         abort_("[process_file] color_type of input file must be PNG_COLOR_TYPE_RGBA (%d) (is %d)",
                PNG_COLOR_TYPE_RGBA, png_get_color_type(png_ptr, info_ptr));
     
     for (y=0; y<imageHeight; y++) {
         uint8* row = row_pointers[y];
-
+        
         for (x=0; x<imageWidth; x++) {
             uint8* ptr = &(row[x*4]);
             image[y*imageWidth + x] = *ptr;
         }
     }
-
+    
     return image;
 }
 
@@ -207,7 +212,7 @@ void setImage(uint8* image){
             *ptr = image[y*imageWidth + x];
         }
     }
-    free(image);
+    delete image;
 }
 
 
