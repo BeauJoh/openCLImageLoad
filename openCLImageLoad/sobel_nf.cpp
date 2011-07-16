@@ -5,7 +5,7 @@
 #include <iostream>
 using namespace std;
 
-uint8 *inData = NULL, *outData = NULL;
+uint8 *inData, *outData;
 
 // OpenCL variables
 int err, gpu;                            // error code returned from api calls
@@ -37,6 +37,7 @@ void cleanKill(int errNumber){
 int main(int argc, char *argv[])
 {
     read_png_file((char*)"rgba.png");
+    
     inData = getImage();
 
     //inData = read_tiff((char*)"GMARBLES.tif");

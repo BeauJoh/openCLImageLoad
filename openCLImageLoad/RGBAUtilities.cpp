@@ -29,7 +29,7 @@ png_infop info_ptr;
 int number_of_passes;
 png_bytep * row_pointers;
 
-uint32 _imageLength, _imageWidth, _config, _bitsPerSample, _samplesPerPixel, _bytesPerPixel;
+uint32 _imageLength, _imageWidth, _config, _bitsPerSample, _samplesPerPixel, _bitsPerPixel;
 uint64 _linebytes;
 
 void read_png_file(char* file_name)
@@ -71,13 +71,18 @@ void read_png_file(char* file_name)
     number_of_passes = png_set_interlace_handling(png_ptr);
     png_read_update_info(png_ptr, info_ptr);
     
-    _imageLength = png_get_image_width(png_ptr, info_ptr);
-    _imageWidth = png_get_image_height(png_ptr, info_ptr);
+    _imageWidth = png_get_image_width(png_ptr, info_ptr);
+    _imageLength = png_get_image_height(png_ptr, info_ptr);
     _config = png_get_color_type(png_ptr, info_ptr);
-    _bitsPerSample = png_get_bit_depth(png_ptr, info_ptr);
-    _samplesPerPixel = png_get_channels(png_ptr, info_ptr);
-    _linebytes = png_get_rowbytes(png_ptr, info_ptr); 
-    _bytesPerPixel = _bitsPerSample/8;
+    _bitsPerSample = png_get_bit_depth(png_ptr, info_ptr); // = 8 bits
+    _samplesPerPixel = png_get_channels(png_ptr, info_ptr); // = 4 bytes
+
+    _bitsPerPixel = _samplesPerPixel*_bitsPerSample;
+    _linebytes = _samplesPerPixel * _imageWidth; // = 640
+    //_linebytes = png_get_rowbytes(png_ptr, info_ptr); = 640
+    
+    //printf("linebytes = %i, expected %i\n",_linebytes,png_get_rowbytes(png_ptr, info_ptr));
+    //printf("Image Height is %d", sizeof(png_bytep) * imageHeight);
 
     
     /* read file */
@@ -176,7 +181,7 @@ void process_file(void)
 }
 
 uint8* getImage(void){
-    uint8* image = new uint8[_linebytes *_imageLength];
+    uint8* image = (uint8*) malloc(sizeof(uint8) * imageHeight);
 
     if (png_get_color_type(png_ptr, info_ptr) != PNG_COLOR_TYPE_RGBA)
         abort_("[process_file] color_type of input file must be PNG_COLOR_TYPE_RGBA (%d) (is %d)",
@@ -184,16 +189,25 @@ uint8* getImage(void){
     
     for (y=0; y<imageHeight; y++) {
         uint8* row = row_pointers[y];
+
         for (x=0; x<imageWidth; x++) {
             uint8* ptr = &(row[x*4]);
-            image[y*x+x+0]=ptr[0];
-            image[y*x+x+1]=ptr[1];
-            image[y*x+x+2]=ptr[2];
-            image[y*x+x+3]=ptr[3];
+            image[y*imageWidth + x] = *ptr;
         }
     }
-    
+
     return image;
+}
+
+void setImage(uint8* image){
+    for (y=0; y<imageHeight; y++) {
+        uint8* row = row_pointers[y];
+        for (x=0; x<imageWidth; x++) {
+            uint8* ptr = &(row[x*4]);
+            *ptr = image[y*imageWidth + x];
+        }
+    }
+    free(image);
 }
 
 

@@ -36,7 +36,7 @@ void write_png_file(char* file_name);
 void process_file(void);
 
 uint8* getImage(void);
-void setImage(uint8);
+void setImage(uint8*);
 
 uint32 getImageLength(void);
 uint32 getImageWidth(void);

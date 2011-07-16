@@ -8,10 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		8B04432E1367AA1100D919D5 /* OpenCL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B04432D1367AA1100D919D5 /* OpenCL.framework */; };
-		8B8FABA6136CE6B900961823 /* UnixImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B8FABA5136CE6B900961823 /* UnixImageIO.framework */; };
+		8B60938C13D145BA00178EE8 /* RGBAUtilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B60938B13D145BA00178EE8 /* RGBAUtilities.cpp */; };
 		8B8FABB2136CF82F00961823 /* sobel_nf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B8FABB1136CF82F00961823 /* sobel_nf.cpp */; };
 		8B95BDB213CC13BA00B3E897 /* libpng.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B95BDB113CC13BA00B3E897 /* libpng.framework */; };
-		8B95BDD513CD325600B3E897 /* RGBAUtilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B95BDD313CD325600B3E897 /* RGBAUtilities.cpp */; };
 		8B9A212713AB280400F36E8A /* openCLUtilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B9A212513AB280400F36E8A /* openCLUtilities.cpp */; };
 /* End PBXBuildFile section */
 
@@ -30,12 +29,11 @@
 /* Begin PBXFileReference section */
 		8B04431E1367A8EC00D919D5 /* openCLImageLoad */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = openCLImageLoad; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B04432D1367AA1100D919D5 /* OpenCL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenCL.framework; path = System/Library/Frameworks/OpenCL.framework; sourceTree = SDKROOT; };
-		8B8FABA5136CE6B900961823 /* UnixImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UnixImageIO.framework; path = Library/Frameworks/UnixImageIO.framework; sourceTree = SDKROOT; };
+		8B60938A13D145BA00178EE8 /* RGBAUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RGBAUtilities.h; sourceTree = "<group>"; };
+		8B60938B13D145BA00178EE8 /* RGBAUtilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RGBAUtilities.cpp; sourceTree = "<group>"; };
 		8B8FABA7136CE7BD00961823 /* sobel_opt1.cl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.opencl; path = sobel_opt1.cl; sourceTree = "<group>"; };
 		8B8FABB1136CF82F00961823 /* sobel_nf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sobel_nf.cpp; sourceTree = "<group>"; };
 		8B95BDB113CC13BA00B3E897 /* libpng.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libpng.framework; path = Library/Frameworks/libpng.framework; sourceTree = SDKROOT; };
-		8B95BDD313CD325600B3E897 /* RGBAUtilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RGBAUtilities.cpp; sourceTree = "<group>"; };
-		8B95BDD413CD325600B3E897 /* RGBAUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RGBAUtilities.h; sourceTree = "<group>"; };
 		8B95BDD613CD625E00B3E897 /* io_tiff.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = io_tiff.cpp; sourceTree = "<group>"; };
 		8B95BDD713CD625E00B3E897 /* io_tiff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = io_tiff.h; sourceTree = "<group>"; };
 		8B9A212513AB280400F36E8A /* openCLUtilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = openCLUtilities.cpp; sourceTree = "<group>"; };
@@ -48,7 +46,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B95BDB213CC13BA00B3E897 /* libpng.framework in Frameworks */,
-				8B8FABA6136CE6B900961823 /* UnixImageIO.framework in Frameworks */,
 				8B04432E1367AA1100D919D5 /* OpenCL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -60,7 +57,6 @@
 			isa = PBXGroup;
 			children = (
 				8B95BDB113CC13BA00B3E897 /* libpng.framework */,
-				8B8FABA5136CE6B900961823 /* UnixImageIO.framework */,
 				8B04432D1367AA1100D919D5 /* OpenCL.framework */,
 				8B0443211367A8EC00D919D5 /* openCLImageLoad */,
 				8B04431F1367A8EC00D919D5 /* Products */,
@@ -81,8 +77,8 @@
 				8B8FABB1136CF82F00961823 /* sobel_nf.cpp */,
 				8B9A212513AB280400F36E8A /* openCLUtilities.cpp */,
 				8B9A212613AB280400F36E8A /* openCLUtilities.h */,
-				8B95BDD313CD325600B3E897 /* RGBAUtilities.cpp */,
-				8B95BDD413CD325600B3E897 /* RGBAUtilities.h */,
+				8B60938A13D145BA00178EE8 /* RGBAUtilities.h */,
+				8B60938B13D145BA00178EE8 /* RGBAUtilities.cpp */,
 				8B95BDD613CD625E00B3E897 /* io_tiff.cpp */,
 				8B95BDD713CD625E00B3E897 /* io_tiff.h */,
 				8B8FABA7136CE7BD00961823 /* sobel_opt1.cl */,
@@ -142,7 +138,7 @@
 			files = (
 				8B8FABB2136CF82F00961823 /* sobel_nf.cpp in Sources */,
 				8B9A212713AB280400F36E8A /* openCLUtilities.cpp in Sources */,
-				8B95BDD513CD325600B3E897 /* RGBAUtilities.cpp in Sources */,
+				8B60938C13D145BA00178EE8 /* RGBAUtilities.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
