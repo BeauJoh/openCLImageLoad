@@ -34,7 +34,7 @@ png_infop info_ptr;
 int number_of_passes;
 png_bytep * row_pointers;
 
-uint32 _imageLength, _imageWidth, _config, _bitsPerSample, _samplesPerPixel, _bitsPerPixel;
+uint32 _imageLength, _imageWidth, _config, _bitsPerSample, _samplesPerPixel, _bitsPerPixel, _imageBitSize, _imageSize;
 uint64 _linebytes;
 
 void read_png_file(char* file_name)
@@ -46,9 +46,9 @@ void read_png_file(char* file_name)
     if (!fp)
         abort_("[read_png_file] File %s could not be opened for reading", file_name);
     fread(header, 1, 8, fp);
-    //    if (png_sig_cmp(header, 0, 8))
-    //        abort_("[read_png_file] File %s is not recognized as a PNG file", file_name);
-    //    
+//    if (png_sig_cmp(header, 0, 8))
+//        abort_("[read_png_file] File %s is not recognized as a PNG file", file_name);
+//    
     
     /* initialize stuff */
     png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
@@ -72,7 +72,7 @@ void read_png_file(char* file_name)
     imageHeight = png_get_image_height(png_ptr, info_ptr);
     color_type = png_get_color_type(png_ptr, info_ptr);
     bit_depth = png_get_bit_depth(png_ptr, info_ptr);
-    
+
     number_of_passes = png_set_interlace_handling(png_ptr);
     png_read_update_info(png_ptr, info_ptr);
     
@@ -81,14 +81,15 @@ void read_png_file(char* file_name)
     _config = png_get_color_type(png_ptr, info_ptr);
     _bitsPerSample = png_get_bit_depth(png_ptr, info_ptr); // = 8 bits
     _samplesPerPixel = png_get_channels(png_ptr, info_ptr); // = 4 bytes
-    
+
     _bitsPerPixel = _samplesPerPixel*_bitsPerSample;
     _linebytes = _samplesPerPixel * _imageWidth; // = 640
     //_linebytes = png_get_rowbytes(png_ptr, info_ptr); = 640
-    
+    _imageBitSize = (sizeof(uint8) * _imageWidth * _imageLength * _samplesPerPixel);
+    _imageSize = _imageWidth * _imageLength * _samplesPerPixel;
     //printf("linebytes = %i, expected %i\n",_linebytes,png_get_rowbytes(png_ptr, info_ptr));
     //printf("Image Height is %d", sizeof(png_bytep) * imageHeight);
-    
+
     
     /* read file */
     if (setjmp(png_jmpbuf(png_ptr)))
@@ -185,16 +186,53 @@ void process_file(void)
     }
 }
 
-uint8* getImage(void){
-    uint8* image = new uint8[(sizeof(uint8) * imageHeight)];
+uint8* normalizeImage(uint8* input){
+    //with 8 bits this obvously causes a rounding error, usually down to 0, solve this by storing as floats
+    uint8* output = new uint8[_imageBitSize];
     
+    for (int i = 0; i < _imageSize; i++) {
+        output[i] = (input[i]/pow(2,_bitsPerSample));
+    }
+    delete input;
+    return output;
+}
+
+uint8* denormalizeImage(uint8*input){
+    //with 8 bits this obvously causes a rounding error, usually down to 0, solve this by storing as floats
+    uint8* output = new uint8[_imageBitSize];
+
+    for (int i = 0; i < _imageSize; i++) {
+        output[i] = (input[i]*pow(2,_bitsPerSample));
+    }
+    delete input;
+    return output;
+}
+
+bool allPixelsAreNormal(uint8* image){
+    #ifdef DEBUG
+    printf("bits per sample is %i", _bitsPerSample);
+    #endif
+    for (int i = 0; i < _imageSize; i++) {
+        if (image[i] > 1) {
+            #ifdef DEBUG
+            printf("Not normal at point %i with %d", i, image[i]);
+            #endif
+            return false;
+        }
+    }
+    return true;
+}
+
+uint8* convolutedGetImage(void){
+    uint8* image = new uint8[(sizeof(uint8) * imageHeight)];
+
     if (png_get_color_type(png_ptr, info_ptr) != PNG_COLOR_TYPE_RGBA)
         abort_("[process_file] color_type of input file must be PNG_COLOR_TYPE_RGBA (%d) (is %d)",
-               PNG_COLOR_TYPE_RGBA, png_get_color_type(png_ptr, info_ptr));
+                PNG_COLOR_TYPE_RGBA, png_get_color_type(png_ptr, info_ptr));
     
     for (y=0; y<imageHeight; y++) {
         uint8* row = row_pointers[y];
-        
+
         for (x=0; x<imageWidth; x++) {
             uint8* ptr = &(row[x*4]);
             image[y*imageWidth + x] = *ptr;
@@ -204,7 +242,25 @@ uint8* getImage(void){
     return image;
 }
 
-void setImage(uint8* image){
+uint8* getImage(void){
+    uint8* image = new uint8[(sizeof(uint8) * _imageWidth * _imageLength * _samplesPerPixel)];
+    for (y=0; y < _imageLength; y++) {
+        uint8* row = row_pointers[y];
+        int origX = 0;
+        for (x=0; x < _linebytes; x+=4) {
+            uint8* ptr = &(row[origX*4]);
+            image[y*_linebytes + x + 0] = ptr[0];
+            image[y*_linebytes + x + 1] = ptr[1];
+            image[y*_linebytes + x + 2] = ptr[2];
+            image[y*_linebytes + x + 3] = ptr[3];
+            origX++;
+        }
+    }
+    
+    return image;
+}
+
+void convolutedSetImage(uint8* image){
     for (y=0; y<imageHeight; y++) {
         uint8* row = row_pointers[y];
         for (x=0; x<imageWidth; x++) {
@@ -212,6 +268,26 @@ void setImage(uint8* image){
             *ptr = image[y*imageWidth + x];
         }
     }
+    
+    delete image;
+
+}
+
+void setImage(uint8* image){
+    
+    for (y=0; y < _imageLength; y++) {
+        uint8* row = row_pointers[y];
+        int origX = 0;
+        for (x=0; x < _linebytes; x+=4) {
+            uint8* ptr = &(row[origX*4]);
+            ptr[0] = image[y*_linebytes + x + 0];
+            ptr[1] = image[y*_linebytes + x + 1];
+            ptr[2] = image[y*_linebytes + x + 2];
+            ptr[3] = image[y*_linebytes + x + 3];
+            origX++;
+        }
+    }
+    
     delete image;
 }
 
