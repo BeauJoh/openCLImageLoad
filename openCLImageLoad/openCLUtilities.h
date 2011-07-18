@@ -18,6 +18,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <string.h>
+#include "FreeImage.h"
 
 // Special automatic include statement, 
 // openCL is dependent on specific libraries, depending on the OS
@@ -48,5 +49,5 @@ void getGPUUnitSupportedImageFormats(cl_context context);
 cl_bool doesGPUSupportImageObjects(cl_device_id device_id);
 char *load_program_source(const char *filename);
 cl_bool cleanupAndKill();
-
+cl_mem LoadImage(cl_context context, char *fileName, int &width, int &height);
 #endif

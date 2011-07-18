@@ -138,8 +138,8 @@ int main(int argc, char *argv[])
         cleanKill(EXIT_FAILURE);
     }
     
-    width = getImageWidth();
-    height = getImageLength();
+//    width = getImageWidth();
+//    height = getImageLength();
     
 //    uint16 *realInData[4];
 //    realInData[0]=inData;
@@ -147,21 +147,24 @@ int main(int argc, char *argv[])
 //    realInData[2]=inData;
 //    realInData[3]=inData;
 
-    input = clCreateImage2D(context, 
-                            CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 
-                            &format, 
-                            width, 
-                            height, 
-                            getImageRowPitch(), 
-                            inData, 
-                                &err); 
-    
-    if(there_was_an_error(err)){
-        cout << "Input Image Buffer creation error!" << endl;
-        cleanKill(EXIT_FAILURE);
-    }
+//    input = clCreateImage2D(context, 
+//                            CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 
+//                            &format, 
+//                            width, 
+//                            height, 
+//                            getImageRowPitch(), 
+//                            inData, 
+//                                &err); 
+//    
+//    if(there_was_an_error(err)){
+//        cout << "Input Image Buffer creation error!" << endl;
+//        cleanKill(EXIT_FAILURE);
+//    }
     
     //getGPUUnitSupportedImageFormats(context);
+    
+    input = LoadImage(context, (char*)"rgba.png", width, height);
+    
     output = clCreateImage2D(context, 
                              CL_MEM_WRITE_ONLY, 
                              &format, 

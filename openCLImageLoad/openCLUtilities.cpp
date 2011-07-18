@@ -205,3 +205,37 @@ char *load_program_source(const char *filename)
 	
     return source;
 }
+
+cl_mem LoadImage(cl_context context, char *fileName, int &width, int &height)
+{ 
+    FREE_IMAGE_FORMAT format = FreeImage_GetFileType(fileName, 0); 
+    FIBITMAP* image = FreeImage_Load(format, fileName);
+    // Convert to 32-bit image 
+    FIBITMAP* temp = image; 
+    image = FreeImage_ConvertTo32Bits(image); 
+    FreeImage_Unload(temp);
+    width = FreeImage_GetWidth(image); 
+    height = FreeImage_GetHeight(image);
+    char *buffer = new char[width * height * 4]; 
+    memcpy(buffer, FreeImage_GetBits(image), width * height * 4);
+    FreeImage_Unload(image);
+    // Create OpenCL image 
+    cl_image_format clImageFormat; 
+    clImageFormat.image_channel_order = CL_RGBA; 
+    clImageFormat.image_channel_data_type = CL_UNORM_INT8;
+    cl_int errNum; 
+    cl_mem clImage; 
+    clImage = clCreateImage2D(context,
+                              CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, 
+                              &clImageFormat, 
+                              width,
+                              height, 
+                              0, 
+                              buffer, 
+                              &errNum);
+    if (errNum != CL_SUCCESS) {
+        printf("Error creating CL image object\n"); 
+        return 0;
+    }
+    return clImage; 
+}
