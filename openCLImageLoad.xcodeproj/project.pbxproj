@@ -12,7 +12,6 @@
 		8B8FABB2136CF82F00961823 /* sobel_nf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B8FABB1136CF82F00961823 /* sobel_nf.cpp */; };
 		8B95BDB213CC13BA00B3E897 /* libpng.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B95BDB113CC13BA00B3E897 /* libpng.framework */; };
 		8B9A212713AB280400F36E8A /* openCLUtilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B9A212513AB280400F36E8A /* openCLUtilities.cpp */; };
-		8BE3370C13D3EC3F00FE12B9 /* libfreeimage.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BE3370B13D3EC3F00FE12B9 /* libfreeimage.3.dylib */; };
 		8BE3371013D3F51A00FE12B9 /* libfreeimage-3.15.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BE3370F13D3F51A00FE12B9 /* libfreeimage-3.15.0.dylib */; };
 /* End PBXBuildFile section */
 
@@ -51,7 +50,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8BE3371013D3F51A00FE12B9 /* libfreeimage-3.15.0.dylib in Frameworks */,
-				8BE3370C13D3EC3F00FE12B9 /* libfreeimage.3.dylib in Frameworks */,
 				8B95BDB213CC13BA00B3E897 /* libpng.framework in Frameworks */,
 				8B04432E1367AA1100D919D5 /* OpenCL.framework in Frameworks */,
 			);
