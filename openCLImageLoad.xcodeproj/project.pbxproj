@@ -9,21 +9,21 @@
 /* Begin PBXBuildFile section */
 		8B04367513D182F300695184 /* RGBAUtilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B04367413D182F300695184 /* RGBAUtilities.cpp */; };
 		8B04432E1367AA1100D919D5 /* OpenCL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B04432D1367AA1100D919D5 /* OpenCL.framework */; };
+		8B5EAB4513D67BFC005C1C8D /* libfreeimage.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B5EAB4413D67BFC005C1C8D /* libfreeimage.dylib */; };
 		8B8FABB2136CF82F00961823 /* sobel_nf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B8FABB1136CF82F00961823 /* sobel_nf.cpp */; };
 		8B95BDB213CC13BA00B3E897 /* libpng.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B95BDB113CC13BA00B3E897 /* libpng.framework */; };
 		8B9A212713AB280400F36E8A /* openCLUtilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B9A212513AB280400F36E8A /* openCLUtilities.cpp */; };
-		8BE3371013D3F51A00FE12B9 /* libfreeimage-3.15.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BE3370F13D3F51A00FE12B9 /* libfreeimage-3.15.0.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		8B04431C1367A8EC00D919D5 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			dstPath = /usr/share/man/man1/;
 			dstSubfolderSpec = 0;
 			files = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -32,6 +32,7 @@
 		8B04367413D182F300695184 /* RGBAUtilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RGBAUtilities.cpp; sourceTree = "<group>"; };
 		8B04431E1367A8EC00D919D5 /* openCLImageLoad */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = openCLImageLoad; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B04432D1367AA1100D919D5 /* OpenCL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenCL.framework; path = System/Library/Frameworks/OpenCL.framework; sourceTree = SDKROOT; };
+		8B5EAB4413D67BFC005C1C8D /* libfreeimage.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libfreeimage.dylib; sourceTree = "<group>"; };
 		8B8FABA7136CE7BD00961823 /* sobel_opt1.cl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.opencl; path = sobel_opt1.cl; sourceTree = "<group>"; };
 		8B8FABB1136CF82F00961823 /* sobel_nf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sobel_nf.cpp; sourceTree = "<group>"; };
 		8B95BDB113CC13BA00B3E897 /* libpng.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libpng.framework; path = Library/Frameworks/libpng.framework; sourceTree = SDKROOT; };
@@ -39,9 +40,7 @@
 		8B95BDD713CD625E00B3E897 /* io_tiff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = io_tiff.h; sourceTree = "<group>"; };
 		8B9A212513AB280400F36E8A /* openCLUtilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = openCLUtilities.cpp; sourceTree = "<group>"; };
 		8B9A212613AB280400F36E8A /* openCLUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = openCLUtilities.h; sourceTree = "<group>"; };
-		8BE3370B13D3EC3F00FE12B9 /* libfreeimage.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreeimage.3.dylib; path = usr/local/lib/libfreeimage.3.dylib; sourceTree = SDKROOT; };
 		8BE3370E13D3F32300FE12B9 /* FreeImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeImage.h; sourceTree = "<group>"; };
-		8BE3370F13D3F51A00FE12B9 /* libfreeimage-3.15.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libfreeimage-3.15.0.dylib"; path = "usr/local/lib/libfreeimage-3.15.0.dylib"; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,9 +48,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8BE3371013D3F51A00FE12B9 /* libfreeimage-3.15.0.dylib in Frameworks */,
 				8B95BDB213CC13BA00B3E897 /* libpng.framework in Frameworks */,
 				8B04432E1367AA1100D919D5 /* OpenCL.framework in Frameworks */,
+				8B5EAB4513D67BFC005C1C8D /* libfreeimage.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,8 +60,7 @@
 		8B0443131367A8EC00D919D5 = {
 			isa = PBXGroup;
 			children = (
-				8BE3370F13D3F51A00FE12B9 /* libfreeimage-3.15.0.dylib */,
-				8BE3370B13D3EC3F00FE12B9 /* libfreeimage.3.dylib */,
+				8B5EAB4413D67BFC005C1C8D /* libfreeimage.dylib */,
 				8B95BDB113CC13BA00B3E897 /* libpng.framework */,
 				8B04432D1367AA1100D919D5 /* OpenCL.framework */,
 				8B0443211367A8EC00D919D5 /* openCLImageLoad */,
@@ -188,13 +186,22 @@
 		8B0443281367A8EC00D919D5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				"FRAMEWORK_SEARCH_PATHS[arch=*]" = "\"/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad\"";
+				"FRAMEWORK_SEARCH_PATHS[arch=*]" = "";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_VERSION = 4.2;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				KEEP_PRIVATE_EXTERNS = NO;
+				LD_RUNPATH_SEARCH_PATHS = /Developer/SDKs/MacOSX10.6.sdk/usr/local/lib/;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				"LIBRARY_SEARCH_PATHS[arch=*]" = /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/dylibsAndFrameworks/FreeImage/;
+				LLVM_LTO = NO;
+				PRELINK_LIBS = "/Developer/SDKs/MacOSX10.6.sdk/usr/local/lib/libfreeimage-3.15.0.dylib";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -202,11 +209,18 @@
 		8B0443291367A8EC00D919D5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_VERSION = 4.2;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				KEEP_PRIVATE_EXTERNS = NO;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+				);
+				LLVM_LTO = NO;
+				PRELINK_LIBS = "/Developer/SDKs/MacOSX10.6.sdk/usr/local/lib/libfreeimage-3.15.0.dylib";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

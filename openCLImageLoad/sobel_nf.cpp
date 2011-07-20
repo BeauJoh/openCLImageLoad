@@ -21,7 +21,8 @@ cl_kernel kernel;                   // compute kernel
 cl_sampler sampler;
 cl_mem input;                       // device memory used for the input array
 cl_mem output;                      // device memory used for the output array
-int width, height;                  //input and output image specs
+int width;
+int height;                  //input and output image specs
 
 void cleanKill(int errNumber){
     clReleaseMemObject(input);
@@ -36,9 +37,9 @@ void cleanKill(int errNumber){
 
 int main(int argc, char *argv[])
 {
-    read_png_file((char*)"rgba.png");
+    //read_png_file((char*)"rgba.png");
     
-    inData = getImage();
+    //inData = getImage();
 
     //inData = read_tiff((char*)"GMARBLES.tif");
     
@@ -122,6 +123,7 @@ int main(int argc, char *argv[])
     format.image_channel_order = CL_RGBA; 
     format.image_channel_data_type = CL_UNORM_INT8;
     
+    
 //    format.image_channel_data_type = CL_UNSIGNED_INT8;
 //	format.image_channel_order = CL_RGBA;
 
@@ -133,10 +135,10 @@ int main(int argc, char *argv[])
     
     //CL_UNSIGNED_INT16 would be ideal Each channel component is an unnormalized unsigned 16-bit integer value. But not compatible for image_channel_order of  CL_INTENSITY
     
-    if(!inData){
-        cout << "The input image is empty" << endl;
-        cleanKill(EXIT_FAILURE);
-    }
+//    if(!inData){
+//        cout << "The input image is empty" << endl;
+//        cleanKill(EXIT_FAILURE);
+//    }
     
 //    width = getImageWidth();
 //    height = getImageLength();
@@ -165,14 +167,16 @@ int main(int argc, char *argv[])
     
     input = LoadImage(context, (char*)"rgba.png", width, height);
     
+    cout << "Image is " << width << " wide and " << height << " high" << endl;
+    
     output = clCreateImage2D(context, 
                              CL_MEM_WRITE_ONLY, 
                              &format, 
                              width, 
                              height,
-                             getImageRowPitch(), 
+                             0, 
                              NULL, 
-                                &err);
+                             &err);
 
     if(there_was_an_error(err)){
         cout << "Output Image Buffer creation error!" << endl;
@@ -184,6 +188,20 @@ int main(int argc, char *argv[])
         cleanKill(EXIT_FAILURE);
 	}
     
+    char *buffer = new char [width * height * 4];
+    size_t origin[3] = { 0, 0, 0 };
+    size_t region[3] = { width, height, 1};
+    
+    cl_command_queue queue = clCreateCommandQueue(
+                                                  context, 
+                                                  device_id, 
+                                                  0, 
+                                                  &err);
+    
+    err = clEnqueueReadImage(queue, input,
+                       CL_TRUE, origin, region, 0, 0, buffer, 0, NULL, NULL);
+    
+    SaveImage("outRGBA.png", (char*)buffer, width, height);
 	// Write our data set into the input array in device memory
 //    const size_t origin[3] = {0, 0, 0};
 //    const size_t region[3] = {getImageWidth(), getImageLength(), 1}; 
@@ -194,7 +212,7 @@ int main(int argc, char *argv[])
                               CL_FALSE, // Non-normalized coordinates 
                               CL_ADDRESS_CLAMP_TO_EDGE, 
                               CL_FILTER_NEAREST, 
-                                &err);
+                              &err);
     
     if(there_was_an_error(err)){
         cout << "Error creating CL sampler object." << endl;
@@ -216,9 +234,9 @@ int main(int argc, char *argv[])
 	err = 0;
 	err  = clSetKernelArg(kernel, 0, sizeof(cl_mem), &input);
 	err |= clSetKernelArg(kernel, 1, sizeof(cl_mem), &output);
-    //err |= clSetKernelArg(kernel, 2, sizeof(cl_sampler), &sampler); 
-    //err |= clSetKernelArg(kernel, 3, sizeof(cl_int), &width);
-    //err |= clSetKernelArg(kernel, 4, sizeof(cl_int), &height);
+    err |= clSetKernelArg(kernel, 2, sizeof(cl_sampler), &sampler); 
+    err |= clSetKernelArg(kernel, 3, sizeof(cl_int), &width);
+    err |= clSetKernelArg(kernel, 4, sizeof(cl_int), &height);
     
     if(there_was_an_error(err)){
         cout << "Error: Failed to set kernel arguments! " << err << endl;

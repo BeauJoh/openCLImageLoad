@@ -239,3 +239,16 @@ cl_mem LoadImage(cl_context context, char *fileName, int &width, int &height)
     }
     return clImage; 
 }
+
+bool SaveImage(char *fileName, char *buffer, int width, int height) {
+    FREE_IMAGE_FORMAT format = FreeImage_GetFIFFromFilename(fileName);
+    FIBITMAP *image = FreeImage_ConvertFromRawBits((BYTE*)buffer,
+                                                   width,
+                                                   height,
+                                                   width*4,
+                                                   32,
+                                                   0xFF000000,
+                                                   0x00FF0000,
+                                                   0x0000FF00);
+    return FreeImage_Save(format, image, fileName);
+}
