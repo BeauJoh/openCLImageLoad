@@ -3,7 +3,13 @@
 #include "RGBAUtilities.h"
 
 #include <iostream>
+#include <getopt.h>
 using namespace std;
+
+
+string imageFileName;
+string kernelFileName;
+
 
 uint8 *inData, *outData;
 
@@ -35,18 +41,82 @@ void cleanKill(int errNumber){
     exit(errNumber);
 }
 
+static inline int parseCommandLine(int argc , char** argv){
+    {
+        int c;
+        while (true)
+        {
+            static struct option long_options[] =
+            {
+                /* These options don't set a flag.
+                 We distinguish them by their indices. */
+                {"kernel",required_argument,       0, 'k'},
+                {"image",  required_argument,       0, 'i'},
+                {0, 0, 0, 0}
+            };
+            /* getopt_long stores the option index here. */
+            int option_index = 0;
+            
+            c = getopt_long (argc, argv, ":k:i:",
+                             long_options, &option_index);
+            
+            /* Detect the end of the options. */
+            if (c == -1)
+                break;
+            
+            switch (c)
+            {
+                case 0:
+                    /* If this option set a flag, do nothing else now. */
+                    if (long_options[option_index].flag != 0)
+                        break;
+                    printf ("option %s", long_options[option_index].name);
+                    if (optarg)
+                        printf (" with arg %s", optarg);
+                    printf ("\n");
+                    break;
+                    
+                case 'i':
+                    imageFileName = optarg ;
+                break;
+                    
+                case 'k':
+                    kernelFileName = optarg ;
+                break;
+                    
+                    
+                case '?':
+                    /* getopt_long already printed an error message. */
+                    break;
+                    
+                default:
+                    ;
+                    
+            }
+        }
+        
+        
+        /* Print any remaining command line arguments (not options). */
+        if (optind < argc)
+        {
+            while (optind < argc)
+            /*
+             printf ("%s ", argv[optind]);
+             putchar ('\n');
+             */
+                optind++;
+        }
+    }
+};
+
+
+
+
 int main(int argc, char *argv[])
 {
-    //read_png_file((char*)"rgba.png");
     
-    //inData = getImage();
-
-    //inData = read_tiff((char*)"GMARBLES.tif");
+    parseCommandLine(argc , argv);
     
-    //data = normalizeData(data);
-    
-	//out = new uint16[getSamplesPerPixel() * getImageWidth() * getImageLength()];
-	
 	// Connect to a compute device
 	//
 	gpu = 1;
@@ -71,7 +141,7 @@ int main(int argc, char *argv[])
     
     // Load kernel source code
     //
-	char *source = load_program_source("sobel_opt1.cl");
+	char *source = load_program_source(kernelFileName.data());
     if(!source)
     {
         cout << "Error: Failed to load compute program from file!" << endl;
@@ -165,7 +235,7 @@ int main(int argc, char *argv[])
     
     //getGPUUnitSupportedImageFormats(context);
     
-    input = LoadImage(context, (char*)"rgba.png", width, height);
+    input = LoadImage(context, (char*)imageFileName.data(), width, height);
     
     cout << "Image is " << width << " wide and " << height << " high" << endl;
     
