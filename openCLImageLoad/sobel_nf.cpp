@@ -113,11 +113,11 @@ int main(int argc, char *argv[])
 	
 //    getGPUUnitSupportedImageFormats(context);
     
-    // specify the image format that the images a represented with
-	cl_image_format alternateImageFormat;
-	alternateImageFormat.image_channel_data_type = CL_UNSIGNED_INT16;
-	alternateImageFormat.image_channel_order = CL_A;
-    
+//    // specify the image format that the images a represented with
+//	cl_image_format alternateImageFormat;
+//	alternateImageFormat.image_channel_data_type = CL_UNSIGNED_INT16;
+//	alternateImageFormat.image_channel_order = CL_A;
+//    
     // Create ouput image object 
     cl_image_format format; 
     format.image_channel_order = CL_RGBA; 
@@ -167,7 +167,7 @@ int main(int argc, char *argv[])
     
     input = LoadImage(context, (char*)"rgba.png", width, height);
     
-    cout << "Image is " << width << " wide and " << height << " high" << endl;
+    //cout << "Image is " << width << " wide and " << height << " high" << endl;
     
     output = clCreateImage2D(context, 
                              CL_MEM_WRITE_ONLY, 
@@ -201,7 +201,7 @@ int main(int argc, char *argv[])
     err = clEnqueueReadImage(queue, input,
                        CL_TRUE, origin, region, 0, 0, buffer, 0, NULL, NULL);
     
-    SaveImage("outRGBA.png", (char*)buffer, width, height);
+    SaveImage((char*)"outRGBA.png", (char*)buffer, width, height);
 	// Write our data set into the input array in device memory
 //    const size_t origin[3] = {0, 0, 0};
 //    const size_t region[3] = {getImageWidth(), getImageLength(), 1}; 
@@ -231,7 +231,6 @@ int main(int argc, char *argv[])
     
 	// Set the arguments to our compute kernel
 	//
-	err = 0;
 	err  = clSetKernelArg(kernel, 0, sizeof(cl_mem), &input);
 	err |= clSetKernelArg(kernel, 1, sizeof(cl_mem), &output);
     err |= clSetKernelArg(kernel, 2, sizeof(cl_sampler), &sampler); 
