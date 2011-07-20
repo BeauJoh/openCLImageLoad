@@ -8,10 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		8B04367513D182F300695184 /* RGBAUtilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B04367413D182F300695184 /* RGBAUtilities.cpp */; };
-		8B04432E1367AA1100D919D5 /* OpenCL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B04432D1367AA1100D919D5 /* OpenCL.framework */; };
-		8B5EAB4513D67BFC005C1C8D /* libfreeimage.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B5EAB4413D67BFC005C1C8D /* libfreeimage.dylib */; };
+		8B5EAB4713D6A6CF005C1C8D /* libfreeimage.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B5EAB4613D6A6CF005C1C8D /* libfreeimage.dylib */; };
+		8B5EAB4A13D6A6E1005C1C8D /* libpng.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B5EAB4813D6A6E1005C1C8D /* libpng.framework */; };
+		8B5EAB4B13D6A6E1005C1C8D /* OpenCL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B5EAB4913D6A6E1005C1C8D /* OpenCL.framework */; };
 		8B8FABB2136CF82F00961823 /* sobel_nf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B8FABB1136CF82F00961823 /* sobel_nf.cpp */; };
-		8B95BDB213CC13BA00B3E897 /* libpng.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B95BDB113CC13BA00B3E897 /* libpng.framework */; };
 		8B9A212713AB280400F36E8A /* openCLUtilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B9A212513AB280400F36E8A /* openCLUtilities.cpp */; };
 /* End PBXBuildFile section */
 
@@ -31,11 +31,11 @@
 		8B04367313D182F300695184 /* RGBAUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RGBAUtilities.h; sourceTree = "<group>"; };
 		8B04367413D182F300695184 /* RGBAUtilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RGBAUtilities.cpp; sourceTree = "<group>"; };
 		8B04431E1367A8EC00D919D5 /* openCLImageLoad */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = openCLImageLoad; sourceTree = BUILT_PRODUCTS_DIR; };
-		8B04432D1367AA1100D919D5 /* OpenCL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenCL.framework; path = System/Library/Frameworks/OpenCL.framework; sourceTree = SDKROOT; };
-		8B5EAB4413D67BFC005C1C8D /* libfreeimage.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libfreeimage.dylib; sourceTree = "<group>"; };
+		8B5EAB4613D6A6CF005C1C8D /* libfreeimage.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreeimage.dylib; path = dylibsAndFrameworks/libfreeimage.dylib; sourceTree = "<group>"; };
+		8B5EAB4813D6A6E1005C1C8D /* libpng.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libpng.framework; path = dylibsAndFrameworks/libpng.framework; sourceTree = "<group>"; };
+		8B5EAB4913D6A6E1005C1C8D /* OpenCL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenCL.framework; path = dylibsAndFrameworks/OpenCL.framework; sourceTree = "<group>"; };
 		8B8FABA7136CE7BD00961823 /* sobel_opt1.cl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.opencl; path = sobel_opt1.cl; sourceTree = "<group>"; };
 		8B8FABB1136CF82F00961823 /* sobel_nf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sobel_nf.cpp; sourceTree = "<group>"; };
-		8B95BDB113CC13BA00B3E897 /* libpng.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libpng.framework; path = Library/Frameworks/libpng.framework; sourceTree = SDKROOT; };
 		8B95BDD613CD625E00B3E897 /* io_tiff.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = io_tiff.cpp; sourceTree = "<group>"; };
 		8B95BDD713CD625E00B3E897 /* io_tiff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = io_tiff.h; sourceTree = "<group>"; };
 		8B9A212513AB280400F36E8A /* openCLUtilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = openCLUtilities.cpp; sourceTree = "<group>"; };
@@ -48,9 +48,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8B95BDB213CC13BA00B3E897 /* libpng.framework in Frameworks */,
-				8B04432E1367AA1100D919D5 /* OpenCL.framework in Frameworks */,
-				8B5EAB4513D67BFC005C1C8D /* libfreeimage.dylib in Frameworks */,
+				8B5EAB4713D6A6CF005C1C8D /* libfreeimage.dylib in Frameworks */,
+				8B5EAB4A13D6A6E1005C1C8D /* libpng.framework in Frameworks */,
+				8B5EAB4B13D6A6E1005C1C8D /* OpenCL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -60,9 +60,9 @@
 		8B0443131367A8EC00D919D5 = {
 			isa = PBXGroup;
 			children = (
-				8B5EAB4413D67BFC005C1C8D /* libfreeimage.dylib */,
-				8B95BDB113CC13BA00B3E897 /* libpng.framework */,
-				8B04432D1367AA1100D919D5 /* OpenCL.framework */,
+				8B5EAB4813D6A6E1005C1C8D /* libpng.framework */,
+				8B5EAB4913D6A6E1005C1C8D /* OpenCL.framework */,
+				8B5EAB4613D6A6CF005C1C8D /* libfreeimage.dylib */,
 				8B0443211367A8EC00D919D5 /* openCLImageLoad */,
 				8B04431F1367A8EC00D919D5 /* Products */,
 			);
@@ -189,6 +189,10 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/dylibsAndFrameworks\"",
+				);
 				"FRAMEWORK_SEARCH_PATHS[arch=*]" = "";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
@@ -198,6 +202,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/dylibsAndFrameworks\"",
 				);
 				"LIBRARY_SEARCH_PATHS[arch=*]" = /Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/dylibsAndFrameworks/FreeImage/;
 				LLVM_LTO = NO;
@@ -212,12 +217,17 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/dylibsAndFrameworks\"",
+				);
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				KEEP_PRIVATE_EXTERNS = NO;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/dylibsAndFrameworks\"",
 				);
 				LLVM_LTO = NO;
 				PRELINK_LIBS = "/Developer/SDKs/MacOSX10.6.sdk/usr/local/lib/libfreeimage-3.15.0.dylib";
