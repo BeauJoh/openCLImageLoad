@@ -10,8 +10,8 @@ uint8 *inData, *outData;
 // OpenCL variables
 int err, gpu;                            // error code returned from api calls
 
-size_t global;                      // global domain size for our calculation
-size_t local;                       // local domain size for our calculation
+size_t *global;                      // global domain size for our calculation
+size_t *local;                       // local domain size for our calculation
 
 cl_device_id device_id;             // compute device id 
 cl_context context;                 // compute context
@@ -188,21 +188,7 @@ int main(int argc, char *argv[])
         cleanKill(EXIT_FAILURE);
 	}
     
-    char *buffer = new char [width * height * 4];
-    size_t origin[3] = { 0, 0, 0 };
-    size_t region[3] = { width, height, 1};
-    
-    cl_command_queue queue = clCreateCommandQueue(
-                                                  context, 
-                                                  device_id, 
-                                                  0, 
-                                                  &err);
-    
-    err = clEnqueueReadImage(queue, input,
-                       CL_TRUE, origin, region, 0, 0, buffer, 0, NULL, NULL);
-    
-    SaveImage((char*)"outRGBA.png", (char*)buffer, width, height);
-	// Write our data set into the input array in device memory
+// Write our data set into the input array in device memory
 //    const size_t origin[3] = {0, 0, 0};
 //    const size_t region[3] = {getImageWidth(), getImageLength(), 1}; 
 //    
@@ -244,9 +230,9 @@ int main(int argc, char *argv[])
     
 	// Get the maximum work group size for executing the kernel on the device
 	//
-    //  err = clGetKernelWorkGroupInfo(kernel, device_id, CL_KERNEL_WORK_GROUP_SIZE, sizeof(int) * 4 + sizeof(float) * 2, &local, NULL);
+    err = clGetKernelWorkGroupInfo(kernel, device_id, CL_KERNEL_WORK_GROUP_SIZE, sizeof(int) * 4 + sizeof(float) * 2, &local, NULL);
 
-	err = clGetKernelWorkGroupInfo(kernel, device_id, CL_KERNEL_WORK_GROUP_SIZE, sizeof(unsigned short)* getImageLength()*getImageWidth(), &local, NULL);
+	//err = clGetKernelWorkGroupInfo(kernel, device_id, CL_KERNEL_WORK_GROUP_SIZE, sizeof(unsigned short)* getImageLength()*getImageWidth(), &local, NULL);
 
 	if (err != CL_SUCCESS)
 	{
@@ -263,10 +249,21 @@ int main(int argc, char *argv[])
 	// Execute the kernel over the entire range of our 1d input data set
 	// using the maximum number of work group items for this device
 	//
-    global = sizeof(unsigned short)* getImageLength()*getImageWidth();
-	local = 64;
+    local = new size_t[2];
+    global = new size_t[2];
+
     
-	err = clEnqueueNDRangeKernel(commands, kernel, 2, NULL, &global, &local, 0, NULL, NULL);
+    // THIS IS POORLY DOCUMENTED ELSEWHERE!
+    // each independed image object steam needs its own local & global data spec
+    // thus while I use 1 input and 1 output object local[0] for local input
+    // and local[1] for local output
+    
+    local[0] = 1;
+    local[1] = local[0];
+    global[0] = width*height;
+    global[1] = global[0];
+    
+	err = clEnqueueNDRangeKernel(commands, kernel, 2, NULL, global, local, 0, NULL, NULL);
 	if (err)
 	{
         cout << print_cl_errstring(err) << endl;
@@ -305,6 +302,23 @@ int main(int argc, char *argv[])
 	
 	// Shutdown and cleanup
 	//
+    
+    char *buffer = new char [width * height * 4];
+    size_t origin[3] = { 0, 0, 0 };
+    size_t region[3] = { width, height, 1};
+    
+    cl_command_queue queue = clCreateCommandQueue(
+                                                  context, 
+                                                  device_id, 
+                                                  0, 
+                                                  &err);
+    
+    err = clEnqueueReadImage(queue, output,
+                             CL_TRUE, origin, region, 0, 0, buffer, 0, NULL, NULL);
+    
+    SaveImage((char*)"outRGBA.png", (char*)buffer, width, height);
+
+    
 	cleanKill(EXIT_SUCCESS);
 	
 //write image here	

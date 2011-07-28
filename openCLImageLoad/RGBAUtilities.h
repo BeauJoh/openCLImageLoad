@@ -46,7 +46,7 @@ void write_png_file(char* file_name);
 //an example on how to access pixel components of the file
 void process_file(void);
 //normalizing/denormalizing and testing normalization only works with the getImage/setImage functions and even then cannot currently be used due to rounding
-uint8* normalizeImage(uint8*);
+float* normalizeImage(uint8*);
 uint8* denormalizeImage(uint8*);
 bool allPixelsAreNormal(uint8*);
 

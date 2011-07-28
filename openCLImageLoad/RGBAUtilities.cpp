@@ -186,9 +186,9 @@ void process_file(void)
     }
 }
 
-uint8* normalizeImage(uint8* input){
+float* normalizeImage(uint8* input){
     //with 8 bits this obvously causes a rounding error, usually down to 0, solve this by storing as floats
-    uint8* output = new uint8[_imageBitSize];
+    float* output = new float[_imageBitSize];
     
     for (int i = 0; i < _imageSize; i++) {
         output[i] = (input[i]/pow(2,_bitsPerSample));
@@ -197,7 +197,7 @@ uint8* normalizeImage(uint8* input){
     return output;
 }
 
-uint8* denormalizeImage(uint8*input){
+uint8* denormalizeImage(float*input){
     //with 8 bits this obvously causes a rounding error, usually down to 0, solve this by storing as floats
     uint8* output = new uint8[_imageBitSize];
 

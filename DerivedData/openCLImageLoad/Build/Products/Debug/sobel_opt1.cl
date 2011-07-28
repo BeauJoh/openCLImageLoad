@@ -1,36 +1,36 @@
-const int order = 1;
-
-__kernel void sobel(__global const uchar* data, __global uchar* out, const uint width, const uint height,  __global const float* coef_ver,  __global const float* coef_hor, __local float *coef_ver_shared, __local float *coef_hor_shared)
+__kernel void sobel(__read_only image2d_t srcImg,
+                              __write_only image2d_t dstImg,
+                              sampler_t sampler,
+                              int width, int height)
 {
-	int i, j, gid, lid, coef_width;
-	float out_ver = 0, out_hor = 0;
-	gid = get_global_id(0);
-	lid = get_local_id(0);
-	
-	coef_width = 2 * order + 1;
-	
-	if(lid < 9)
-	{
-		coef_ver_shared[lid] = coef_ver[lid];
-		coef_hor_shared[lid] = coef_hor[lid];
-	}
-	
-	barrier(CLK_LOCAL_MEM_FENCE);
-	
-	if(gid < width) return;
-	if(gid > (height-1)*width) return;
-	if((gid << (int) log2((float) gid)) == 1 || ((gid + 1) << (int) log2((float) gid)) == 1) return;
-	
-	for(i = -1 * order; i < (order + 1); i++)
-	{
-		for(j = -1 * order; j < order + 1; j++)
-		{
-			out_ver += data[gid + width * i + j] * coef_ver_shared[(i + order) * coef_width + (j + order)];
-			out_hor += data[gid + width * i + j] * coef_hor_shared[(i + order) * coef_width + (j + order)];
-		}
-	}
-	out[gid] = (uchar) sqrt((float) (pow((float) out_ver, 2) + pow((float) out_hor, 2)));
-	
-	barrier(CLK_LOCAL_MEM_FENCE);
+    // Gaussian Kernel is:
+    // 1  2  1
+    // 2  4  2
+    // 1  2  1
+    float kernelWeights[9] = { 1.0f, 2.0f, 1.0f,
+        2.0f, 4.0f, 2.0f,
+        1.0f, 2.0f, 1.0f };
+    int2 startImageCoord = (int2) (get_global_id(0) - 1,
+                                   get_global_id(1) - 1);
+    int2 endImageCoord   = (int2) (get_global_id(0) + 1,
+                                   get_global_id(1) + 1);
+    int2 outImageCoord = (int2) (get_global_id(0),
+                                 get_global_id(1));
+    if (outImageCoord.x < width && outImageCoord.y < height)
+    {
+        int weight = 0;
+        float4 outColor = (float4)(0.0f, 0.0f, 0.0f, 0.0f);
+        for(int y = startImageCoord.y; y <= endImageCoord.y; y++)
+        {
+            for(int x= startImageCoord.x; x <= endImageCoord.x; x++)
+            {
+                outColor +=
+                (read_imagef(srcImg, sampler, (int2)(x, y)) *
+                 (kernelWeights[weight] / 16.0f));
+                weight += 1;
+                // Write the output value to image
+                write_imagef(dstImg, outImageCoord, outColor);
+            }
+        } 
+    }
 }
-
