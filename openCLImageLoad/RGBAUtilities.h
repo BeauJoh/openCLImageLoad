@@ -20,6 +20,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include <math.h>
+
 #define PNG_DEBUG 3
 
     //define our data types, the following numbers denote the number of bits
@@ -47,22 +48,31 @@ void write_png_file(char* file_name);
 void process_file(void);
 //normalizing/denormalizing and testing normalization only works with the getImage/setImage functions and even then cannot currently be used due to rounding
 float* normalizeImage(uint8*);
-uint8* denormalizeImage(uint8*);
+uint8* denormalizeImage(float*);
 bool allPixelsAreNormal(uint8*);
+float* convertFromRawBits(uint8 * bits, int width, int height, unsigned bpp);
 
 uint8* getImage(void);
 void setImage(uint8*);
 
+float* norm(float* input, uint32 imageSize);
+float* denorm(float* input, uint32 imageSize);
+float* upcastToFloat(uint8* input, uint32 imageSize);
+uint8* downCastToByte(float* input, uint32 imageSize);
+float* upcastToFloatAndNormalize(uint8* input, uint32 imageSize);
+uint8* downcastToByteAndDenormalize(float* input, uint32 imageSize);
+uint32 getImageSizeInFloats(void);
+
 //old less obvious way of doing things (nested uint8*[uint8*[]]) 2D array, useless for OpenCL
 uint8* convolutedGetImage(void);
 void convolutedSetImage(uint8*);
-
 uint32 getImageLength(void);
 uint32 getImageWidth(void);
 uint32 getConfig(void);
 uint32 getBitsPerSample(void);
 uint32 getSamplesPerPixel(void);
 uint32 getImageRowPitch(void);
+uint32 getImageSize(void);
 
 #endif
 

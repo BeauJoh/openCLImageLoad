@@ -206,7 +206,41 @@ char *load_program_source(const char *filename)
     return source;
 }
 
-cl_mem LoadImage(cl_context context, char *fileName, int &width, int &height)
+cl_mem LoadImage(cl_context context, char *fileName, int &width, int &height, cl_image_format &format)
+{ 
+    read_png_file(fileName);
+    
+    width = getImageWidth();
+    height = getImageLength();
+    
+    uint8 *buffer = new uint8[getImageSizeInFloats()];    
+    memcpy(buffer, upcastToFloatAndNormalize(getImage(), getImageSize()), getImageSizeInFloats());
+    
+    //char*buffer = new char[width * height * 4];
+    //memcpy(buffer, normalizeImage(getImage()), width*height*4*sizeof(float));
+    
+    format.image_channel_order = CL_RGBA; 
+    format.image_channel_data_type = CL_UNORM_INT8;
+        
+    cl_int errNum; 
+    cl_mem clImage; 
+    
+    clImage = clCreateImage2D(context,
+                              CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, 
+                              &format, 
+                              width,
+                              height, 
+                              0, 
+                              buffer, 
+                              &errNum);
+    if (errNum != CL_SUCCESS) {
+        printf("Error creating CL image object\n"); 
+        return 0;
+    }
+    return clImage; 
+}
+
+cl_mem FreeImageLoadImage(cl_context context, char *fileName, int &width, int &height, cl_image_format &clImageFormat)
 { 
     FREE_IMAGE_FORMAT format = FreeImage_GetFileType(fileName, 0); 
     FIBITMAP* image = FreeImage_Load(format, fileName);
@@ -220,7 +254,7 @@ cl_mem LoadImage(cl_context context, char *fileName, int &width, int &height)
     memcpy(buffer, FreeImage_GetBits(image), width * height * 4);
     FreeImage_Unload(image);
     // Create OpenCL image 
-    cl_image_format clImageFormat; 
+//    cl_image_format clImageFormat; 
     clImageFormat.image_channel_order = CL_RGBA; 
     clImageFormat.image_channel_data_type = CL_UNORM_INT8;
     cl_int errNum; 
@@ -240,7 +274,17 @@ cl_mem LoadImage(cl_context context, char *fileName, int &width, int &height)
     return clImage; 
 }
 
-bool SaveImage(char *fileName, char *buffer, int width, int height) {
+bool SaveImage(char *fileName, uint8 *buffer, int width, int height) {
+    //setImage((uint8*)denormalizeImage((float*)buffer));
+    //write_png_file(fileName);
+    
+    setImage(downcastToByteAndDenormalize((float*)buffer, getImageSize()));
+    write_png_file(fileName);
+    
+    return true;
+}
+
+bool FreeImageSaveImage(char *fileName, char *buffer, int width, int height) {
     FREE_IMAGE_FORMAT format = FreeImage_GetFIFFromFilename(fileName);
     FIBITMAP *image = FreeImage_ConvertFromRawBits((BYTE*)buffer,
                                                    width,

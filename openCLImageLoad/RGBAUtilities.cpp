@@ -188,10 +188,13 @@ void process_file(void)
 
 float* normalizeImage(uint8* input){
     //with 8 bits this obvously causes a rounding error, usually down to 0, solve this by storing as floats
-    float* output = new float[_imageBitSize];
+    float* output = new float[_imageSize];
     
     for (int i = 0; i < _imageSize; i++) {
-        output[i] = (input[i]/pow(2,_bitsPerSample));
+        output[i] = ((float)input[i]/255.0f);
+        if (i == 50) {
+            printf("First Float Value In is %f", output[i]);
+        }
     }
     delete input;
     return output;
@@ -199,10 +202,12 @@ float* normalizeImage(uint8* input){
 
 uint8* denormalizeImage(float*input){
     //with 8 bits this obvously causes a rounding error, usually down to 0, solve this by storing as floats
-    uint8* output = new uint8[_imageBitSize];
-
+    uint8* output = new uint8[_imageSize];
     for (int i = 0; i < _imageSize; i++) {
-        output[i] = (input[i]*pow(2,_bitsPerSample));
+        output[i] = ((uint8)input[i]*255.0f);
+        if (i == 50) {
+            printf("First Float Value In is %d", output[i]);
+        }
     }
     delete input;
     return output;
@@ -291,6 +296,98 @@ void setImage(uint8* image){
     delete image;
 }
 
+float* norm(float* input, uint32 imageSize){
+    float* output = new float[imageSize];
+    
+    for (int i = 0; i < imageSize; i++) {
+        output[i] = input[i]/255.0f;
+    }
+    return output;
+}
+
+float* denorm(float* input, uint32 imageSize){
+    float* output = new float[imageSize];
+    
+    for (int i = 0; i < imageSize; i++) {
+        output[i] = input[i]*255.0f;
+    }
+    return output;
+}
+
+float* upcastToFloat(uint8* input, uint32 imageSize){
+    float* output = new float[imageSize];
+    for (int i = 0; i < imageSize; i++) {
+        output[i] = (float)input[i];
+    }
+    return output;
+}
+
+float* upcastToFloatAndNormalize(uint8* input, uint32 imageSize){
+    float* output = new float[imageSize];
+    for (int i = 0; i < imageSize; i++) {
+        output[i] = (float)input[i]/255.0f;
+    }
+    return output;
+}
+
+uint8* downcastToByteAndDenormalize(float* input, uint32 imageSize){
+    uint8* output = new uint8[imageSize];
+    for (int i = 0; i < imageSize; i++) {
+        output[i] = input[i]*255.0f;
+    }
+    return output;
+}
+
+uint32 getImageSizeInFloats(void){
+    return _imageSize*sizeof(float);
+}
+
+uint8* downCastToByte(float* input, uint32 imageSize){
+    uint8* output = new uint8[imageSize];
+    for (int i = 0; i < imageSize; i++) {
+        output[i] = (uint8)input[i];
+    }
+    return output;
+}
+
+float* convertFromRawBits(uint8 * bits, int width, int height, unsigned bpp){
+    float*buffer = new float[sizeof(uint8) * _imageWidth * _imageLength * _samplesPerPixel];
+    
+    if (buffer != NULL) {
+        int j = 0;
+        for (int i = 0; i < _imageSize; i++) {
+            long unsigned int tmp0,tmp1,tmp2,tmp3,tmp;
+            tmp0 = ((long unsigned int)bits[j+0]);
+            tmp1 = ((long unsigned int)bits[j+1]);
+            tmp2 = ((long unsigned int)bits[j+2]);
+            tmp3 = ((long unsigned int)bits[j+3]);
+            
+            
+            buffer[i] = 0.0f;
+            
+            buffer[i] = (tmp0>>0);
+            buffer[i] = buffer[i] + (tmp1>>8);
+            buffer[i] = buffer[i] + (tmp2>>16);
+            buffer[i] = buffer[i] + (tmp3>>24);
+            buffer[i] = ((long unsigned int)buffer[i]);
+            if (i == 50) {
+                printf("\nFirst Float Value Out is %f", buffer[i]);
+                printf("\nFirst bit = %li", tmp0);
+                printf("\nSecond bit = %li", tmp1);
+                printf("\nThird bit = %li", tmp2);
+                printf("\nFourth bit = %li\n", tmp3);
+            }
+            //buffer[i] = (bits[j] << 24) | (bits[j+1] << 16) | (bits[j+2] << 8) | (bits[j+3]);   
+            j+=4;
+        }
+    }
+    
+    return buffer;
+}
+
+uint32 getImageSize(void){
+    return _imageSize;
+}
 
 uint32 getImageLength(void){
     return _imageLength;

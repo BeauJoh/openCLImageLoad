@@ -19,6 +19,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include "FreeImage.h"
+#include "RGBAUtilities.h"
 
 // Special automatic include statement, 
 // openCL is dependent on specific libraries, depending on the OS
@@ -41,6 +42,7 @@ assert(0); \
 
 #define SRC 1
 #define DST 2
+#define byte unsigned char
 
 
 char *print_cl_errstring(cl_int err);
@@ -49,6 +51,8 @@ void getGPUUnitSupportedImageFormats(cl_context context);
 cl_bool doesGPUSupportImageObjects(cl_device_id device_id);
 char *load_program_source(const char *filename);
 cl_bool cleanupAndKill();
-cl_mem LoadImage(cl_context context, char *fileName, int &width, int &height);
-bool SaveImage(char *fileName, char *buffer, int width, int height);
+cl_mem LoadImage(cl_context context, char *fileName, int &width, int &height, cl_image_format &format);
+bool SaveImage(char *fileName, uint8 *buffer, int width, int height);
+cl_mem FreeImageLoadImage(cl_context context, char *fileName, int &width, int &height, cl_image_format &format);
+bool FreeImageSaveImage(char *fileName, char *buffer, int width, int height);
 #endif

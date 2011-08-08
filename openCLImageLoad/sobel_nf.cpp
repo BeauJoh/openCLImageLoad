@@ -5,8 +5,6 @@
 #include <iostream>
 using namespace std;
 
-uint8 *inData, *outData;
-
 // OpenCL variables
 int err, gpu;                            // error code returned from api calls
 
@@ -35,18 +33,42 @@ void cleanKill(int errNumber){
     exit(errNumber);
 }
 
-int main(int argc, char *argv[])
-{
-    //read_png_file((char*)"rgba.png");
+int imgTest(int argc, char ** argv){
     
-    //inData = getImage();
+    read_png_file((char*)"rgba.png");
+    
+//    cout << "Size of image " << getImageSize() << endl;
+//
+//    float *buffer = new float[getImageSize()];    
+//    memcpy(buffer, upcastToFloatAndNormalize(getImage(), getImageSize()), getImageSizeInFloats());
+//    
+//    //buffer is now populated with array of normalized floats
+//    setImage(downcastToByteAndDenormalize(buffer, getImageSize()));
 
-    //inData = read_tiff((char*)"GMARBLES.tif");
     
-    //data = normalizeData(data);
+    uint8 *buffer = new uint8[getImageSizeInFloats()];    
+    memcpy(buffer, upcastToFloatAndNormalize(getImage(), getImageSize()), getImageSizeInFloats());
     
-	//out = new uint16[getSamplesPerPixel() * getImageWidth() * getImageLength()];
-	
+    //buffer is now populated with array of normalized floats
+    setImage(downcastToByteAndDenormalize((float*)buffer, getImageSize()));
+    
+    
+    //setImage(downCastToByte(denorm(norm(upcastToFloat(getImage(), getImageSize()),getImageSize()), getImageSize()),getImageSize()));
+    
+    
+    // write image back
+    //setImage(buffer);
+    write_png_file((char*)"outRGBA.png");
+    
+    //SaveImage((char*)"outRGBA.png", buffer, width, height);
+    
+    system("open outRGBA.png");
+    return 1;
+}
+
+#define USINGFREEIMAGE
+int main(int argc, char *argv[])
+{	    
 	// Connect to a compute device
 	//
 	gpu = 1;
@@ -111,64 +133,31 @@ int main(int argc, char *argv[])
         cleanKill(EXIT_FAILURE);
     }
 	
-//    getGPUUnitSupportedImageFormats(context);
+    #ifdef DEBUG
+        getGPUUnitSupportedImageFormats(context);
+    #endif
     
-//    // specify the image format that the images a represented with
-//	cl_image_format alternateImageFormat;
-//	alternateImageFormat.image_channel_data_type = CL_UNSIGNED_INT16;
-//	alternateImageFormat.image_channel_order = CL_A;
-//    
-    // Create ouput image object 
+    //  specify the image format that the images are represented as... 
+    //  by default to support OpenCL they must support 
+    //  format.image_channel_data_type = CL_UNORM_INT8;
+    //  i.e. Each channel component is a normalized unsigned 8-bit integer value.
+    //
+    //	format.image_channel_order = CL_RGBA;
+    //
+    //  format is collected with the LoadImage function
     cl_image_format format; 
-    format.image_channel_order = CL_RGBA; 
-    format.image_channel_data_type = CL_UNORM_INT8;
     
     
-//    format.image_channel_data_type = CL_UNSIGNED_INT8;
-//	format.image_channel_order = CL_RGBA;
-
-    //CL_UNORM_INT8 = Each channel component is a normalized unsigned 8-bit integer value.
-    //CL_UNORM_INT16 = Each channel component is a normalized unsigned 16-bit integer value.
-
+    #ifdef USINGFREEIMAGE
+        /*----------->     FREE IMAGE REQUIRED     <-----------*/
+        input = FreeImageLoadImage(context, (char*)"rgba.png", width, height, format);
+    #else
+        input = LoadImage(context, (char*)"rgba.png", width, height, format);
+    #endif
     
-    //cl_image_format format = {CL_INTENSITY, CL_UNORM_INT16};
     
-    //CL_UNSIGNED_INT16 would be ideal Each channel component is an unnormalized unsigned 16-bit integer value. But not compatible for image_channel_order of  CL_INTENSITY
     
-//    if(!inData){
-//        cout << "The input image is empty" << endl;
-//        cleanKill(EXIT_FAILURE);
-//    }
-    
-//    width = getImageWidth();
-//    height = getImageLength();
-    
-//    uint16 *realInData[4];
-//    realInData[0]=inData;
-//    realInData[1]=inData;
-//    realInData[2]=inData;
-//    realInData[3]=inData;
-
-//    input = clCreateImage2D(context, 
-//                            CL_MEM_READ_ONLY|CL_MEM_COPY_HOST_PTR, 
-//                            &format, 
-//                            width, 
-//                            height, 
-//                            getImageRowPitch(), 
-//                            inData, 
-//                                &err); 
-//    
-//    if(there_was_an_error(err)){
-//        cout << "Input Image Buffer creation error!" << endl;
-//        cleanKill(EXIT_FAILURE);
-//    }
-    
-    //getGPUUnitSupportedImageFormats(context);
-    
-    input = LoadImage(context, (char*)"rgba.png", width, height);
-    
-    //cout << "Image is " << width << " wide and " << height << " high" << endl;
-    
+    //  create output buffer object, to store results
     output = clCreateImage2D(context, 
                              CL_MEM_WRITE_ONLY, 
                              &format, 
@@ -183,15 +172,13 @@ int main(int argc, char *argv[])
         cleanKill(EXIT_FAILURE);
     }    
     
+    
+    //  if either input of output are empty, crash and burn
 	if (!input || !output ){
 		cout << "Failed to allocate device memory!" << endl;
         cleanKill(EXIT_FAILURE);
 	}
     
-// Write our data set into the input array in device memory
-//    const size_t origin[3] = {0, 0, 0};
-//    const size_t region[3] = {getImageWidth(), getImageLength(), 1}; 
-//    
     
     // Create sampler for sampling image object 
     sampler = clCreateSampler(context,
@@ -204,15 +191,6 @@ int main(int argc, char *argv[])
         cout << "Error creating CL sampler object." << endl;
         cleanKill(EXIT_FAILURE);
     }
-    
-//    err = clEnqueueWriteImage(commands, input, CL_TRUE, origin, region, 0, 0, data, 0, NULL, NULL);
-//
-//	if (err != CL_SUCCESS)
-//	{
-//		cout << "Error: Failed to write to source array!" << endl;
-//		cleanKill(EXIT_FAILURE);
-//	}
-//    
     
     
 	// Set the arguments to our compute kernel
@@ -293,6 +271,7 @@ int main(int argc, char *argv[])
 //                                 NULL            //              cl_event *event)
 //                                 
 	//err = clEnqueueReadImage(commands, output, CL_TRUE, origin, region, getImageRowPitch(), getImageSlicePitch(), out, 0, NULL, NULL);  
+    
 	if (err != CL_SUCCESS)
 	{
 		cout << "Error: Failed to read output array! " << err << endl;
@@ -303,7 +282,14 @@ int main(int argc, char *argv[])
 	// Shutdown and cleanup
 	//
     
-    char *buffer = new char [width * height * 4];
+    #ifdef USINGFREEIMAGE
+        /*----------->     FREE IMAGE REQUIRED     <-----------*/
+        char* buffer = new char[width * height * 4];
+    #else
+        uint8* buffer = new uint8[getImageSizeInFloats()];    
+    #endif
+    
+    
     size_t origin[3] = { 0, 0, 0 };
     size_t region[3] = { width, height, 1};
     
@@ -316,10 +302,20 @@ int main(int argc, char *argv[])
     err = clEnqueueReadImage(queue, output,
                              CL_TRUE, origin, region, 0, 0, buffer, 0, NULL, NULL);
     
-    SaveImage((char*)"outRGBA.png", (char*)buffer, width, height);
-
+    
+    #ifdef USINGFREEIMAGE
+        /*----------->     FREE IMAGE REQUIRED     <-----------*/
+        FreeImageSaveImage((char*)"outRGBA.png", buffer, width, height);
+    #else
+        SaveImage((char*)"outRGBA.png", buffer, width, height);
+    #endif
+    
+    
+    
+    cout << "RUN FINISHED SUCCESSFULLY!" << endl;
+    system("open outRGBA.png");
     
 	cleanKill(EXIT_SUCCESS);
-	
+	return 1;
 //write image here	
 }
