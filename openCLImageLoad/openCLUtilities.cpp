@@ -254,9 +254,9 @@ cl_mem FreeImageLoadImage(cl_context context, char *fileName, int &width, int &h
     memcpy(buffer, FreeImage_GetBits(image), width * height * 4);
     FreeImage_Unload(image);
     // Create OpenCL image 
-//    cl_image_format clImageFormat; 
     clImageFormat.image_channel_order = CL_RGBA; 
     clImageFormat.image_channel_data_type = CL_UNORM_INT8;
+    
     cl_int errNum; 
     cl_mem clImage; 
     clImage = clCreateImage2D(context,
@@ -295,4 +295,19 @@ bool FreeImageSaveImage(char *fileName, char *buffer, int width, int height) {
                                                    0x00FF0000,
                                                    0x0000FF00);
     return FreeImage_Save(format, image, fileName);
+}
+
+//  Round up to the nearest multiple of the group size
+//
+size_t RoundUp(int groupSize, int globalSize)   {
+    
+    int r = globalSize % groupSize;
+    if(r == 0)
+    {
+     	return globalSize;
+    }
+    else
+    {
+     	return globalSize + groupSize - r;
+    }
 }
