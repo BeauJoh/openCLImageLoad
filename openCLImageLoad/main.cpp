@@ -33,7 +33,7 @@ void cleanKill(int errNumber){
     exit(errNumber);
 }
 
-int imgTest(int argc, char ** argv){
+int mainBak(int argc, char ** argv){
     
     read_png_file((char*)"rgba.png");
     
@@ -44,9 +44,13 @@ int imgTest(int argc, char ** argv){
 //    
 //    //buffer is now populated with array of normalized floats
 //    setImage(downcastToByteAndDenormalize(buffer, getImageSize()));
+    cout << "Input image:" << endl;
+    imageStatistics(getImage(), getImageSize());
+    cout << endl;
+    cout << endl;
 
     
-    uint8 *buffer = new uint8[getImageSizeInFloats()];    
+    char *buffer = new char[getImageSizeInFloats()];    
     memcpy(buffer, upcastToFloatAndNormalize(getImage(), getImageSize()), getImageSizeInFloats());
     
     //buffer is now populated with array of normalized floats
@@ -60,8 +64,17 @@ int imgTest(int argc, char ** argv){
     //setImage(buffer);
     write_png_file((char*)"outRGBA.png");
     
-    //SaveImage((char*)"outRGBA.png", buffer, width, height);
+    read_png_file((char*)"outRGBA.png");
     
+    cout << "Output image:" << endl;
+    imageStatistics(getImage(), getImageSize());
+    cout << endl;
+    cout << endl;
+
+    
+    
+    //SaveImage((char*)"outRGBA.png", buffer, width, height);
+    system("open rgba.png");
     system("open outRGBA.png");
     return 1;
 }
@@ -154,6 +167,31 @@ int main(int argc, char *argv[])
         input = FreeImageLoadImage(context, (char*)"rgba.png", width, height, format);
     #else
         input = LoadImage(context, (char*)"rgba.png", width, height, format);
+    
+        uint8* thisBuffer = new uint8[getImageSizeInFloats()];    
+    
+    
+        size_t thisOrigin[3] = { 0, 0, 0 };
+        size_t thisRegion[3] = { width, height, 1};
+    
+        cl_command_queue thisQueue = clCreateCommandQueue(
+                                                  context, 
+                                                  device_id, 
+                                                  0, 
+                                                  &err);
+    
+//        err = clEnqueueReadImage(thisQueue, input,
+//                             CL_TRUE, thisOrigin, thisRegion, getImageRowPitch(), 0, thisBuffer, 0, NULL, NULL);
+    
+        // Implicit row pitch calculation
+        //
+    err = clEnqueueReadImage(thisQueue, input,
+                             CL_TRUE, thisOrigin, thisRegion, 0, 0, thisBuffer, 0, NULL, NULL);
+
+        SaveImage((char*)"outRGBA.png", thisBuffer, width, height);
+    
+        system("open outRGBA.png");
+        return(1);
     #endif
     
     //  create output buffer object, to store results
@@ -241,8 +279,7 @@ int main(int argc, char *argv[])
 //    globalWorksize[1] = globalWorksize[0];
     
     size_t localWorksize[2] = { 16, 16 };
-    size_t globalWorksize[2] =  { RoundUp(localWorksize[0], width),
-        RoundUp(localWorksize[1], height) };
+    size_t globalWorksize[2] =  { RoundUp(localWorksize[0], width), RoundUp(localWorksize[1], height) };
     
     
     //  Start up the kernels in the GPUs
