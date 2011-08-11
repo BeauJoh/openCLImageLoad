@@ -188,7 +188,7 @@ int main(int argc, char *argv[])
     err = clEnqueueReadImage(thisQueue, input,
                              CL_TRUE, thisOrigin, thisRegion, 0, 0, thisBuffer, 0, NULL, NULL);
 
-        SaveImage((char*)"outRGBA.png", thisBuffer, width, height*4);
+        SaveImage((char*)"outRGBA.png", thisBuffer, width, height);
     
         system("open outRGBA.png");
         return(1);
