@@ -350,6 +350,16 @@ uint8* downCastToByte(float* input, uint32 imageSize){
     return output;
 }
 
+void imageStatistics(uint8 * input, uint32 imageSize){
+    float mean = 0;
+    
+    for (int i = 0; i < imageSize; i++) {
+        mean += input[i];
+    }
+    
+    printf("Image has mean value %f\n", mean/imageSize);
+}
+
 float* convertFromRawBits(uint8 * bits, int width, int height, unsigned bpp){
     float*buffer = new float[sizeof(uint8) * _imageWidth * _imageLength * _samplesPerPixel];
     
