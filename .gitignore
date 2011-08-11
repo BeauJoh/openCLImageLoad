@@ -1,8 +1,14 @@
-.DS_store
-openCLImageLoad.xcodeproj/project.xcworkspace/xcuserdata/beau.xcuserdatad/UserInterfaceState.xcuserstate
+.DS_Store
+*.swp
+*~.nib
 
-openCLImageLoad.xcodeproj/project.xcworkspace/xcuserdata/beau.xcuserdatad/UserInterfaceState.xcuserstate
+build/
 
-DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad.dep
+*.pbxuser
+*.perspective
+*.perspectivev3
 
-DerivedData/openCLImageLoad/Logs/Debug/3DBC231D-CC6D-4B70-B8DA-D107FD99B256.xcactivitylog
+*.mode1v3
+*.mode2v3
+
+xcuserdata
