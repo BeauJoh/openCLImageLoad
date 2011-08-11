@@ -4523,8 +4523,8 @@
 				</dict>
 			</array>
 		</dict>
-		<real>334752742.70100999</real>
-		<string>{5000, 856}</string>
+		<real>334752779.57612997</real>
+		<string>{4892, 1049}</string>
 		<string>{6228, 0}</string>
 		<string>main(int argc, char *argv[])</string>
 		<dict>
@@ -9585,7 +9585,7 @@
 			</dict>
 		</dict>
 		<string>file://localhost/Users/beau/Documents/FourthYear/miscProjects/openCLImageLoad/openCLImageLoad.xcodeproj/</string>
-		<real>334752737.79548401</real>
+		<real>334752774.65936399</real>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -11646,8 +11646,8 @@
 				</dict>
 			</array>
 		</dict>
-		<real>334752742.69929498</real>
-		<string>{5000, 856}</string>
+		<real>334752779.57426602</real>
+		<string>{4892, 1049}</string>
 		<string>{6228, 0}</string>
 		<dict>
 			<key>$class</key>
