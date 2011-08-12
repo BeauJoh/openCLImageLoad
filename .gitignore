@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .DS_store
 
 *.swp
@@ -7,6 +8,13 @@ DerivedData/openCLImageLoad/Build/FileMaps/
 DerivedData/openCLImageLoad/Build/Intermediates/
 DerivedData/openCLImageLoad/Build/LatestTargetBuildLogs/
 
+=======
+.DS_Store
+*.swp
+*~.nib
+
+build/
+>>>>>>> b49e4ca99e8263257513dc61e85aa6e53f41d613
 
 *.pbxuser
 *.perspective
@@ -15,5 +23,10 @@ DerivedData/openCLImageLoad/Build/LatestTargetBuildLogs/
 *.mode1v3
 *.mode2v3
 
+<<<<<<< HEAD
 *.xcuserstate
 
+=======
+xcuserdata
+DerivedData/openCLImageLoad/Logs/Debug/19C32A33-38A2-4D0D-BDC0-F2DBB69B8370.xcactivitylog
+>>>>>>> b49e4ca99e8263257513dc61e85aa6e53f41d613
