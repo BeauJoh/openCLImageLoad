@@ -9,7 +9,11 @@ build
 *~.nib
 *.mode1v3
 
+<<<<<<< HEAD
 xcuserdata
+=======
+DerivedData/openCLImageLoad/build/
+>>>>>>> 5827502dbc3fd5174f8d06a88b64e0440ab80e94
 
 openCLImageLoad.xcodeproj/project.xcworkspace/xcuserdata/beau.xcuserdatad/UserInterfaceState.xcuserstate
 
@@ -20,3 +24,8 @@ DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/open
 
 DerivedData/openCLImageLoad/Logs/*
 
+<<<<<<< HEAD
+=======
+*.xcuserstate
+
+>>>>>>> 5827502dbc3fd5174f8d06a88b64e0440ab80e94
