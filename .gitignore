@@ -13,3 +13,5 @@ build/
 *.mode2v3
 
 xcuserdata
+
+DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad.dep

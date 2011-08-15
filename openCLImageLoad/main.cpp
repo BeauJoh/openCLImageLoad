@@ -2,8 +2,14 @@
 #include "openCLUtilities.h"
 #include "RGBAUtilities.h"
 
+#include <getopt.h>
 #include <iostream>
 using namespace std;
+
+
+string imageFileName;
+string kernelFileName;
+string outputImageFileName;
 
 // OpenCL variables
 int err, gpu;                            // error code returned from api calls
@@ -22,6 +28,79 @@ cl_mem output;                      // device memory used for the output array
 int width;
 int height;                  //input and output image specs
 
+static inline int parseCommandLine(int argc , char** argv){
+    {
+        int c;
+        while (true)
+        {
+            static struct option long_options[] =
+            {
+                /* These options don't set a flag.
+                 We distinguish them by their indices. */
+                {"kernel",required_argument,       0, 'k'},
+                {"image",  required_argument,       0, 'i'},
+                {0, 0, 0, 0}
+            };
+            /* getopt_long stores the option index here. */
+            int option_index = 0;
+            
+            c = getopt_long (argc, argv, ":k:i:",
+                             long_options, &option_index);
+            
+            /* Detect the end of the options. */
+            if (c == -1)
+                break;
+            
+            switch (c)
+            {
+                case 0:
+                    /* If this option set a flag, do nothing else now. */
+                    if (long_options[option_index].flag != 0)
+                        break;
+                    printf ("option %s", long_options[option_index].name);
+                    if (optarg)
+                        printf (" with arg %s", optarg);
+                    printf ("\n");
+                    break;
+                    
+                case 'i':
+                    imageFileName = optarg ;
+                    break;
+                    
+                case 'o':
+                    outputImageFileName = optarg;
+                    break;
+                    
+                case 'k':
+                    kernelFileName = optarg ;
+                    break;
+                    
+                    
+                case '?':
+                    /* getopt_long already printed an error message. */
+                    break;
+                    
+                default:
+                    ;
+                    
+            }
+        }
+        
+        
+        /* Print any remaining command line arguments (not options). */
+        if (optind < argc)
+        {
+            while (optind < argc)
+            /*
+             printf ("%s ", argv[optind]);
+             putchar ('\n');
+             */
+                optind++;
+        }
+    }
+};
+
+
 void cleanKill(int errNumber){
     clReleaseMemObject(input);
 	clReleaseMemObject(output);
@@ -31,6 +110,21 @@ void cleanKill(int errNumber){
 	clReleaseCommandQueue(commands);
 	clReleaseContext(context);
     exit(errNumber);
+}
+
+int testImgLoad(){
+    
+    read_png_file((char*)"rgba.png");
+    
+    width = getImageWidth();
+    height = getImageLength();
+    
+    uint8 *buffer = new uint8[getImageSizeInFloats()];    
+    memcpy(buffer, upcastToFloatAndNormalize(getImage(), getImageSize()), getImageSizeInFloats());
+    
+    SaveImage((char*)"outRGBA.png", buffer, width, height);
+    system("open outRGBA.png");
+    return 1;
 }
 
 int mainBak(int argc, char ** argv){
@@ -82,7 +176,9 @@ int mainBak(int argc, char ** argv){
 //#define USINGFREEIMAGE
 
 int main(int argc, char *argv[])
-{	    
+{	
+    parseCommandLine(argc , argv);
+
 	// Connect to a compute device
 	//
 	gpu = 1;
@@ -107,7 +203,7 @@ int main(int argc, char *argv[])
     
     // Load kernel source code
     //
-	char *source = load_program_source("sobel_opt1.cl");
+	char *source = load_program_source((char*)"sobel_opt1.cl");
     if(!source)
     {
         cout << "Error: Failed to load compute program from file!" << endl;
@@ -164,9 +260,9 @@ int main(int argc, char *argv[])
     
     #ifdef USINGFREEIMAGE
         /*----------->     FREE IMAGE REQUIRED     <-----------*/
-        input = FreeImageLoadImage(context, (char*)"rgba.png", width, height, format);
+        input = FreeImageLoadImage(context, (char*)imageFileName.data(), width, height, format);
     #else
-        input = LoadImage(context, (char*)"rgba.png", width, height, format);
+        input = LoadImage(context, (char*)imageFileName.data(), width, height, format);
     
         uint8* thisBuffer = new uint8[getImageSizeInFloats()];    
     
@@ -179,18 +275,20 @@ int main(int argc, char *argv[])
                                                   device_id, 
                                                   0, 
                                                   &err);
-    
-//        err = clEnqueueReadImage(thisQueue, input,
-//                             CL_TRUE, thisOrigin, thisRegion, getImageRowPitch(), 0, thisBuffer, 0, NULL, NULL);
-    
-        // Implicit row pitch calculation
+        // Explicit row pitch calculation
         //
-    err = clEnqueueReadImage(thisQueue, input,
+        //    err = clEnqueueReadImage(thisQueue, input,
+        //      CL_TRUE, thisOrigin, thisRegion, getImageRowPitch(), 0, thisBuffer, 0, NULL, NULL);
+    
+        // Read image to buffer with implicit row pitch calculation
+        //
+        err = clEnqueueReadImage(thisQueue, input,
                              CL_TRUE, thisOrigin, thisRegion, 0, 0, thisBuffer, 0, NULL, NULL);
 
-        SaveImage((char*)"outRGBA.png", thisBuffer, width, height);
-    
-        system("open outRGBA.png");
+        SaveImage((char*)kernelFileName.data(), thisBuffer, width, height);
+        
+        string command("open ",  kernelFileName.data());
+        system((char*)command.data());
         return(1);
     #endif
     

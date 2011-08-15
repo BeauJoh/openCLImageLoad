@@ -13,7 +13,6 @@
 		8B5EAB4B13D6A6E1005C1C8D /* OpenCL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B5EAB4913D6A6E1005C1C8D /* OpenCL.framework */; };
 		8B8FABB2136CF82F00961823 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B8FABB1136CF82F00961823 /* main.cpp */; };
 		8B9A212713AB280400F36E8A /* openCLUtilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B9A212513AB280400F36E8A /* openCLUtilities.cpp */; };
-		8BC29C2913F2228C00DC2C1A /* sobel_opt1.cl in Sources */ = {isa = PBXBuildFile; fileRef = 8BC29C2813F2228C00DC2C1A /* sobel_opt1.cl */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -40,7 +39,6 @@
 		8B95BDD713CD625E00B3E897 /* io_tiff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = io_tiff.h; sourceTree = "<group>"; };
 		8B9A212513AB280400F36E8A /* openCLUtilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = openCLUtilities.cpp; sourceTree = "<group>"; };
 		8B9A212613AB280400F36E8A /* openCLUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = openCLUtilities.h; sourceTree = "<group>"; };
-		8BC29C2813F2228C00DC2C1A /* sobel_opt1.cl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.opencl; name = sobel_opt1.cl; path = DerivedData/openCLImageLoad/Build/Products/Debug/sobel_opt1.cl; sourceTree = SOURCE_ROOT; };
 		8BE3370E13D3F32300FE12B9 /* FreeImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FreeImage.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -88,7 +86,6 @@
 				8B95BDD613CD625E00B3E897 /* io_tiff.cpp */,
 				8BE3370E13D3F32300FE12B9 /* FreeImage.h */,
 				8B95BDD713CD625E00B3E897 /* io_tiff.h */,
-				8BC29C2813F2228C00DC2C1A /* sobel_opt1.cl */,
 			);
 			path = openCLImageLoad;
 			sourceTree = "<group>";
@@ -146,7 +143,6 @@
 				8B8FABB2136CF82F00961823 /* main.cpp in Sources */,
 				8B9A212713AB280400F36E8A /* openCLUtilities.cpp in Sources */,
 				8B04367513D182F300695184 /* RGBAUtilities.cpp in Sources */,
-				8BC29C2913F2228C00DC2C1A /* sobel_opt1.cl in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
