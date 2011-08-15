@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8B04367513D182F300695184 /* RGBAUtilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8B04367413D182F300695184 /* RGBAUtilities.cpp */; };
+		8B5D0A1C13F8DDD80075E084 /* sobel_opt1.cl in Sources */ = {isa = PBXBuildFile; fileRef = 8B5D0A1B13F8DDD80075E084 /* sobel_opt1.cl */; };
 		8B5EAB4713D6A6CF005C1C8D /* libfreeimage.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B5EAB4613D6A6CF005C1C8D /* libfreeimage.dylib */; };
 		8B5EAB4A13D6A6E1005C1C8D /* libpng.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B5EAB4813D6A6E1005C1C8D /* libpng.framework */; };
 		8B5EAB4B13D6A6E1005C1C8D /* OpenCL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B5EAB4913D6A6E1005C1C8D /* OpenCL.framework */; };
@@ -31,6 +32,7 @@
 		8B04367313D182F300695184 /* RGBAUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RGBAUtilities.h; sourceTree = "<group>"; };
 		8B04367413D182F300695184 /* RGBAUtilities.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RGBAUtilities.cpp; sourceTree = "<group>"; };
 		8B04431E1367A8EC00D919D5 /* openCLImageLoad */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = openCLImageLoad; sourceTree = BUILT_PRODUCTS_DIR; };
+		8B5D0A1B13F8DDD80075E084 /* sobel_opt1.cl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.opencl; path = sobel_opt1.cl; sourceTree = "<group>"; };
 		8B5EAB4613D6A6CF005C1C8D /* libfreeimage.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libfreeimage.dylib; path = dylibsAndFrameworks/libfreeimage.dylib; sourceTree = "<group>"; };
 		8B5EAB4813D6A6E1005C1C8D /* libpng.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libpng.framework; path = dylibsAndFrameworks/libpng.framework; sourceTree = "<group>"; };
 		8B5EAB4913D6A6E1005C1C8D /* OpenCL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenCL.framework; path = dylibsAndFrameworks/OpenCL.framework; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 				8B95BDD613CD625E00B3E897 /* io_tiff.cpp */,
 				8BE3370E13D3F32300FE12B9 /* FreeImage.h */,
 				8B95BDD713CD625E00B3E897 /* io_tiff.h */,
+				8B5D0A1B13F8DDD80075E084 /* sobel_opt1.cl */,
 			);
 			path = openCLImageLoad;
 			sourceTree = "<group>";
@@ -143,6 +146,7 @@
 				8B8FABB2136CF82F00961823 /* main.cpp in Sources */,
 				8B9A212713AB280400F36E8A /* openCLUtilities.cpp in Sources */,
 				8B04367513D182F300695184 /* RGBAUtilities.cpp in Sources */,
+				8B5D0A1C13F8DDD80075E084 /* sobel_opt1.cl in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

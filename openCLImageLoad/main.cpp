@@ -3,6 +3,7 @@
 #include "RGBAUtilities.h"
 
 #include <getopt.h>
+#include <string>
 #include <iostream>
 using namespace std;
 
@@ -39,12 +40,13 @@ static inline int parseCommandLine(int argc , char** argv){
                  We distinguish them by their indices. */
                 {"kernel",required_argument,       0, 'k'},
                 {"image",  required_argument,       0, 'i'},
+                {"output-image", required_argument, 0, 'o'},
                 {0, 0, 0, 0}
             };
             /* getopt_long stores the option index here. */
             int option_index = 0;
             
-            c = getopt_long (argc, argv, ":k:i:",
+            c = getopt_long (argc, argv, ":k:i:o:",
                              long_options, &option_index);
             
             /* Detect the end of the options. */
@@ -203,7 +205,8 @@ int main(int argc, char *argv[])
     
     // Load kernel source code
     //
-	char *source = load_program_source((char*)"sobel_opt1.cl");
+    //	char *source = load_program_source((char*)"sobel_opt1.cl");
+    char *source = load_program_source((char*)kernelFileName.c_str());
     if(!source)
     {
         cout << "Error: Failed to load compute program from file!" << endl;
@@ -260,9 +263,9 @@ int main(int argc, char *argv[])
     
     #ifdef USINGFREEIMAGE
         /*----------->     FREE IMAGE REQUIRED     <-----------*/
-        input = FreeImageLoadImage(context, (char*)imageFileName.data(), width, height, format);
+        input = FreeImageLoadImage(context, (char*)imageFileName.c_str(), width, height, format);
     #else
-        input = LoadImage(context, (char*)imageFileName.data(), width, height, format);
+        input = LoadImage(context, (char*)imageFileName.c_str(), width, height, format);
     
         uint8* thisBuffer = new uint8[getImageSizeInFloats()];    
     
@@ -285,10 +288,13 @@ int main(int argc, char *argv[])
         err = clEnqueueReadImage(thisQueue, input,
                              CL_TRUE, thisOrigin, thisRegion, 0, 0, thisBuffer, 0, NULL, NULL);
 
-        SaveImage((char*)kernelFileName.data(), thisBuffer, width, height);
+        SaveImage((char*)outputImageFileName.c_str(), thisBuffer, width, height);
         
-        string command("open ",  kernelFileName.data());
-        system((char*)command.data());
+        string command = "open ";
+        command += outputImageFileName;
+        
+        system((char*)command.c_str());
+    
         return(1);
     #endif
     
