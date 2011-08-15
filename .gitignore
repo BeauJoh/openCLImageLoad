@@ -14,4 +14,4 @@ build/
 
 xcuserdata
 
-DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/openCLImageLoad.dep
+DerivedData/openCLImageLoad/Logs/*
