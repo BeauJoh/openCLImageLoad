@@ -16,4 +16,7 @@ xcuserdata
 
 openCLImageLoad.xcodeproj/project.xcworkspace/xcuserdata/beau.xcuserdatad/UserInterfaceState.xcuserstate
 
+DerivedData/openCLImageLoad/Logs/Debug/Cache.db
+
 DerivedData/openCLImageLoad/Logs/*
+
