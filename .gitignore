@@ -17,6 +17,8 @@ xcuserdata
 openCLImageLoad.xcodeproj/project.xcworkspace/xcuserdata/beau.xcuserdatad/UserInterfaceState.xcuserstate
 
 DerivedData/openCLImageLoad/Logs/Debug/Cache.db
+DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/DerivedSources/sobel_opt1.cl.c
+	DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/DerivedSources/sobel_opt1.cl.h
 
 DerivedData/openCLImageLoad/Logs/*
 
