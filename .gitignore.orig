@@ -1,0 +1,60 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
+.DS_store
+
+=======
+build
+*.mode1v3
+*.pbxuser
+*.perspective
+*.perspectivev3
+*.mode2v3
+.DS_Store
+>>>>>>> origin/officeBranch
+*.swp
+*~.nib
+*.mode1v3
+
+<<<<<<< HEAD
+DerivedData/openCLImageLoad/Build/FileMaps/
+DerivedData/openCLImageLoad/Build/Intermediates/
+DerivedData/openCLImageLoad/Build/LatestTargetBuildLogs/
+
+=======
+.DS_Store
+*.swp
+*~.nib
+
+build/
+>>>>>>> b49e4ca99e8263257513dc61e85aa6e53f41d613
+=======
+<<<<<<< HEAD
+xcuserdata
+=======
+DerivedData/openCLImageLoad/build/
+>>>>>>> 5827502dbc3fd5174f8d06a88b64e0440ab80e94
+>>>>>>> origin/officeBranch
+
+openCLImageLoad.xcodeproj/project.xcworkspace/xcuserdata/beau.xcuserdatad/UserInterfaceState.xcuserstate
+
+DerivedData/openCLImageLoad/Logs/Debug/Cache.db
+DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/DerivedSources/sobel_opt1.cl.c
+
+DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/openCLImageLoad.build/DerivedSources/sobel_opt1.cl.h
+
+DerivedData/openCLImageLoad/Logs/*
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+*.xcuserstate
+
+=======
+xcuserdata
+DerivedData/openCLImageLoad/Logs/Debug/19C32A33-38A2-4D0D-BDC0-F2DBB69B8370.xcactivitylog
+>>>>>>> b49e4ca99e8263257513dc61e85aa6e53f41d613
+=======
+=======
+*.xcuserstate
+
+>>>>>>> 5827502dbc3fd5174f8d06a88b64e0440ab80e94
+>>>>>>> origin/officeBranch
