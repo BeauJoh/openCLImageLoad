@@ -7,17 +7,15 @@
 #include <iostream>
 using namespace std;
 
-
+// getopt argument parser variables
 string imageFileName;
 string kernelFileName;
 string outputImageFileName;
 
 // OpenCL variables
-int err, gpu;                            // error code returned from api calls
-
-size_t *globalWorksize;                  // global domain size for our calculation
-size_t *localWorksize;                       // local domain size for our calculation
-
+int err, gpu;                       // error code returned from api calls
+size_t *globalWorksize;             // global domain size for our calculation
+size_t *localWorksize;              // local domain size for our calculation
 cl_device_id device_id;             // compute device id 
 cl_context context;                 // compute context
 cl_command_queue commands;          // compute command queue
@@ -27,7 +25,7 @@ cl_sampler sampler;
 cl_mem input;                       // device memory used for the input array
 cl_mem output;                      // device memory used for the output array
 int width;
-int height;                  //input and output image specs
+int height;                         //input and output image specs
 
 static inline int parseCommandLine(int argc , char** argv){
     {
