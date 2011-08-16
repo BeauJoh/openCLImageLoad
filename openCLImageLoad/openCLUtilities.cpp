@@ -278,7 +278,9 @@ bool SaveImage(char *fileName, uint8 *buffer, int width, int height) {
     //setImage((uint8*)denormalizeImage((float*)buffer));
     //write_png_file(fileName);
     
-    setImage(downcastToByteAndDenormalize((float*)buffer, getImageSize()));
+//    setImage(downcastToByteAndDenormalize((float*)buffer, getImageSize()));
+
+    setImageFromFloat(downcastToByteAndDenormalize((float*)buffer, getImageSize()));
     write_png_file(fileName);
     
     return true;
@@ -294,6 +296,7 @@ bool FreeImageSaveImage(char *fileName, char *buffer, int width, int height) {
                                                    0xFF000000,
                                                    0x00FF0000,
                                                    0x0000FF00);
+    printf("size of image is: %lu", sizeof(image));
     return FreeImage_Save(format, image, fileName);
 }
 

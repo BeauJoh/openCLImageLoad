@@ -278,6 +278,20 @@ void convolutedSetImage(uint8* image){
 
 }
 
+void setImageFromFloat(uint8* image){
+    
+    for (y=0; y < _imageLength; y++) {
+        uint8* row = row_pointers[y];
+        
+        for (x=0; x < _linebytes; x+=4) {
+            uint8* ptr = &(row[x*4]);
+            ptr[0] = image[y*_linebytes+x];
+        }
+    }
+    
+    delete image;
+}
+
 void setImage(uint8* image){
     
     for (y=0; y < _imageLength; y++) {
