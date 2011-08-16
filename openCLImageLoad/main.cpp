@@ -284,7 +284,7 @@ int main(int argc, char *argv[])
         // Read image to buffer with implicit row pitch calculation
         //
         err = clEnqueueReadImage(thisQueue, input,
-                             CL_TRUE, thisOrigin, thisRegion, 0, 0, thisBuffer, 0, NULL, NULL);
+                             CL_TRUE, thisOrigin, thisRegion, getImageRowPitch(), 0, thisBuffer, 0, NULL, NULL);
 
         SaveImage((char*)outputImageFileName.c_str(), thisBuffer, width, height);
         
@@ -424,15 +424,20 @@ int main(int argc, char *argv[])
     
     #ifdef USINGFREEIMAGE
         /*----------->     FREE IMAGE REQUIRED     <-----------*/
-        FreeImageSaveImage((char*)"outRGBA.png", buffer, width, height);
+        FreeImageSaveImage((char*)outputImageFileName.c_str(), buffer, width, height);
     #else
-        SaveImage((char*)"outRGBA.png", buffer, width, height);
+        SaveImage((char*)outputImageFileName.c_str(), buffer, width, height);
     #endif
     
     
     
     cout << "RUN FINISHED SUCCESSFULLY!" << endl;
-    system("open outRGBA.png");
+    
+    string fincommand = "open ";
+    fincommand += outputImageFileName;
+    
+    system((char*)fincommand.c_str());
+    
     
     // Shutdown and cleanup
 	//
