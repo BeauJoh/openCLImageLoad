@@ -278,14 +278,33 @@ void convolutedSetImage(uint8* image){
 
 }
 
+void clearImageBuffer(){
+    for (y=0; y<_imageLength; y++) {
+        uint8* row = row_pointers[y];
+        int origX = 0;
+        for (x=0; x<_linebytes; x+=4) {
+            uint8* ptr = &(row[origX*4]);
+            ptr[0] = 0;
+            ptr[1] = 0;
+            ptr[2] = 0;
+            ptr[3] = 0;
+            origX++;
+        }
+    }
+}
+
 void setImageFromFloat(uint8* image){
     
     for (y=0; y < _imageLength; y++) {
         uint8* row = row_pointers[y];
+
+        for (x=0; x<_linebytes; x+=4) {
+            
+            row[x+0] = image[y*_linebytes+x+0];
+            row[x+1] = image[y*_linebytes+x+1];
+            row[x+2] = image[y*_linebytes+x+2];
+            row[x+3] = image[y*_linebytes+x+3];
         
-        for (x=0; x < _linebytes; x+=4) {
-            uint8* ptr = &(row[x*4]);
-            ptr[0] = image[y*_linebytes+x];
         }
     }
     

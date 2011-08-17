@@ -55,6 +55,7 @@ float* convertFromRawBits(uint8 * bits, int width, int height, unsigned bpp);
 uint8* getImage(void);
 void setImage(uint8*);
 void setImageFromFloat(uint8* image);
+void clearImageBuffer();
 
 float* norm(float* input, uint32 imageSize);
 float* denorm(float* input, uint32 imageSize);
