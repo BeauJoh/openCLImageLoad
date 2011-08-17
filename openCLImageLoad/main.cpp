@@ -127,7 +127,7 @@ int mainBak(int argc, char ** argv){
     return 1;
 }
 
-int mainBak(int argc, char ** argv){
+int loadImg(int argc, char ** argv){
     
     read_png_file((char*)"rgba.png");
     
