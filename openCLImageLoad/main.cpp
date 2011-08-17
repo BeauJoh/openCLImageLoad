@@ -112,7 +112,7 @@ void cleanKill(int errNumber){
     exit(errNumber);
 }
 
-int testImgLoad(){
+int mainBak(int argc, char ** argv){
     
     read_png_file((char*)"rgba.png");
     
