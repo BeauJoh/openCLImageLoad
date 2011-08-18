@@ -147,6 +147,9 @@ int loadImg(int argc, char ** argv){
     char *buffer = new char[getImageSizeInFloats()];    
     memcpy(buffer, upcastToFloatAndNormalize(getImage(), getImageSize()), getImageSizeInFloats());
     
+    //clear existing image to be thorough
+    clearImageBuffer();
+    
     //buffer is now populated with array of normalized floats
     setImage(downcastToByteAndDenormalize((float*)buffer, getImageSize()));
     
@@ -285,7 +288,21 @@ int main(int argc, char *argv[])
         //
         err = clEnqueueReadImage(thisQueue, input,
                              CL_TRUE, thisOrigin, thisRegion, getImageRowPitch(), 0, thisBuffer, 0, NULL, NULL);
-
+        string rmCommand = "rm ";
+        rmCommand += outputImageFileName;
+        cout << "remove command is:\n" << (char*)rmCommand.c_str() << endl;
+    
+        system((char*)rmCommand.c_str());
+    
+        string lsCommand = "ls ";
+        lsCommand += outputImageFileName;
+        cout << "look command is:\n" << (char*)lsCommand.c_str() << endl;
+        system((char*)lsCommand.c_str());
+    
+        //clear out input image before handing in a new one
+        //
+        clearImageBuffer();
+    
         SaveImage((char*)outputImageFileName.c_str(), thisBuffer, width, height);
         
         string command = "open ";
