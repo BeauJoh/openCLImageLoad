@@ -299,7 +299,7 @@ void setImageFromFloat(uint8* image){
         uint8* row = row_pointers[y];
 
         for (x=0; x<_linebytes; x+=4) {
-            
+             
             row[x+0] = image[y*_linebytes+x+0];
             row[x+1] = image[y*_linebytes+x+1];
             row[x+2] = image[y*_linebytes+x+2];
