@@ -72,7 +72,9 @@ void read_png_file(char* file_name)
     imageHeight = png_get_image_height(png_ptr, info_ptr);
     color_type = png_get_color_type(png_ptr, info_ptr);
     bit_depth = png_get_bit_depth(png_ptr, info_ptr);
-
+    
+    printf("colour type : %d", color_type);
+    
     number_of_passes = png_set_interlace_handling(png_ptr);
     png_read_update_info(png_ptr, info_ptr);
     
@@ -160,7 +162,6 @@ void write_png_file(char* file_name)
     
     fclose(fp);
 }
-
 
 void process_file(void)
 {
@@ -300,10 +301,10 @@ void setImageFromFloat(uint8* image){
 
         for (x=0; x<_linebytes; x+=4) {
              
-            row[x+0] = image[y*_linebytes*4+x+0];
-            row[x+1] = image[y*_linebytes*4+x+1];
-            row[x+2] = image[y*_linebytes*4+x+2];
-            row[x+3] = image[y*_linebytes*4+x+3];
+            row[x+0] = image[y*_linebytes+x+0];
+            row[x+1] = image[y*_linebytes+x+1];
+            row[x+2] = image[y*_linebytes+x+2];
+            row[x+3] = image[y*_linebytes+x+3];
         
         }
     }
@@ -393,6 +394,12 @@ void imageStatistics(uint8 * input, uint32 imageSize){
     printf("Image has mean value %f\n", mean/imageSize);
 }
 
+void printImage(uint8 * input, uint32 imageSize){    
+    for (int i = 0; i < imageSize; i++) {
+        printf("Value at %i: %hhu\n", i ,input[i]);
+    }
+}
+
 float* convertFromRawBits(uint8 * bits, int width, int height, unsigned bpp){
     float*buffer = new float[sizeof(uint8) * _imageWidth * _imageLength * _samplesPerPixel];
     
@@ -426,6 +433,31 @@ float* convertFromRawBits(uint8 * bits, int width, int height, unsigned bpp){
     }
     
     return buffer;
+}
+
+void initializeRedTileRowPtr(void){
+    row_pointers = (png_bytep*) malloc(sizeof(png_bytep) * imageHeight);
+    for (y=0; y<imageHeight; y++)
+        row_pointers[y] = (png_byte*) malloc(40);
+}
+
+uint8* createRedTile(void){
+    uint8* image = new uint8[10*10*4];
+    imageWidth = 10;
+    imageHeight = 10;
+    bit_depth = 8; 
+    color_type = 6;
+    
+    for (int y = 0; y<10; y++) {
+        for (int x = 0; x<40; x+=4) {
+            image[(y*40)+x+0]=24;
+            image[(y*40)+x+1]=0;
+            image[(y*40)+x+2]=0;
+            image[(y*40)+x+3]=128;
+        }
+    }
+    initializeRedTileRowPtr();
+    return image;
 }
 
 uint32 getImageSize(void){

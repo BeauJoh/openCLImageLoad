@@ -76,7 +76,9 @@ uint32 getSamplesPerPixel(void);
 uint32 getImageRowPitch(void);
 uint32 getImageSize(void);
 
+uint8* createRedTile(void);
 void imageStatistics(uint8 * input, uint32 imageSize);
+void printImage(uint8 * input, uint32 imageSize);
 
 #endif
 

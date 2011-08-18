@@ -127,9 +127,25 @@ int mainBak(int argc, char ** argv){
     return 1;
 }
 
-int loadImg(int argc, char ** argv){
+int main(int argc, char ** argv){
+    parseCommandLine(argc, argv);
     
-    read_png_file((char*)"rgba.png");
+    setImage(createRedTile());
+    
+    //printImage(createRedTile(), 10*10*4);
+    
+    write_png_file((char*)outputImageFileName.c_str());
+
+    string command = "open ";
+    command += outputImageFileName;
+    system((char*)command.c_str());
+    return 1;
+}
+
+int LoadImage(int argc, char ** argv){
+    parseCommandLine(argc , argv);
+
+    read_png_file((char*)imageFileName.c_str());
     
 //    cout << "Size of image " << getImageSize() << endl;
 //
@@ -159,26 +175,32 @@ int loadImg(int argc, char ** argv){
     
     // write image back
     //setImage(buffer);
-    write_png_file((char*)"outRGBA.png");
+    write_png_file((char*)outputImageFileName.c_str());
     
-    read_png_file((char*)"outRGBA.png");
+    read_png_file((char*)outputImageFileName.c_str());
     
     cout << "Output image:" << endl;
     imageStatistics(getImage(), getImageSize());
     cout << endl;
     cout << endl;
 
-    
+    //printImage(getImage(), getImageSize());
     
     //SaveImage((char*)"outRGBA.png", buffer, width, height);
-    system("open rgba.png");
-    system("open outRGBA.png");
+    string command = "open ";
+    command += imageFileName;
+    
+    system((char*)command.c_str());
+
+    command = "open ";
+    command += outputImageFileName;
+    system((char*)command.c_str());
     return 1;
 }
 
 //#define USINGFREEIMAGE
 
-int main(int argc, char *argv[])
+int mainReal(int argc, char *argv[])
 {	
     parseCommandLine(argc , argv);
 
@@ -302,7 +324,6 @@ int main(int argc, char *argv[])
         //clear out input image before handing in a new one
         //
         clearImageBuffer();
-    
         SaveImage((char*)outputImageFileName.c_str(), thisBuffer, width, height);
         
         string command = "open ";
