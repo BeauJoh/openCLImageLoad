@@ -300,10 +300,10 @@ void setImageFromFloat(uint8* image){
 
         for (x=0; x<_linebytes; x+=4) {
              
-            row[x+0] = image[y*_linebytes+x+0];
-            row[x+1] = image[y*_linebytes+x+1];
-            row[x+2] = image[y*_linebytes+x+2];
-            row[x+3] = image[y*_linebytes+x+3];
+            row[x+0] = image[y*_linebytes*4+x+0];
+            row[x+1] = image[y*_linebytes*4+x+1];
+            row[x+2] = image[y*_linebytes*4+x+2];
+            row[x+3] = image[y*_linebytes*4+x+3];
         
         }
     }

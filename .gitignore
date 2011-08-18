@@ -1,5 +1,5 @@
 # xcode noise
-build/*
+
 *.pbxuser
 *.mode1v3
 
@@ -8,7 +8,16 @@ build/*
 
 # osx noise
 .DS_Store
+
+DerivedData
+
+
+
+UserInterfaceState.xcurserstate
+
 profile
+
+
 openCLImageLoad/main.cpp.orig
 
 openCLImageLoad.xcodeproj/project.xcworkspace/xcuserdata/beau.xcuserdatad/UserInterfaceState.xcuserstate.orig
@@ -66,3 +75,6 @@ DerivedData/openCLImageLoad/Build/Intermediates/openCLImageLoad.build/Debug/open
 .gitignore.orig.orig
 
 .DS_Store.orig
+
+openCLImageLoad.xcodeproj/project.xcworkspace/xcuserdata/beau.xcuserdatad/UserInterfaceState.xcuserstate
+
