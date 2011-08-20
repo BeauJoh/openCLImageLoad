@@ -112,7 +112,7 @@ void cleanKill(int errNumber){
     exit(errNumber);
 }
 
-int mainBak(int argc, char ** argv){
+int RegularImageCopyWithBuffers(int argc, char ** argv){
     
     read_png_file((char*)"rgba.png");
     
@@ -127,12 +127,12 @@ int mainBak(int argc, char ** argv){
     return 1;
 }
 
-int main(int argc, char ** argv){
+int CreateRedImage(int argc, char ** argv){
     parseCommandLine(argc, argv);
     
     setImage(createRedTile());
     
-    //printImage(createRedTile(), 10*10*4);
+    printImage(getImage(), 10*10*4);
     
     write_png_file((char*)outputImageFileName.c_str());
 
@@ -200,7 +200,7 @@ int LoadImage(int argc, char ** argv){
 
 //#define USINGFREEIMAGE
 
-int mainReal(int argc, char *argv[])
+int main(int argc, char *argv[])
 {	
     parseCommandLine(argc , argv);
 
@@ -290,6 +290,9 @@ int mainReal(int argc, char *argv[])
     #else
         input = LoadImage(context, (char*)imageFileName.c_str(), width, height, format);
     
+        //print image from input
+        //printImage(getImage(), getImageSize());
+    
         uint8* thisBuffer = new uint8[getImageSizeInFloats()];    
     
     
@@ -309,7 +312,8 @@ int mainReal(int argc, char *argv[])
         // Read image to buffer with implicit row pitch calculation
         //
         err = clEnqueueReadImage(thisQueue, input,
-                             CL_TRUE, thisOrigin, thisRegion, getImageRowPitch(), 0, thisBuffer, 0, NULL, NULL);
+                                 CL_TRUE, thisOrigin, thisRegion, 0, 0, thisBuffer, 0, NULL, NULL);
+    
         string rmCommand = "rm ";
         rmCommand += outputImageFileName;
         cout << "remove command is:\n" << (char*)rmCommand.c_str() << endl;
@@ -326,6 +330,9 @@ int mainReal(int argc, char *argv[])
         clearImageBuffer();
         SaveImage((char*)outputImageFileName.c_str(), thisBuffer, width, height);
         
+        printImage(thisBuffer, getImageSize());
+
+    
         string command = "open ";
         command += outputImageFileName;
         

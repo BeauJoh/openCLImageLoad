@@ -14,7 +14,7 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "215"
          endingLineNumber = "215"
-         landmarkName = "mainReal(int argc, char *argv[])"
+         landmarkName = "main(int argc, char *argv[])"
          landmarkType = "7">
       </FileBreakpoint>
    </FileBreakpoints>

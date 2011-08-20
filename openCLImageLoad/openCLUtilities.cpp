@@ -215,9 +215,18 @@ cl_mem LoadImage(cl_context context, char *fileName, int &width, int &height, cl
     
     uint8 *buffer = new uint8[getImageSizeInFloats()];    
     memcpy(buffer, upcastToFloatAndNormalize(getImage(), getImageSize()), getImageSizeInFloats());
+
+    //test with red sample image
+//    setImage(createRedTile());
+//    
+//    width=10;
+//    height=10;
+//    uint8*buffer = new uint8[10*10*4*sizeof(float)];
+//    memcpy(buffer, upcastToFloatAndNormalize(getImage(), 10*10), 10*10*4*sizeof(float));
     
-    //char*buffer = new char[width * height * 4];
-    //memcpy(buffer, normalizeImage(getImage()), width*height*4*sizeof(float));
+    //end of test with sample image
+    
+    
     
     format.image_channel_order = CL_RGBA; 
     format.image_channel_data_type = CL_UNORM_INT8;
@@ -278,9 +287,10 @@ bool SaveImage(char *fileName, uint8 *buffer, int width, int height) {
     //setImage((uint8*)denormalizeImage((float*)buffer));
     //write_png_file(fileName);
     
-//    setImage(downcastToByteAndDenormalize((float*)buffer, getImageSize()));
+    //setImage(downcastToByteAndDenormalize((float*)buffer, getImageSize()));
 
     setImageFromFloat(downcastToByteAndDenormalize((float*)buffer, getImageSize()));
+    
     write_png_file(fileName);
     
     return true;

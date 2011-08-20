@@ -72,9 +72,7 @@ void read_png_file(char* file_name)
     imageHeight = png_get_image_height(png_ptr, info_ptr);
     color_type = png_get_color_type(png_ptr, info_ptr);
     bit_depth = png_get_bit_depth(png_ptr, info_ptr);
-    
-    printf("colour type : %d", color_type);
-    
+        
     number_of_passes = png_set_interlace_handling(png_ptr);
     png_read_update_info(png_ptr, info_ptr);
     
@@ -394,6 +392,12 @@ void imageStatistics(uint8 * input, uint32 imageSize){
     printf("Image has mean value %f\n", mean/imageSize);
 }
 
+void printImageSpecs(){
+    printf("color_type = %d\n", color_type);
+    printf("bit_depth = %d\n", bit_depth);
+    printf("number_of_passes = %d\n", number_of_passes);
+}
+
 void printImage(uint8 * input, uint32 imageSize){    
     for (int i = 0; i < imageSize; i++) {
         printf("Value at %i: %hhu\n", i ,input[i]);
@@ -437,26 +441,49 @@ float* convertFromRawBits(uint8 * bits, int width, int height, unsigned bpp){
 
 void initializeRedTileRowPtr(void){
     row_pointers = (png_bytep*) malloc(sizeof(png_bytep) * imageHeight);
-    for (y=0; y<imageHeight; y++)
-        row_pointers[y] = (png_byte*) malloc(40);
+    for (y=0; y<imageHeight; y++){
+        row_pointers[y] = (png_byte*) malloc(imageWidth*4);
+    }
 }
 
 uint8* createRedTile(void){
+
     uint8* image = new uint8[10*10*4];
     imageWidth = 10;
     imageHeight = 10;
-    bit_depth = 8; 
+    
+    initializeRedTileRowPtr();
+
     color_type = 6;
+    bit_depth = 8; 
+    number_of_passes = 1;
+    
+    _imageWidth = imageWidth;
+    _imageLength = imageHeight;
+
+    _bitsPerSample = bit_depth; // = 8 bits
+    _samplesPerPixel = 4; // = 4 bytes
+    
+    _bitsPerPixel = _samplesPerPixel*_bitsPerSample;
+    _linebytes = _samplesPerPixel * _imageWidth; // = 640
+    _config = color_type;
+    
+    _bitsPerPixel = _samplesPerPixel*_bitsPerSample;
+    _linebytes = _samplesPerPixel * _imageWidth; // = 640
+    //_linebytes = png_get_rowbytes(png_ptr, info_ptr); = 640
+    _imageBitSize = (sizeof(uint8) * _imageWidth * _imageLength * _samplesPerPixel);
+    _imageSize = _imageWidth * _imageLength * _samplesPerPixel;
+    //printf("linebytes = %i, expected %i\n",_linebytes,png_get_ro
+    
     
     for (int y = 0; y<10; y++) {
         for (int x = 0; x<40; x+=4) {
-            image[(y*40)+x+0]=24;
+            image[(y*40)+x+0]=0;
             image[(y*40)+x+1]=0;
             image[(y*40)+x+2]=0;
-            image[(y*40)+x+3]=128;
+            image[(y*40)+x+3]=255;
         }
     }
-    initializeRedTileRowPtr();
     return image;
 }
 
