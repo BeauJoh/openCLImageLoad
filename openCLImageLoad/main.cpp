@@ -198,7 +198,7 @@ int LoadImage(int argc, char ** argv){
     return 1;
 }
 
-//#define USINGFREEIMAGE
+#define IMAGELOADTEST
 
 int main(int argc, char *argv[])
 {	
@@ -268,10 +268,10 @@ int main(int argc, char *argv[])
 		cout << "Failed to create compute kernel!" << endl;
         cleanKill(EXIT_FAILURE);
     }
-	
-    #ifdef USINGFREEIMAGE
-        getGPUUnitSupportedImageFormats(context);
-    #endif
+    
+    // Get GPU image support, useful for debugging
+    // getGPUUnitSupportedImageFormats(context);
+    
     
     //  specify the image format that the images are represented as... 
     //  by default to support OpenCL they must support 
@@ -284,10 +284,8 @@ int main(int argc, char *argv[])
     cl_image_format format; 
     
     
-    #ifdef USINGFREEIMAGE
-        /*----------->     FREE IMAGE REQUIRED     <-----------*/
-        input = FreeImageLoadImage(context, (char*)imageFileName.c_str(), width, height, format);
-    #else
+    #ifdef IMAGELOADTEST
+    
         input = LoadImage(context, (char*)imageFileName.c_str(), width, height, format);
     
         //print image from input
@@ -446,13 +444,8 @@ int main(int argc, char *argv[])
     
 	// Read back the results from the device to verify the output
 	//
-    #ifdef USINGFREEIMAGE
-        /*----------->     FREE IMAGE REQUIRED     <-----------*/
-        char* buffer = new char[width * height * 4];
-    #else
-        uint8* buffer = new uint8[getImageSizeInFloats()];    
-    #endif
     
+    uint8* buffer = new uint8[getImageSizeInFloats()];        
     
     size_t origin[3] = { 0, 0, 0 };
     size_t region[3] = { width, height, 1};
@@ -466,15 +459,7 @@ int main(int argc, char *argv[])
     err = clEnqueueReadImage(queue, output,
                              CL_TRUE, origin, region, 0, 0, buffer, 0, NULL, NULL);
     
-    
-    #ifdef USINGFREEIMAGE
-        /*----------->     FREE IMAGE REQUIRED     <-----------*/
-        FreeImageSaveImage((char*)outputImageFileName.c_str(), buffer, width, height);
-    #else
-        SaveImage((char*)outputImageFileName.c_str(), buffer, width, height);
-    #endif
-    
-    
+    SaveImage((char*)outputImageFileName.c_str(), buffer, width, height);    
     
     cout << "RUN FINISHED SUCCESSFULLY!" << endl;
     

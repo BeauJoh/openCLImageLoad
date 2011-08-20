@@ -249,39 +249,6 @@ cl_mem LoadImage(cl_context context, char *fileName, int &width, int &height, cl
     return clImage; 
 }
 
-cl_mem FreeImageLoadImage(cl_context context, char *fileName, int &width, int &height, cl_image_format &clImageFormat)
-{ 
-    FREE_IMAGE_FORMAT format = FreeImage_GetFileType(fileName, 0); 
-    FIBITMAP* image = FreeImage_Load(format, fileName);
-    // Convert to 32-bit image 
-    FIBITMAP* temp = image; 
-    image = FreeImage_ConvertTo32Bits(image); 
-    FreeImage_Unload(temp);
-    width = FreeImage_GetWidth(image); 
-    height = FreeImage_GetHeight(image);
-    char *buffer = new char[width * height * 4]; 
-    memcpy(buffer, FreeImage_GetBits(image), width * height * 4);
-    FreeImage_Unload(image);
-    // Create OpenCL image 
-    clImageFormat.image_channel_order = CL_RGBA; 
-    clImageFormat.image_channel_data_type = CL_UNORM_INT8;
-    
-    cl_int errNum; 
-    cl_mem clImage; 
-    clImage = clCreateImage2D(context,
-                              CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, 
-                              &clImageFormat, 
-                              width,
-                              height, 
-                              0, 
-                              buffer, 
-                              &errNum);
-    if (errNum != CL_SUCCESS) {
-        printf("Error creating CL image object\n"); 
-        return 0;
-    }
-    return clImage; 
-}
 
 bool SaveImage(char *fileName, uint8 *buffer, int width, int height) {
     //setImage((uint8*)denormalizeImage((float*)buffer));
@@ -294,20 +261,6 @@ bool SaveImage(char *fileName, uint8 *buffer, int width, int height) {
     write_png_file(fileName);
     
     return true;
-}
-
-bool FreeImageSaveImage(char *fileName, char *buffer, int width, int height) {
-    FREE_IMAGE_FORMAT format = FreeImage_GetFIFFromFilename(fileName);
-    FIBITMAP *image = FreeImage_ConvertFromRawBits((BYTE*)buffer,
-                                                   width,
-                                                   height,
-                                                   width*4,
-                                                   32,
-                                                   0xFF000000,
-                                                   0x00FF0000,
-                                                   0x0000FF00);
-    printf("size of image is: %lu", sizeof(image));
-    return FreeImage_Save(format, image, fileName);
 }
 
 //  Round up to the nearest multiple of the group size

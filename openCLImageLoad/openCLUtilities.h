@@ -18,7 +18,6 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <string.h>
-#include "FreeImage.h"
 #include "RGBAUtilities.h"
 
 // Special automatic include statement, 
