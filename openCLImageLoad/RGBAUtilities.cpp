@@ -404,33 +404,50 @@ void printImage(uint8 * input, uint32 imageSize){
     }
 }
 
-float* convertFromRawBits(uint8 * bits, int width, int height, unsigned bpp){
-    float*buffer = new float[sizeof(uint8) * _imageWidth * _imageLength * _samplesPerPixel];
+uint8* GetRawBits(uint8 * bits, int width, int height, unsigned bpp){
+    _samplesPerPixel = 4;
+    
+    uint8*buffer = new uint8[sizeof(uint8) * width * height * _samplesPerPixel];
     
     if (buffer != NULL) {
         int j = 0;
-        for (int i = 0; i < _imageSize; i++) {
+        for (int i = 0; i < width*height*4; i+=4) {
+            
+//            printf("(sizeof(unsigned int) is %lu", (sizeof(unsigned int)));
+//            
+//            printf("sizeof(unsigned long) is %lu", sizeof(unsigned long));
+
             long unsigned int tmp0,tmp1,tmp2,tmp3,tmp;
-            tmp0 = ((long unsigned int)bits[j+0]);
-            tmp1 = ((long unsigned int)bits[j+1]);
-            tmp2 = ((long unsigned int)bits[j+2]);
-            tmp3 = ((long unsigned int)bits[j+3]);
-            
-            
-            buffer[i] = 0.0f;
-            
-            buffer[i] = (tmp0>>0);
-            buffer[i] = buffer[i] + (tmp1>>8);
-            buffer[i] = buffer[i] + (tmp2>>16);
-            buffer[i] = buffer[i] + (tmp3>>24);
-            buffer[i] = ((long unsigned int)buffer[i]);
-            if (i == 50) {
-                printf("\nFirst Float Value Out is %f", buffer[i]);
-                printf("\nFirst bit = %li", tmp0);
-                printf("\nSecond bit = %li", tmp1);
-                printf("\nThird bit = %li", tmp2);
-                printf("\nFourth bit = %li\n", tmp3);
-            }
+            //buffer[i] = bits[j];
+            tmp0 = ((long unsigned int)bits[i+0]);
+            tmp1 = ((long unsigned int)bits[i+1]);
+            tmp2 = ((long unsigned int)bits[i+2]);
+            tmp3 = ((long unsigned int)bits[i+3]);
+
+            buffer[j+0] = tmp0 << 4;
+            buffer[j+1] = tmp1 << 4;
+            buffer[j+2] = tmp2 << 4;
+            buffer[j+3] = tmp3 << 4;
+
+            printf("\nBuffer Value Out @%i is %hhu", j+0, buffer[j+0]);
+            printf("\nBuffer Value Out @%i is %hhu", j+1, buffer[j+1]);
+            printf("\nBuffer Value Out @%i is %hhu", j+2, buffer[j+2]);
+            printf("\nBuffer Value Out @%i is %hhu", j+3, buffer[j+3]);
+
+            printf("\nFirst bit = %li", tmp0);
+            printf("\nSecond bit = %li", tmp1);
+            printf("\nThird bit = %li", tmp2);
+            printf("\nFourth bit = %li\n", tmp3);
+
+//            
+//            
+//            buffer[i] = 0.0f;
+//            
+//            buffer[i] = (tmp0>>0);
+//            buffer[i] = buffer[i] + (tmp1>>8);
+//            buffer[i] = buffer[i] + (tmp2>>16);
+//            buffer[i] = buffer[i] + (tmp3>>24);
+//            buffer[i] = ((long unsigned int)buffer[i]);
             //buffer[i] = (bits[j] << 24) | (bits[j+1] << 16) | (bits[j+2] << 8) | (bits[j+3]);   
             j+=4;
         }

@@ -50,7 +50,7 @@ void process_file(void);
 float* normalizeImage(uint8*);
 uint8* denormalizeImage(float*);
 bool allPixelsAreNormal(uint8*);
-float* convertFromRawBits(uint8 * bits, int width, int height, unsigned bpp);
+uint8* GetRawBits(uint8 * bits, int width, int height, unsigned bpp);
 
 uint8* getImage(void);
 void setImage(uint8*);

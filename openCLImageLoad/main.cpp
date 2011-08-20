@@ -289,7 +289,7 @@ int main(int argc, char *argv[])
         input = LoadImage(context, (char*)imageFileName.c_str(), width, height, format);
     
         //print image from input
-        //printImage(getImage(), getImageSize());
+        printImage(getImage(), getImageSize());
     
         uint8* thisBuffer = new uint8[getImageSizeInFloats()];    
     
@@ -311,24 +311,26 @@ int main(int argc, char *argv[])
         //
         err = clEnqueueReadImage(thisQueue, input,
                                  CL_TRUE, thisOrigin, thisRegion, 0, 0, thisBuffer, 0, NULL, NULL);
+        
+        thisBuffer = GetRawBits(thisBuffer, getImageWidth(),getImageLength(), 8);
     
         string rmCommand = "rm ";
         rmCommand += outputImageFileName;
-        cout << "remove command is:\n" << (char*)rmCommand.c_str() << endl;
+        //cout << "remove command is:\n" << (char*)rmCommand.c_str() << endl;
     
         system((char*)rmCommand.c_str());
     
         string lsCommand = "ls ";
         lsCommand += outputImageFileName;
-        cout << "look command is:\n" << (char*)lsCommand.c_str() << endl;
-        system((char*)lsCommand.c_str());
+        //cout << "look command is:\n" << (char*)lsCommand.c_str() << endl;
+        //system((char*)lsCommand.c_str());
     
         //clear out input image before handing in a new one
         //
         clearImageBuffer();
         SaveImage((char*)outputImageFileName.c_str(), thisBuffer, width, height);
         
-        printImage(thisBuffer, getImageSize());
+        //printImage(thisBuffer, getImageSize());
 
     
         string command = "open ";
