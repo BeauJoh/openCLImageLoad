@@ -427,7 +427,7 @@ uint8* GetRawBits(uint8 * bits, int width, int height, unsigned bpp){
             buffer[j+0] = tmp0 << 4;
             buffer[j+1] = tmp1 << 4;
             buffer[j+2] = tmp2 << 4;
-            buffer[j+3] = tmp3 << 4;
+            buffer[j+3] = tmp3 << 1;
 
             printf("\nBuffer Value Out @%i is %hhu", j+0, buffer[j+0]);
             printf("\nBuffer Value Out @%i is %hhu", j+1, buffer[j+1]);
