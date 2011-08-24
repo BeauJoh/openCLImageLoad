@@ -214,8 +214,21 @@ cl_mem LoadImage(cl_context context, char *fileName, int &width, int &height, cl
     height = getImageLength();
     
     uint8 *buffer = new uint8[getImageSizeInFloats()];    
+    
+    //
+    // As a Normalized float
+    //printImage((uint8*)upcastToFloatAndNormalize(getImage(), getImageSize()), getImageSize());
+    
+    //
+    // Done and Undone
+    // printImage(downcastToByteAndDenormalize(upcastToFloatAndNormalize(getImage(), getImageSize()), getImageSize()), getImageSize());
+
     memcpy(buffer, upcastToFloatAndNormalize(getImage(), getImageSize()), getImageSizeInFloats());
 
+    //
+    // With this buffer
+    //printImage(downcastToByteAndDenormalize((float*)buffer, getImageSizeInFloats()), getImageSize());
+    
     //test with red sample image
 //    setImage(createRedTile());
 //    
@@ -242,6 +255,9 @@ cl_mem LoadImage(cl_context context, char *fileName, int &width, int &height, cl
                               0, 
                               buffer, 
                               &errNum);
+    
+    //printImage(downcastToByteAndDenormalize(buffer, getImageSize()), getImageSize());
+    
     if (errNum != CL_SUCCESS) {
         printf("Error creating CL image object\n"); 
         return 0;
@@ -254,9 +270,11 @@ bool SaveImage(char *fileName, uint8 *buffer, int width, int height) {
     //setImage((uint8*)denormalizeImage((float*)buffer));
     //write_png_file(fileName);
     
-    //setImage(downcastToByteAndDenormalize((float*)buffer, getImageSize()));
+    //printImage(downcastToByteAndDenormalize((float*)buffer, getImageSizeInFloats()), getImageSize());
+    
+    setImage(downcastToByteAndDenormalize((float*)buffer, getImageSizeInFloats()));
 
-    setImageFromFloat(downcastToByteAndDenormalize((float*)buffer, getImageSize()));
+    //setImageFromFloat(downcastToByteAndDenormalize((float*)buffer, getImageSize()));
     
     write_png_file(fileName);
     

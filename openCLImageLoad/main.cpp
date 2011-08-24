@@ -310,11 +310,16 @@ int main(int argc, char *argv[])
         // Read image to buffer with implicit row pitch calculation
         //
         err = clEnqueueReadImage(thisQueue, input,
-                                 CL_TRUE, thisOrigin, thisRegion, 0, 0, thisBuffer, 0, NULL, NULL);
+                                 CL_TRUE, thisOrigin, thisRegion, getImageRowPitch(), 0, thisBuffer, 0, NULL, NULL);
         
-        thisBuffer = GetRawBits(thisBuffer, getImageWidth(),getImageLength(), 8);
+        printImage(downcastToByteAndDenormalize((float*)thisBuffer, getImageSizeInFloats()), getImageSize());
+    
+        //thisBuffer = GetRawBits(thisBuffer, getImageWidth(),getImageLength(), 8);
         //cout << LONG_MAX << endl;
         //cout << LONG_MIN << endl;
+        //printImage(thisBuffer, getImageSize());
+
+        //thisBuffer = GetRawBits(thisBuffer, getImageWidth(),getImageLength(), 8);
     
         string rmCommand = "rm ";
         rmCommand += outputImageFileName;
