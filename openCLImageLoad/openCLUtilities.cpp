@@ -214,8 +214,11 @@ cl_mem LoadImage(cl_context context, char *fileName, int &width, int &height, cl
     height = getImageLength();
     
     uint8 *buffer = new uint8[getImageSizeInFloats()];    
-    memcpy(buffer, upcastToFloatAndNormalize(getImage(), getImageSize()), getImageSizeInFloats());
+    //printImage(downcastToByteAndDenormalize(upcastToFloatAndNormalize(getImage(), getImageSize()), getImageSize()), getImageSize());
 
+    memcpy(buffer, upcastToFloatAndNormalize(getImage(), getImageSize()), getImageSize());
+
+    
     //test with red sample image
 //    setImage(createRedTile());
 //    
@@ -242,6 +245,9 @@ cl_mem LoadImage(cl_context context, char *fileName, int &width, int &height, cl
                               0, 
                               buffer, 
                               &errNum);
+    
+    printImage(downcastToByteAndDenormalize(buffer, getImageSize()), getImageSize());
+    
     if (errNum != CL_SUCCESS) {
         printf("Error creating CL image object\n"); 
         return 0;
