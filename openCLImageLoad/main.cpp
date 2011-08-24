@@ -289,7 +289,7 @@ int main(int argc, char *argv[])
         input = LoadImage(context, (char*)imageFileName.c_str(), width, height, format);
     
         //print image from input
-        printImage(getImage(), getImageSize());
+        //printImage(getImage(), getImageSize());
     
         uint8* thisBuffer = new uint8[getImageSizeInFloats()];    
     
@@ -312,7 +312,9 @@ int main(int argc, char *argv[])
         err = clEnqueueReadImage(thisQueue, input,
                                  CL_TRUE, thisOrigin, thisRegion, 0, 0, thisBuffer, 0, NULL, NULL);
         
-        thisBuffer = GetRawBits(thisBuffer, getImageWidth(),getImageLength(), 8);
+        printImage(thisBuffer, getImageSize());
+
+        //thisBuffer = GetRawBits(thisBuffer, getImageWidth(),getImageLength(), 8);
     
         string rmCommand = "rm ";
         rmCommand += outputImageFileName;

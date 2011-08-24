@@ -357,7 +357,7 @@ float* upcastToFloat(uint8* input, uint32 imageSize){
 float* upcastToFloatAndNormalize(uint8* input, uint32 imageSize){
     float* output = new float[imageSize];
     for (int i = 0; i < imageSize; i++) {
-        output[i] = (float)input[i]/255.0f;
+        output[i] = ((float)input[i])/255.0f;
     }
     return output;
 }
