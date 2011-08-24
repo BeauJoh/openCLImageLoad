@@ -423,6 +423,7 @@ uint8* GetRawBits(uint8 * bits, int width, int height, unsigned bpp){
             tmp1 = ((long unsigned int)bits[i+1]);
             tmp2 = ((long unsigned int)bits[i+2]);
             tmp3 = ((long unsigned int)bits[i+3]);
+            tmp = ((long unsigned int)bits[i+4]);
 
             buffer[j+0] = tmp0 << 4;
             buffer[j+1] = tmp1 << 4;
@@ -438,6 +439,7 @@ uint8* GetRawBits(uint8 * bits, int width, int height, unsigned bpp){
             printf("\nSecond bit = %li", tmp1);
             printf("\nThird bit = %li", tmp2);
             printf("\nFourth bit = %li\n", tmp3);
+            printf("\nFifth bit? = %li\n", tmp);
 
 //            
 //            

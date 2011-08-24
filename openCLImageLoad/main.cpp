@@ -289,7 +289,7 @@ int main(int argc, char *argv[])
         input = LoadImage(context, (char*)imageFileName.c_str(), width, height, format);
     
         //print image from input
-        printImage(getImage(), getImageSize());
+        //printImage(getImage(), getImageSize());
     
         uint8* thisBuffer = new uint8[getImageSizeInFloats()];    
     
@@ -313,6 +313,8 @@ int main(int argc, char *argv[])
                                  CL_TRUE, thisOrigin, thisRegion, 0, 0, thisBuffer, 0, NULL, NULL);
         
         thisBuffer = GetRawBits(thisBuffer, getImageWidth(),getImageLength(), 8);
+        //cout << LONG_MAX << endl;
+        //cout << LONG_MIN << endl;
     
         string rmCommand = "rm ";
         rmCommand += outputImageFileName;
