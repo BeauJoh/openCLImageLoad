@@ -311,8 +311,12 @@ int main(int argc, char *argv[])
         //
         err = clEnqueueReadImage(thisQueue, input,
                                  CL_TRUE, thisOrigin, thisRegion, getImageRowPitch(), 0, thisBuffer, 0, NULL, NULL);
-        
-        printImage(downcastToByteAndDenormalize((float*)thisBuffer, getImageSizeInFloats()), getImageSize());
+//    Field Test this!
+//    multiplexToFloat(getImage(), getImageSize());
+//    demultToBytes(indata, getImageSizeInFloats());
+
+    
+        //printImage(downcastToByteAndDenormalize((float*)thisBuffer, getImageSizeInFloats()), getImageSize());
     
         //thisBuffer = GetRawBits(thisBuffer, getImageWidth(),getImageLength(), 8);
         //cout << LONG_MAX << endl;

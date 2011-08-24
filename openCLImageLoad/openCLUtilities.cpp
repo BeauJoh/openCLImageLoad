@@ -295,3 +295,63 @@ size_t RoundUp(int groupSize, int globalSize)   {
      	return globalSize + groupSize - r;
     }
 }
+
+union FloatAndByte
+{
+    float   f;
+    uint8   c[0];
+};
+
+float* multiplexToFloat(uint8* data, int imageSize){
+    
+    float* resultingValues = new float[imageSize];
+    
+    int j = 0;
+    for (int i = 0; i < imageSize; i+=4) {
+        FloatAndByte aFloatAndByte;
+                
+        aFloatAndByte.c[0] = data[i+0];
+        aFloatAndByte.c[1] = data[i+1];
+        aFloatAndByte.c[2] = data[i+2];
+        aFloatAndByte.c[3] = data[i+3];
+
+        resultingValues[j] = aFloatAndByte.f;
+        j++;
+    }
+    return resultingValues;
+}
+
+uint8* demultToBytes(float* data, int imageSize){
+
+    uint8* resultingValues = new uint8[imageSize];
+    
+    int j = 0;
+    for (int i = 0; i < imageSize; i+=4) {
+        FloatAndByte aFloatAndByte;
+        aFloatAndByte.f = data[j];
+        
+        resultingValues[i+0] = aFloatAndByte.c[0];
+        resultingValues[i+1] = aFloatAndByte.c[1];
+        resultingValues[i+2] = aFloatAndByte.c[2];
+        resultingValues[i+3] = aFloatAndByte.c[3];
+        
+        j++;
+    }
+    return resultingValues;
+}
+
+//Example Usage:
+//uint8* tmpVals = new uint8[4];
+//tmpVals[0] = 1;
+//tmpVals[1] = 2;
+//tmpVals[2] = 3;
+//tmpVals[3] = 4;
+//
+//
+//float* result = multiplexToFloat(tmpVals, getImageSize());
+//
+//uint8* moreTmpVals = new uint8[4];
+//moreTmpVals = demultToBytes(result, getImageSizeInFloats());
+//printf("float value is : %i\n", moreTmpVals[0]);
+
+

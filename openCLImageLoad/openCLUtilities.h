@@ -56,4 +56,7 @@ cl_mem FreeImageLoadImage(cl_context context, char *fileName, int &width, int &h
 bool FreeImageSaveImage(char *fileName, char *buffer, int width, int height);
 size_t RoundUp(int groupSize, int globalSize);
 
+float* multiplexToFloat(uint8* data, int imageSize);
+uint8* demultToBytes(float* data, int imageSize);
+
 #endif
