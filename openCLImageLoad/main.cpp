@@ -397,6 +397,7 @@ int main(int argc, char *argv[])
     size_t origin[3] = { 0, 0, 0 };
     size_t region[3] = { width, height, 1};
     
+    
     cl_command_queue queue = clCreateCommandQueue(
                                                   context, 
                                                   device_id, 
