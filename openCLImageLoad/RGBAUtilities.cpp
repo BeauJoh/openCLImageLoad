@@ -191,9 +191,6 @@ float* normalizeImage(uint8* input){
     
     for (int i = 0; i < _imageSize; i++) {
         output[i] = ((float)input[i]/255.0f);
-        if (i == 50) {
-            printf("First Float Value In is %f", output[i]);
-        }
     }
     delete input;
     return output;
@@ -204,9 +201,6 @@ uint8* denormalizeImage(float*input){
     uint8* output = new uint8[_imageSize];
     for (int i = 0; i < _imageSize; i++) {
         output[i] = ((uint8)input[i]*255.0f);
-        if (i == 50) {
-            printf("First Float Value In is %d", output[i]);
-        }
     }
     delete input;
     return output;
@@ -274,7 +268,6 @@ void convolutedSetImage(uint8* image){
     }
     
     delete image;
-
 }
 
 void clearImageBuffer(){
@@ -290,24 +283,6 @@ void clearImageBuffer(){
             origX++;
         }
     }
-}
-
-void setImageFromFloat(uint8* image){
-    
-    for (y=0; y < _imageLength; y++) {
-        uint8* row = row_pointers[y];
-
-        for (x=0; x<_linebytes; x+=4) {
-             
-            row[x+0] = image[y*_linebytes+x+0];
-            row[x+1] = image[y*_linebytes+x+1];
-            row[x+2] = image[y*_linebytes+x+2];
-            row[x+3] = image[y*_linebytes+x+3];
-        
-        }
-    }
-    
-    delete image;
 }
 
 void setImage(uint8* image){
@@ -370,10 +345,6 @@ uint8* downcastToByteAndDenormalize(float* input, uint32 imageSize){
     return output;
 }
 
-uint32 getImageSizeInFloats(void){
-    return _imageSize*sizeof(float);
-}
-
 uint8* downCastToByte(float* input, uint32 imageSize){
     uint8* output = new uint8[imageSize];
     for (int i = 0; i < imageSize; i++) {
@@ -404,58 +375,62 @@ void printImage(uint8 * input, uint32 imageSize){
     }
 }
 
-uint8* GetRawBits(uint8 * bits, int width, int height, unsigned bpp){
-    _samplesPerPixel = 4;
+union FloatAndByte
+{
+    float   f;
+    uint8   c[0];
+};
+
+//Example Usage:
+//uint8* tmpVals = new uint8[4];
+//tmpVals[0] = 1;
+//tmpVals[1] = 2;
+//tmpVals[2] = 3;
+//tmpVals[3] = 4;
+//
+//
+//float* result = multiplexToFloat(tmpVals, 1);
+//
+//uint8* moreTmpVals = new uint8[4];
+//moreTmpVals = demultToBytes(result, 4);
+//printf("float value is : %i\n", moreTmpVals[0]);
+
+float* multiplexToFloat(uint8* data, int imageSize){
     
-    uint8*buffer = new uint8[sizeof(uint8) * width * height * _samplesPerPixel];
+    float* resultingValues = new float[imageSize];
     
-    if (buffer != NULL) {
-        int j = 0;
-        for (int i = 0; i < width*height*4; i+=4) {
-            
-//            printf("(sizeof(unsigned int) is %lu", (sizeof(unsigned int)));
-//            
-//            printf("sizeof(unsigned long) is %lu", sizeof(unsigned long));
-
-            long unsigned int tmp0,tmp1,tmp2,tmp3,tmp;
-            //buffer[i] = bits[j];
-            tmp0 = ((long unsigned int)bits[i+0]);
-            tmp1 = ((long unsigned int)bits[i+1]);
-            tmp2 = ((long unsigned int)bits[i+2]);
-            tmp3 = ((long unsigned int)bits[i+3]);
-            tmp = ((long unsigned int)bits[i+4]);
-
-            buffer[j+0] = tmp0 << 4;
-            buffer[j+1] = tmp1 << 4;
-            buffer[j+2] = tmp2 << 4;
-            buffer[j+3] = tmp3 << 1;
-
-            printf("\nBuffer Value Out @%i is %hhu", j+0, buffer[j+0]);
-            printf("\nBuffer Value Out @%i is %hhu", j+1, buffer[j+1]);
-            printf("\nBuffer Value Out @%i is %hhu", j+2, buffer[j+2]);
-            printf("\nBuffer Value Out @%i is %hhu", j+3, buffer[j+3]);
-
-            printf("\nFirst bit = %li", tmp0);
-            printf("\nSecond bit = %li", tmp1);
-            printf("\nThird bit = %li", tmp2);
-            printf("\nFourth bit = %li\n", tmp3);
-            printf("\nFifth bit? = %li\n", tmp);
-
-//            
-//            
-//            buffer[i] = 0.0f;
-//            
-//            buffer[i] = (tmp0>>0);
-//            buffer[i] = buffer[i] + (tmp1>>8);
-//            buffer[i] = buffer[i] + (tmp2>>16);
-//            buffer[i] = buffer[i] + (tmp3>>24);
-//            buffer[i] = ((long unsigned int)buffer[i]);
-            //buffer[i] = (bits[j] << 24) | (bits[j+1] << 16) | (bits[j+2] << 8) | (bits[j+3]);   
-            j+=4;
-        }
+    int j = 0;
+    for (int i = 0; i < imageSize; i+=4) {
+        FloatAndByte aFloatAndByte;
+        
+        aFloatAndByte.c[0] = data[i+0];
+        aFloatAndByte.c[1] = data[i+1];
+        aFloatAndByte.c[2] = data[i+2];
+        aFloatAndByte.c[3] = data[i+3];
+        
+        resultingValues[j] = aFloatAndByte.f;
+        j++;
     }
+    return resultingValues;
+}
+
+uint8* demultToBytes(float* data, int imageSize){
     
-    return buffer;
+    uint8* resultingValues = new uint8[imageSize];
+    
+    int j = 0;
+    for (int i = 0; i < imageSize; i+=4) {
+        FloatAndByte aFloatAndByte;
+        aFloatAndByte.f = data[j];
+        
+        resultingValues[i+0] = aFloatAndByte.c[0];
+        resultingValues[i+1] = aFloatAndByte.c[1];
+        resultingValues[i+2] = aFloatAndByte.c[2];
+        resultingValues[i+3] = aFloatAndByte.c[3];
+        
+        j++;
+    }
+    return resultingValues;
 }
 
 void initializeRedTileRowPtr(void){
@@ -465,7 +440,7 @@ void initializeRedTileRowPtr(void){
     }
 }
 
-uint8* createRedTile(void){
+uint8* createBlackTile(void){
 
     uint8* image = new uint8[10*10*4];
     imageWidth = 10;
@@ -510,7 +485,15 @@ uint32 getImageSize(void){
     return _imageSize;
 }
 
+uint32 getImageSizeInFloats(void){
+    return _imageSize*sizeof(float);
+}
+
 uint32 getImageLength(void){
+    return _imageLength;
+};
+
+uint32 getImageHeight(void){
     return _imageLength;
 };
 

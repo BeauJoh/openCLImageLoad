@@ -98,6 +98,7 @@ static inline int parseCommandLine(int argc , char** argv){
                 optind++;
         }
     }
+    return 1;
 };
 
 
@@ -130,7 +131,7 @@ int RegularImageCopyWithBuffers(int argc, char ** argv){
 int CreateRedImage(int argc, char ** argv){
     parseCommandLine(argc, argv);
     
-    setImage(createRedTile());
+    setImage(createBlackTile());
     
     printImage(getImage(), 10*10*4);
     
@@ -282,74 +283,9 @@ int main(int argc, char *argv[])
     //
     //  format is collected with the LoadImage function
     cl_image_format format; 
-    
-    
-    #ifdef IMAGELOADTEST
-    
-        input = LoadImage(context, (char*)imageFileName.c_str(), width, height, format);
-    
-        //print image from input
-        //printImage(getImage(), getImageSize());
-    
-        uint8* thisBuffer = new uint8[getImageSizeInFloats()];    
-    
-    
-        size_t thisOrigin[3] = { 0, 0, 0 };
-        size_t thisRegion[3] = { width, height, 1};
-    
-        cl_command_queue thisQueue = clCreateCommandQueue(
-                                                  context, 
-                                                  device_id, 
-                                                  0, 
-                                                  &err);
-        // Explicit row pitch calculation
-        //
-        //    err = clEnqueueReadImage(thisQueue, input,
-        //      CL_TRUE, thisOrigin, thisRegion, getImageRowPitch(), 0, thisBuffer, 0, NULL, NULL);
-    
-        // Read image to buffer with implicit row pitch calculation
-        //
-        err = clEnqueueReadImage(thisQueue, input,
-                                 CL_TRUE, thisOrigin, thisRegion, getImageRowPitch(), 0, thisBuffer, 0, NULL, NULL);
-//    Field Test this!
-//    multiplexToFloat(getImage(), getImageSize());
-//    demultToBytes(indata, getImageSizeInFloats());
-    
-        printImage(thisBuffer, getImageSize());
-    
-        //thisBuffer = GetRawBits(thisBuffer, getImageWidth(),getImageLength(), 8);
-        //cout << LONG_MAX << endl;
-        //cout << LONG_MIN << endl;
-        //printImage(thisBuffer, getImageSize());
 
-        //thisBuffer = GetRawBits(thisBuffer, getImageWidth(),getImageLength(), 8);
-    
-        string rmCommand = "rm ";
-        rmCommand += outputImageFileName;
-        //cout << "remove command is:\n" << (char*)rmCommand.c_str() << endl;
-    
-        system((char*)rmCommand.c_str());
-    
-        string lsCommand = "ls ";
-        lsCommand += outputImageFileName;
-        //cout << "look command is:\n" << (char*)lsCommand.c_str() << endl;
-        //system((char*)lsCommand.c_str());
-    
-        //clear out input image before handing in a new one
-        //
-        clearImageBuffer();
-        SaveImage((char*)outputImageFileName.c_str(), thisBuffer, width, height);
-        
-        //printImage(thisBuffer, getImageSize());
-
-    
-        string command = "open ";
-        command += outputImageFileName;
-        
-        system((char*)command.c_str());
-    
-        return(1);
-    #endif
+    //  create input image buffer object to read results from
+    input = LoadImage(context, (char*)imageFileName.c_str(), width, height, format);
     
     //  create output buffer object, to store results
     output = clCreateImage2D(context, 
@@ -436,7 +372,7 @@ int main(int argc, char *argv[])
 //    globalWorksize[1] = globalWorksize[0];
     
     size_t localWorksize[2] = { 16, 16 };
-    size_t globalWorksize[2] =  { RoundUp(localWorksize[0], width), RoundUp(localWorksize[1], height) };
+    size_t globalWorksize[2] =  { RoundUp((int)localWorksize[0], width), RoundUp((int)localWorksize[1], height) };
     
     
     //  Start up the kernels in the GPUs
@@ -456,7 +392,6 @@ int main(int argc, char *argv[])
     
 	// Read back the results from the device to verify the output
 	//
-    
     uint8* buffer = new uint8[getImageSizeInFloats()];        
     
     size_t origin[3] = { 0, 0, 0 };
@@ -468,8 +403,10 @@ int main(int argc, char *argv[])
                                                   0, 
                                                   &err);
     
+    // Read image to buffer with implicit row pitch calculation
+    //
     err = clEnqueueReadImage(queue, output,
-                             CL_TRUE, origin, region, 0, 0, buffer, 0, NULL, NULL);
+                             CL_TRUE, origin, region, getImageRowPitch(), 0, buffer, 0, NULL, NULL);
     
     SaveImage((char*)outputImageFileName.c_str(), buffer, width, height);    
     
