@@ -314,9 +314,8 @@ int main(int argc, char *argv[])
 //    Field Test this!
 //    multiplexToFloat(getImage(), getImageSize());
 //    demultToBytes(indata, getImageSizeInFloats());
-
     
-        //printImage(downcastToByteAndDenormalize((float*)thisBuffer, getImageSizeInFloats()), getImageSize());
+        printImage(thisBuffer, getImageSize());
     
         //thisBuffer = GetRawBits(thisBuffer, getImageWidth(),getImageLength(), 8);
         //cout << LONG_MAX << endl;

@@ -213,7 +213,7 @@ cl_mem LoadImage(cl_context context, char *fileName, int &width, int &height, cl
     width = getImageWidth();
     height = getImageLength();
     
-    uint8 *buffer = new uint8[getImageSizeInFloats()];    
+    uint8 *buffer = new uint8[getImageSize()];    
     
     //
     // As a Normalized float
@@ -223,7 +223,9 @@ cl_mem LoadImage(cl_context context, char *fileName, int &width, int &height, cl
     // Done and Undone
     // printImage(downcastToByteAndDenormalize(upcastToFloatAndNormalize(getImage(), getImageSize()), getImageSize()), getImageSize());
 
-    memcpy(buffer, upcastToFloatAndNormalize(getImage(), getImageSize()), getImageSizeInFloats());
+    memcpy(buffer, getImage(), getImageSize());
+
+//    memcpy(buffer, upcastToFloatAndNormalize(getImage(), getImageSize()), getImageSizeInFloats());
 
     //
     // With this buffer
@@ -256,7 +258,14 @@ cl_mem LoadImage(cl_context context, char *fileName, int &width, int &height, cl
                               buffer, 
                               &errNum);
     
-    //printImage(downcastToByteAndDenormalize(buffer, getImageSize()), getImageSize());
+    
+    //normalized values in buffer
+    //
+    //printImage(buffer, getImageSize());
+    
+    //unnormalized values from buffer
+    //
+    //printImage(downcastToByteAndDenormalize((float*)buffer, getImageSizeInFloats()), getImageSize());
     
     if (errNum != CL_SUCCESS) {
         printf("Error creating CL image object\n"); 
@@ -272,7 +281,8 @@ bool SaveImage(char *fileName, uint8 *buffer, int width, int height) {
     
     //printImage(downcastToByteAndDenormalize((float*)buffer, getImageSizeInFloats()), getImageSize());
     
-    setImage(downcastToByteAndDenormalize((float*)buffer, getImageSizeInFloats()));
+//    setImage(downcastToByteAndDenormalize((float*)buffer, getImageSizeInFloats()));
+    setImage(buffer);
 
     //setImageFromFloat(downcastToByteAndDenormalize((float*)buffer, getImageSize()));
     
@@ -334,7 +344,7 @@ uint8* demultToBytes(float* data, int imageSize){
         resultingValues[i+1] = aFloatAndByte.c[1];
         resultingValues[i+2] = aFloatAndByte.c[2];
         resultingValues[i+3] = aFloatAndByte.c[3];
-        
+
         j++;
     }
     return resultingValues;
@@ -348,10 +358,10 @@ uint8* demultToBytes(float* data, int imageSize){
 //tmpVals[3] = 4;
 //
 //
-//float* result = multiplexToFloat(tmpVals, getImageSize());
+//float* result = multiplexToFloat(tmpVals, 1);
 //
 //uint8* moreTmpVals = new uint8[4];
-//moreTmpVals = demultToBytes(result, getImageSizeInFloats());
+//moreTmpVals = demultToBytes(result, 4);
 //printf("float value is : %i\n", moreTmpVals[0]);
 
 
