@@ -72,7 +72,7 @@ void read_png_file(char* file_name)
     imageHeight = png_get_image_height(png_ptr, info_ptr);
     color_type = png_get_color_type(png_ptr, info_ptr);
     bit_depth = png_get_bit_depth(png_ptr, info_ptr);
-
+        
     number_of_passes = png_set_interlace_handling(png_ptr);
     png_read_update_info(png_ptr, info_ptr);
     
@@ -161,7 +161,6 @@ void write_png_file(char* file_name)
     fclose(fp);
 }
 
-
 void process_file(void)
 {
     if (png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_RGB)
@@ -192,9 +191,6 @@ float* normalizeImage(uint8* input){
     
     for (int i = 0; i < _imageSize; i++) {
         output[i] = ((float)input[i]/255.0f);
-        if (i == 50) {
-            printf("First Float Value In is %f", output[i]);
-        }
     }
     delete input;
     return output;
@@ -205,9 +201,6 @@ uint8* denormalizeImage(float*input){
     uint8* output = new uint8[_imageSize];
     for (int i = 0; i < _imageSize; i++) {
         output[i] = ((uint8)input[i]*255.0f);
-        if (i == 50) {
-            printf("First Float Value In is %d", output[i]);
-        }
     }
     delete input;
     return output;
@@ -275,7 +268,21 @@ void convolutedSetImage(uint8* image){
     }
     
     delete image;
+}
 
+void clearImageBuffer(){
+    for (y=0; y<_imageLength; y++) {
+        uint8* row = row_pointers[y];
+        int origX = 0;
+        for (x=0; x<_linebytes; x+=4) {
+            uint8* ptr = &(row[origX*4]);
+            ptr[0] = 0;
+            ptr[1] = 0;
+            ptr[2] = 0;
+            ptr[3] = 0;
+            origX++;
+        }
+    }
 }
 
 void setImage(uint8* image){
@@ -325,7 +332,7 @@ float* upcastToFloat(uint8* input, uint32 imageSize){
 float* upcastToFloatAndNormalize(uint8* input, uint32 imageSize){
     float* output = new float[imageSize];
     for (int i = 0; i < imageSize; i++) {
-        output[i] = (float)input[i]/255.0f;
+        output[i] = ((float)input[i])/255.0f;
     }
     return output;
 }
@@ -336,10 +343,6 @@ uint8* downcastToByteAndDenormalize(float* input, uint32 imageSize){
         output[i] = input[i]*255.0f;
     }
     return output;
-}
-
-uint32 getImageSizeInFloats(void){
-    return _imageSize*sizeof(float);
 }
 
 uint8* downCastToByte(float* input, uint32 imageSize){
@@ -360,46 +363,137 @@ void imageStatistics(uint8 * input, uint32 imageSize){
     printf("Image has mean value %f\n", mean/imageSize);
 }
 
-float* convertFromRawBits(uint8 * bits, int width, int height, unsigned bpp){
-    float*buffer = new float[sizeof(uint8) * _imageWidth * _imageLength * _samplesPerPixel];
+void printImageSpecs(){
+    printf("color_type = %d\n", color_type);
+    printf("bit_depth = %d\n", bit_depth);
+    printf("number_of_passes = %d\n", number_of_passes);
+}
+
+void printImage(uint8 * input, uint32 imageSize){    
+    for (int i = 0; i < imageSize; i++) {
+        printf("Value at %i: %hhu\n", i ,input[i]);
+    }
+}
+
+union FloatAndByte
+{
+    float   f;
+    uint8   c[0];
+};
+
+//Example Usage:
+//uint8* tmpVals = new uint8[4];
+//tmpVals[0] = 1;
+//tmpVals[1] = 2;
+//tmpVals[2] = 3;
+//tmpVals[3] = 4;
+//
+//
+//float* result = multiplexToFloat(tmpVals, 1);
+//
+//uint8* moreTmpVals = new uint8[4];
+//moreTmpVals = demultToBytes(result, 4);
+//printf("float value is : %i\n", moreTmpVals[0]);
+
+float* multiplexToFloat(uint8* data, int imageSize){
     
-    if (buffer != NULL) {
-        int j = 0;
-        for (int i = 0; i < _imageSize; i++) {
-            long unsigned int tmp0,tmp1,tmp2,tmp3,tmp;
-            tmp0 = ((long unsigned int)bits[j+0]);
-            tmp1 = ((long unsigned int)bits[j+1]);
-            tmp2 = ((long unsigned int)bits[j+2]);
-            tmp3 = ((long unsigned int)bits[j+3]);
-            
-            
-            buffer[i] = 0.0f;
-            
-            buffer[i] = (tmp0>>0);
-            buffer[i] = buffer[i] + (tmp1>>8);
-            buffer[i] = buffer[i] + (tmp2>>16);
-            buffer[i] = buffer[i] + (tmp3>>24);
-            buffer[i] = ((long unsigned int)buffer[i]);
-            if (i == 50) {
-                printf("\nFirst Float Value Out is %f", buffer[i]);
-                printf("\nFirst bit = %li", tmp0);
-                printf("\nSecond bit = %li", tmp1);
-                printf("\nThird bit = %li", tmp2);
-                printf("\nFourth bit = %li\n", tmp3);
-            }
-            //buffer[i] = (bits[j] << 24) | (bits[j+1] << 16) | (bits[j+2] << 8) | (bits[j+3]);   
-            j+=4;
+    float* resultingValues = new float[imageSize];
+    
+    int j = 0;
+    for (int i = 0; i < imageSize; i+=4) {
+        FloatAndByte aFloatAndByte;
+        
+        aFloatAndByte.c[0] = data[i+0];
+        aFloatAndByte.c[1] = data[i+1];
+        aFloatAndByte.c[2] = data[i+2];
+        aFloatAndByte.c[3] = data[i+3];
+        
+        resultingValues[j] = aFloatAndByte.f;
+        j++;
+    }
+    return resultingValues;
+}
+
+uint8* demultToBytes(float* data, int imageSize){
+    
+    uint8* resultingValues = new uint8[imageSize];
+    
+    int j = 0;
+    for (int i = 0; i < imageSize; i+=4) {
+        FloatAndByte aFloatAndByte;
+        aFloatAndByte.f = data[j];
+        
+        resultingValues[i+0] = aFloatAndByte.c[0];
+        resultingValues[i+1] = aFloatAndByte.c[1];
+        resultingValues[i+2] = aFloatAndByte.c[2];
+        resultingValues[i+3] = aFloatAndByte.c[3];
+        
+        j++;
+    }
+    return resultingValues;
+}
+
+void initializeRedTileRowPtr(void){
+    row_pointers = (png_bytep*) malloc(sizeof(png_bytep) * imageHeight);
+    for (y=0; y<imageHeight; y++){
+        row_pointers[y] = (png_byte*) malloc(imageWidth*4);
+    }
+}
+
+uint8* createBlackTile(void){
+
+    uint8* image = new uint8[10*10*4];
+    imageWidth = 10;
+    imageHeight = 10;
+    
+    initializeRedTileRowPtr();
+
+    color_type = 6;
+    bit_depth = 8; 
+    number_of_passes = 1;
+    
+    _imageWidth = imageWidth;
+    _imageLength = imageHeight;
+
+    _bitsPerSample = bit_depth; // = 8 bits
+    _samplesPerPixel = 4; // = 4 bytes
+    
+    _bitsPerPixel = _samplesPerPixel*_bitsPerSample;
+    _linebytes = _samplesPerPixel * _imageWidth; // = 640
+    _config = color_type;
+    
+    _bitsPerPixel = _samplesPerPixel*_bitsPerSample;
+    _linebytes = _samplesPerPixel * _imageWidth; // = 640
+    //_linebytes = png_get_rowbytes(png_ptr, info_ptr); = 640
+    _imageBitSize = (sizeof(uint8) * _imageWidth * _imageLength * _samplesPerPixel);
+    _imageSize = _imageWidth * _imageLength * _samplesPerPixel;
+    //printf("linebytes = %i, expected %i\n",_linebytes,png_get_ro
+    
+    
+    for (int y = 0; y<10; y++) {
+        for (int x = 0; x<40; x+=4) {
+            image[(y*40)+x+0]=0;
+            image[(y*40)+x+1]=0;
+            image[(y*40)+x+2]=0;
+            image[(y*40)+x+3]=255;
         }
     }
-    
-    return buffer;
+    return image;
 }
 
 uint32 getImageSize(void){
     return _imageSize;
 }
 
+uint32 getImageSizeInFloats(void){
+    return _imageSize*sizeof(float);
+}
+
 uint32 getImageLength(void){
+    return _imageLength;
+};
+
+uint32 getImageHeight(void){
     return _imageLength;
 };
 

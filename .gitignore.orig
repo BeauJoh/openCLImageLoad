@@ -1,3 +1,19 @@
+<<<<<<< HEAD
+.DS_Store
+*.swp
+*~.nib
+
+build/
+
+*.pbxuser
+*.perspective
+*.perspectivev3
+
+*.mode1v3
+*.mode2v3
+
+xcuserdata
+=======
 # xcode noise
 
 *.pbxuser
@@ -81,3 +97,4 @@ openCLImageLoad.xcodeproj/project.xcworkspace/xcuserdata/beau.xcuserdatad/UserIn
 
 
 .DS_Store
+>>>>>>> freeImageLessBranch

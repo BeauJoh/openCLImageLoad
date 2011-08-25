@@ -2,15 +2,20 @@
 #include "openCLUtilities.h"
 #include "RGBAUtilities.h"
 
+#include <getopt.h>
+#include <string>
 #include <iostream>
 using namespace std;
 
+// getopt argument parser variables
+string imageFileName;
+string kernelFileName;
+string outputImageFileName;
+
 // OpenCL variables
-int err, gpu;                            // error code returned from api calls
-
-size_t *globalWorksize;                  // global domain size for our calculation
-size_t *localWorksize;                       // local domain size for our calculation
-
+int err, gpu;                       // error code returned from api calls
+size_t *globalWorksize;             // global domain size for our calculation
+size_t *localWorksize;              // local domain size for our calculation
 cl_device_id device_id;             // compute device id 
 cl_context context;                 // compute context
 cl_command_queue commands;          // compute command queue
@@ -20,7 +25,82 @@ cl_sampler sampler;
 cl_mem input;                       // device memory used for the input array
 cl_mem output;                      // device memory used for the output array
 int width;
-int height;                  //input and output image specs
+int height;                         //input and output image specs
+
+static inline int parseCommandLine(int argc , char** argv){
+    {
+        int c;
+        while (true)
+        {
+            static struct option long_options[] =
+            {
+                /* These options don't set a flag.
+                 We distinguish them by their indices. */
+                {"kernel",required_argument,       0, 'k'},
+                {"image",  required_argument,       0, 'i'},
+                {"output-image", required_argument, 0, 'o'},
+                {0, 0, 0, 0}
+            };
+            /* getopt_long stores the option index here. */
+            int option_index = 0;
+            
+            c = getopt_long (argc, argv, ":k:i:o:",
+                             long_options, &option_index);
+            
+            /* Detect the end of the options. */
+            if (c == -1)
+                break;
+            
+            switch (c)
+            {
+                case 0:
+                    /* If this option set a flag, do nothing else now. */
+                    if (long_options[option_index].flag != 0)
+                        break;
+                    printf ("option %s", long_options[option_index].name);
+                    if (optarg)
+                        printf (" with arg %s", optarg);
+                    printf ("\n");
+                    break;
+                    
+                case 'i':
+                    imageFileName = optarg ;
+                    break;
+                    
+                case 'o':
+                    outputImageFileName = optarg;
+                    break;
+                    
+                case 'k':
+                    kernelFileName = optarg ;
+                    break;
+                    
+                    
+                case '?':
+                    /* getopt_long already printed an error message. */
+                    break;
+                    
+                default:
+                    ;
+                    
+            }
+        }
+        
+        
+        /* Print any remaining command line arguments (not options). */
+        if (optind < argc)
+        {
+            while (optind < argc)
+            /*
+             printf ("%s ", argv[optind]);
+             putchar ('\n');
+             */
+                optind++;
+        }
+    }
+    return 1;
+};
+
 
 void cleanKill(int errNumber){
     clReleaseMemObject(input);
@@ -33,9 +113,40 @@ void cleanKill(int errNumber){
     exit(errNumber);
 }
 
-int mainBak(int argc, char ** argv){
+int RegularImageCopyWithBuffers(int argc, char ** argv){
     
     read_png_file((char*)"rgba.png");
+    
+    width = getImageWidth();
+    height = getImageLength();
+    
+    uint8 *buffer = new uint8[getImageSizeInFloats()];    
+    memcpy(buffer, upcastToFloatAndNormalize(getImage(), getImageSize()), getImageSizeInFloats());
+    
+    SaveImage((char*)"outRGBA.png", buffer, width, height);
+    system("open outRGBA.png");
+    return 1;
+}
+
+int CreateRedImage(int argc, char ** argv){
+    parseCommandLine(argc, argv);
+    
+    setImage(createBlackTile());
+    
+    printImage(getImage(), 10*10*4);
+    
+    write_png_file((char*)outputImageFileName.c_str());
+
+    string command = "open ";
+    command += outputImageFileName;
+    system((char*)command.c_str());
+    return 1;
+}
+
+int LoadImage(int argc, char ** argv){
+    parseCommandLine(argc , argv);
+
+    read_png_file((char*)imageFileName.c_str());
     
 //    cout << "Size of image " << getImageSize() << endl;
 //
@@ -53,6 +164,9 @@ int mainBak(int argc, char ** argv){
     char *buffer = new char[getImageSizeInFloats()];    
     memcpy(buffer, upcastToFloatAndNormalize(getImage(), getImageSize()), getImageSizeInFloats());
     
+    //clear existing image to be thorough
+    clearImageBuffer();
+    
     //buffer is now populated with array of normalized floats
     setImage(downcastToByteAndDenormalize((float*)buffer, getImageSize()));
     
@@ -62,27 +176,35 @@ int mainBak(int argc, char ** argv){
     
     // write image back
     //setImage(buffer);
-    write_png_file((char*)"outRGBA.png");
+    write_png_file((char*)outputImageFileName.c_str());
     
-    read_png_file((char*)"outRGBA.png");
+    read_png_file((char*)outputImageFileName.c_str());
     
     cout << "Output image:" << endl;
     imageStatistics(getImage(), getImageSize());
     cout << endl;
     cout << endl;
 
-    
+    //printImage(getImage(), getImageSize());
     
     //SaveImage((char*)"outRGBA.png", buffer, width, height);
-    system("open rgba.png");
-    system("open outRGBA.png");
+    string command = "open ";
+    command += imageFileName;
+    
+    system((char*)command.c_str());
+
+    command = "open ";
+    command += outputImageFileName;
+    system((char*)command.c_str());
     return 1;
 }
 
-//#define USINGFREEIMAGE
+#define IMAGELOADTEST
 
 int main(int argc, char *argv[])
-{	    
+{	
+    parseCommandLine(argc , argv);
+
 	// Connect to a compute device
 	//
 	gpu = 1;
@@ -107,7 +229,8 @@ int main(int argc, char *argv[])
     
     // Load kernel source code
     //
-	char *source = load_program_source("sobel_opt1.cl");
+    //	char *source = load_program_source((char*)"sobel_opt1.cl");
+    char *source = load_program_source((char*)kernelFileName.c_str());
     if(!source)
     {
         cout << "Error: Failed to load compute program from file!" << endl;
@@ -146,10 +269,10 @@ int main(int argc, char *argv[])
 		cout << "Failed to create compute kernel!" << endl;
         cleanKill(EXIT_FAILURE);
     }
-	
-    #ifdef USINGFREEIMAGE
-        getGPUUnitSupportedImageFormats(context);
-    #endif
+    
+    // Get GPU image support, useful for debugging
+    // getGPUUnitSupportedImageFormats(context);
+    
     
     //  specify the image format that the images are represented as... 
     //  by default to support OpenCL they must support 
@@ -160,39 +283,9 @@ int main(int argc, char *argv[])
     //
     //  format is collected with the LoadImage function
     cl_image_format format; 
-    
-    
-    #ifdef USINGFREEIMAGE
-        /*----------->     FREE IMAGE REQUIRED     <-----------*/
-        input = FreeImageLoadImage(context, (char*)"rgba.png", width, height, format);
-    #else
-        input = LoadImage(context, (char*)"rgba.png", width, height, format);
-    
-        uint8* thisBuffer = new uint8[getImageSizeInFloats()];    
-    
-    
-        size_t thisOrigin[3] = { 0, 0, 0 };
-        size_t thisRegion[3] = { width, height, 1};
-    
-        cl_command_queue thisQueue = clCreateCommandQueue(
-                                                  context, 
-                                                  device_id, 
-                                                  0, 
-                                                  &err);
-    
-//        err = clEnqueueReadImage(thisQueue, input,
-//                             CL_TRUE, thisOrigin, thisRegion, getImageRowPitch(), 0, thisBuffer, 0, NULL, NULL);
-    
-        // Implicit row pitch calculation
-        //
-    err = clEnqueueReadImage(thisQueue, input,
-                             CL_TRUE, thisOrigin, thisRegion, 0, 0, thisBuffer, 0, NULL, NULL);
 
-        SaveImage((char*)"outRGBA.png", thisBuffer, width, height);
-    
-        system("open outRGBA.png");
-        return(1);
-    #endif
+    //  create input image buffer object to read results from
+    input = LoadImage(context, (char*)imageFileName.c_str(), width, height, format);
     
     //  create output buffer object, to store results
     output = clCreateImage2D(context, 
@@ -279,7 +372,7 @@ int main(int argc, char *argv[])
 //    globalWorksize[1] = globalWorksize[0];
     
     size_t localWorksize[2] = { 16, 16 };
-    size_t globalWorksize[2] =  { RoundUp(localWorksize[0], width), RoundUp(localWorksize[1], height) };
+    size_t globalWorksize[2] =  { RoundUp((int)localWorksize[0], width), RoundUp((int)localWorksize[1], height) };
     
     
     //  Start up the kernels in the GPUs
@@ -299,13 +392,7 @@ int main(int argc, char *argv[])
     
 	// Read back the results from the device to verify the output
 	//
-    #ifdef USINGFREEIMAGE
-        /*----------->     FREE IMAGE REQUIRED     <-----------*/
-        char* buffer = new char[width * height * 4];
-    #else
-        uint8* buffer = new uint8[getImageSizeInFloats()];    
-    #endif
-    
+    uint8* buffer = new uint8[getImageSizeInFloats()];        
     
     size_t origin[3] = { 0, 0, 0 };
     size_t region[3] = { width, height, 1};
@@ -316,21 +403,20 @@ int main(int argc, char *argv[])
                                                   0, 
                                                   &err);
     
+    // Read image to buffer with implicit row pitch calculation
+    //
     err = clEnqueueReadImage(queue, output,
-                             CL_TRUE, origin, region, 0, 0, buffer, 0, NULL, NULL);
+                             CL_TRUE, origin, region, getImageRowPitch(), 0, buffer, 0, NULL, NULL);
     
-    
-    #ifdef USINGFREEIMAGE
-        /*----------->     FREE IMAGE REQUIRED     <-----------*/
-        FreeImageSaveImage((char*)"outRGBA.png", buffer, width, height);
-    #else
-        SaveImage((char*)"outRGBA.png", buffer, width, height);
-    #endif
-    
-    
+    SaveImage((char*)outputImageFileName.c_str(), buffer, width, height);    
     
     cout << "RUN FINISHED SUCCESSFULLY!" << endl;
-    system("open outRGBA.png");
+    
+    string fincommand = "open ";
+    fincommand += outputImageFileName;
+    
+    system((char*)fincommand.c_str());
+    
     
     // Shutdown and cleanup
 	//

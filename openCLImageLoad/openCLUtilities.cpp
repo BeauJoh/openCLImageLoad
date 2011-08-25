@@ -213,11 +213,35 @@ cl_mem LoadImage(cl_context context, char *fileName, int &width, int &height, cl
     width = getImageWidth();
     height = getImageLength();
     
-    uint8 *buffer = new uint8[getImageSizeInFloats()];    
-    memcpy(buffer, upcastToFloatAndNormalize(getImage(), getImageSize()), getImageSizeInFloats());
+    uint8 *buffer = new uint8[getImageSize()];    
     
-    //char*buffer = new char[width * height * 4];
-    //memcpy(buffer, normalizeImage(getImage()), width*height*4*sizeof(float));
+    //
+    // As a Normalized float
+    //printImage((uint8*)upcastToFloatAndNormalize(getImage(), getImageSize()), getImageSize());
+    
+    //
+    // Done and Undone
+    // printImage(downcastToByteAndDenormalize(upcastToFloatAndNormalize(getImage(), getImageSize()), getImageSize()), getImageSize());
+
+    memcpy(buffer, getImage(), getImageSize());
+
+//    memcpy(buffer, upcastToFloatAndNormalize(getImage(), getImageSize()), getImageSizeInFloats());
+
+    //
+    // With this buffer
+    //printImage(downcastToByteAndDenormalize((float*)buffer, getImageSizeInFloats()), getImageSize());
+    
+    //test with red sample image
+//    setImage(createRedTile());
+//    
+//    width=10;
+//    height=10;
+//    uint8*buffer = new uint8[10*10*4*sizeof(float)];
+//    memcpy(buffer, upcastToFloatAndNormalize(getImage(), 10*10), 10*10*4*sizeof(float));
+    
+    //end of test with sample image
+    
+    
     
     format.image_channel_order = CL_RGBA; 
     format.image_channel_data_type = CL_UNORM_INT8;
@@ -233,6 +257,16 @@ cl_mem LoadImage(cl_context context, char *fileName, int &width, int &height, cl
                               0, 
                               buffer, 
                               &errNum);
+    
+    
+    //normalized values in buffer
+    //
+    //printImage(buffer, getImageSize());
+    
+    //unnormalized values from buffer
+    //
+    //printImage(downcastToByteAndDenormalize((float*)buffer, getImageSizeInFloats()), getImageSize());
+    
     if (errNum != CL_SUCCESS) {
         printf("Error creating CL image object\n"); 
         return 0;
@@ -240,61 +274,21 @@ cl_mem LoadImage(cl_context context, char *fileName, int &width, int &height, cl
     return clImage; 
 }
 
-cl_mem FreeImageLoadImage(cl_context context, char *fileName, int &width, int &height, cl_image_format &clImageFormat)
-{ 
-    FREE_IMAGE_FORMAT format = FreeImage_GetFileType(fileName, 0); 
-    FIBITMAP* image = FreeImage_Load(format, fileName);
-    // Convert to 32-bit image 
-    FIBITMAP* temp = image; 
-    image = FreeImage_ConvertTo32Bits(image); 
-    FreeImage_Unload(temp);
-    width = FreeImage_GetWidth(image); 
-    height = FreeImage_GetHeight(image);
-    char *buffer = new char[width * height * 4]; 
-    memcpy(buffer, FreeImage_GetBits(image), width * height * 4);
-    FreeImage_Unload(image);
-    // Create OpenCL image 
-    clImageFormat.image_channel_order = CL_RGBA; 
-    clImageFormat.image_channel_data_type = CL_UNORM_INT8;
-    
-    cl_int errNum; 
-    cl_mem clImage; 
-    clImage = clCreateImage2D(context,
-                              CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, 
-                              &clImageFormat, 
-                              width,
-                              height, 
-                              0, 
-                              buffer, 
-                              &errNum);
-    if (errNum != CL_SUCCESS) {
-        printf("Error creating CL image object\n"); 
-        return 0;
-    }
-    return clImage; 
-}
 
 bool SaveImage(char *fileName, uint8 *buffer, int width, int height) {
     //setImage((uint8*)denormalizeImage((float*)buffer));
     //write_png_file(fileName);
     
-    setImage(downcastToByteAndDenormalize((float*)buffer, getImageSize()));
+    //printImage(downcastToByteAndDenormalize((float*)buffer, getImageSizeInFloats()), getImageSize());
+    
+//    setImage(downcastToByteAndDenormalize((float*)buffer, getImageSizeInFloats()));
+    setImage(buffer);
+
+    //setImageFromFloat(downcastToByteAndDenormalize((float*)buffer, getImageSize()));
+    
     write_png_file(fileName);
     
     return true;
-}
-
-bool FreeImageSaveImage(char *fileName, char *buffer, int width, int height) {
-    FREE_IMAGE_FORMAT format = FreeImage_GetFIFFromFilename(fileName);
-    FIBITMAP *image = FreeImage_ConvertFromRawBits((BYTE*)buffer,
-                                                   width,
-                                                   height,
-                                                   width*4,
-                                                   32,
-                                                   0xFF000000,
-                                                   0x00FF0000,
-                                                   0x0000FF00);
-    return FreeImage_Save(format, image, fileName);
 }
 
 //  Round up to the nearest multiple of the group size
@@ -311,3 +305,4 @@ size_t RoundUp(int groupSize, int globalSize)   {
      	return globalSize + groupSize - r;
     }
 }
+

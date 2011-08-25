@@ -50,10 +50,12 @@ void process_file(void);
 float* normalizeImage(uint8*);
 uint8* denormalizeImage(float*);
 bool allPixelsAreNormal(uint8*);
-float* convertFromRawBits(uint8 * bits, int width, int height, unsigned bpp);
+uint8* GetRawBits(uint8 * bits, int width, int height, unsigned bpp);
 
 uint8* getImage(void);
 void setImage(uint8*);
+void setImageFromFloat(uint8* image);
+void clearImageBuffer();
 
 float* norm(float* input, uint32 imageSize);
 float* denorm(float* input, uint32 imageSize);
@@ -61,12 +63,12 @@ float* upcastToFloat(uint8* input, uint32 imageSize);
 uint8* downCastToByte(float* input, uint32 imageSize);
 float* upcastToFloatAndNormalize(uint8* input, uint32 imageSize);
 uint8* downcastToByteAndDenormalize(float* input, uint32 imageSize);
-uint32 getImageSizeInFloats(void);
+float* multiplexToFloat(uint8* data, int imageSize);
+uint8* demultToBytes(float* data, int imageSize);
 
-//old less obvious way of doing things (nested uint8*[uint8*[]]) 2D array, useless for OpenCL
-uint8* convolutedGetImage(void);
-void convolutedSetImage(uint8*);
+uint32 getImageSizeInFloats(void);
 uint32 getImageLength(void);
+uint32 getImageHeight(void);
 uint32 getImageWidth(void);
 uint32 getConfig(void);
 uint32 getBitsPerSample(void);
@@ -74,7 +76,9 @@ uint32 getSamplesPerPixel(void);
 uint32 getImageRowPitch(void);
 uint32 getImageSize(void);
 
+uint8* createBlackTile(void);
 void imageStatistics(uint8 * input, uint32 imageSize);
+void printImage(uint8 * input, uint32 imageSize);
 
 #endif
 
