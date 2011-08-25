@@ -254,7 +254,7 @@ cl_mem LoadImage(cl_context context, char *fileName, int &width, int &height, cl
                               &format, 
                               width,
                               height, 
-                              0, 
+                              getImageRowPitch(), 
                               buffer, 
                               &errNum);
     
@@ -305,4 +305,55 @@ size_t RoundUp(int groupSize, int globalSize)   {
      	return globalSize + groupSize - r;
     }
 }
+
+cl_mem LoadStackOfImages(cl_context context, char *fileName, int &width, int &height, int &depth, cl_image_format &format)
+{ 
+    generateStackListing(fileName);
+
+    depth = getImageDepth();
+
+    //read each image and add it to end of buffer
+    read_png_file(fileName);
+
+    width = getImageWidth();
+    height = getImageLength();
+    
+    uint8 *buffer = new uint8[getImageSize()];    
+
+    
+    memcpy(buffer, getImage(), getImageSize());
+    
+    
+    format.image_channel_order = CL_RGBA; 
+    format.image_channel_data_type = CL_UNORM_INT8;
+    
+    cl_int errNum; 
+    cl_mem clImage; 
+    
+    //    cl_mem clCreateImage3D (cl_context context, cl_mem_flags flags,
+    //                            const cl_image_format *image_format, size_t image_width,
+    //                            size_t image_height,
+    //                            size_t image_depth,
+    //                            size_t image_row_pitch, size_t image_slice_pitch, void *host_ptr,
+    //                            cl_int *errcode_ret)
+//    clImage = clCreateImage2D(context,
+//                              CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, 
+//                              &format, 
+//                              width,
+//                              height,
+//                              depth,
+//                              GetRowPitch(),
+//                              GetSlicePitch(),
+//                              buffer, 
+//                              &errNum);
+//    
+    
+    if (errNum != CL_SUCCESS) {
+        printf("Error creating CL image object\n"); 
+        return 0;
+    }
+    return clImage; 
+}
+
+
 

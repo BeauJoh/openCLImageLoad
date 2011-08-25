@@ -20,6 +20,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include <math.h>
+#include "FileHandler.h"
 
 #define PNG_DEBUG 3
 
@@ -50,7 +51,6 @@ void process_file(void);
 float* normalizeImage(uint8*);
 uint8* denormalizeImage(float*);
 bool allPixelsAreNormal(uint8*);
-uint8* GetRawBits(uint8 * bits, int width, int height, unsigned bpp);
 
 uint8* getImage(void);
 void setImage(uint8*);
@@ -75,6 +75,9 @@ uint32 getBitsPerSample(void);
 uint32 getSamplesPerPixel(void);
 uint32 getImageRowPitch(void);
 uint32 getImageSize(void);
+uint32 getImageDepth(void);
+
+void generateStackListing(char* filename);
 
 uint8* createBlackTile(void);
 void imageStatistics(uint8 * input, uint32 imageSize);

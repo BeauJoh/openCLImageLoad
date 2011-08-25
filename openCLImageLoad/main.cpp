@@ -26,6 +26,7 @@ cl_mem input;                       // device memory used for the input array
 cl_mem output;                      // device memory used for the output array
 int width;
 int height;                         //input and output image specs
+int depth;
 
 static inline int parseCommandLine(int argc , char** argv){
     {
@@ -113,94 +114,6 @@ void cleanKill(int errNumber){
     exit(errNumber);
 }
 
-int RegularImageCopyWithBuffers(int argc, char ** argv){
-    
-    read_png_file((char*)"rgba.png");
-    
-    width = getImageWidth();
-    height = getImageLength();
-    
-    uint8 *buffer = new uint8[getImageSizeInFloats()];    
-    memcpy(buffer, upcastToFloatAndNormalize(getImage(), getImageSize()), getImageSizeInFloats());
-    
-    SaveImage((char*)"outRGBA.png", buffer, width, height);
-    system("open outRGBA.png");
-    return 1;
-}
-
-int CreateRedImage(int argc, char ** argv){
-    parseCommandLine(argc, argv);
-    
-    setImage(createBlackTile());
-    
-    printImage(getImage(), 10*10*4);
-    
-    write_png_file((char*)outputImageFileName.c_str());
-
-    string command = "open ";
-    command += outputImageFileName;
-    system((char*)command.c_str());
-    return 1;
-}
-
-int LoadImage(int argc, char ** argv){
-    parseCommandLine(argc , argv);
-
-    read_png_file((char*)imageFileName.c_str());
-    
-//    cout << "Size of image " << getImageSize() << endl;
-//
-//    float *buffer = new float[getImageSize()];    
-//    memcpy(buffer, upcastToFloatAndNormalize(getImage(), getImageSize()), getImageSizeInFloats());
-//    
-//    //buffer is now populated with array of normalized floats
-//    setImage(downcastToByteAndDenormalize(buffer, getImageSize()));
-    cout << "Input image:" << endl;
-    imageStatistics(getImage(), getImageSize());
-    cout << endl;
-    cout << endl;
-
-    
-    char *buffer = new char[getImageSizeInFloats()];    
-    memcpy(buffer, upcastToFloatAndNormalize(getImage(), getImageSize()), getImageSizeInFloats());
-    
-    //clear existing image to be thorough
-    clearImageBuffer();
-    
-    //buffer is now populated with array of normalized floats
-    setImage(downcastToByteAndDenormalize((float*)buffer, getImageSize()));
-    
-    
-    //setImage(downCastToByte(denorm(norm(upcastToFloat(getImage(), getImageSize()),getImageSize()), getImageSize()),getImageSize()));
-    
-    
-    // write image back
-    //setImage(buffer);
-    write_png_file((char*)outputImageFileName.c_str());
-    
-    read_png_file((char*)outputImageFileName.c_str());
-    
-    cout << "Output image:" << endl;
-    imageStatistics(getImage(), getImageSize());
-    cout << endl;
-    cout << endl;
-
-    //printImage(getImage(), getImageSize());
-    
-    //SaveImage((char*)"outRGBA.png", buffer, width, height);
-    string command = "open ";
-    command += imageFileName;
-    
-    system((char*)command.c_str());
-
-    command = "open ";
-    command += outputImageFileName;
-    system((char*)command.c_str());
-    return 1;
-}
-
-#define IMAGELOADTEST
-
 int main(int argc, char *argv[])
 {	
     parseCommandLine(argc , argv);
@@ -285,7 +198,7 @@ int main(int argc, char *argv[])
     cl_image_format format; 
 
     //  create input image buffer object to read results from
-    input = LoadImage(context, (char*)imageFileName.c_str(), width, height, format);
+    input = LoadStackOfImages(context, (char*)imageFileName.c_str(), width, height, depth, format);
     
     //  create output buffer object, to store results
     output = clCreateImage2D(context, 

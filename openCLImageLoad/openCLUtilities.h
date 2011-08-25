@@ -51,6 +51,8 @@ cl_bool doesGPUSupportImageObjects(cl_device_id device_id);
 char *load_program_source(const char *filename);
 cl_bool cleanupAndKill();
 cl_mem LoadImage(cl_context context, char *fileName, int &width, int &height, cl_image_format &format);
+cl_mem LoadStackOfImages(cl_context context, char *fileName, int &width, int &height, int &depth, cl_image_format &format);
+
 bool SaveImage(char *fileName, uint8 *buffer, int width, int height);
 cl_mem FreeImageLoadImage(cl_context context, char *fileName, int &width, int &height, cl_image_format &format);
 bool FreeImageSaveImage(char *fileName, char *buffer, int width, int height);
