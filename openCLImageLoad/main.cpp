@@ -287,7 +287,7 @@ int main(int argc, char *argv[])
     
 	// Read back the results from the device to verify the output
 	//
-    uint8* buffer = new uint8[getImageSize()*depth];        
+    uint8* bigBuffer = new uint8[getImageSize()*depth];        
     
     size_t origin[3] = { 0, 0, 0 };
     size_t region[3] = { width, height, depth};
@@ -301,11 +301,37 @@ int main(int argc, char *argv[])
     // Read image to buffer with implicit row pitch calculation
     //
     err = clEnqueueReadImage(queue, output,
-                             CL_TRUE, origin, region, getImageRowPitch(), getImageSlicePitch(), buffer, 0, NULL, NULL);
+                             CL_TRUE, origin, region, getImageRowPitch(), getImageSlicePitch(), bigBuffer, 0, NULL, NULL);
     
-    printImage(buffer, getImageSize()*depth);
     
-    SaveImage((char*)outputImageFileName.c_str(), buffer, width, height);    
+    //printImage(buffer, getImageSize()*depth);
+        
+    //load all images into a buffer
+    for (int i = 0; i < depth; i++) {
+        uint8 *buffer = new uint8[getImageSize()];
+        memcpy(buffer, bigBuffer+(i*getImageSize()), getImageSize());
+        
+        string file = outputImageFileName.substr(outputImageFileName.find_last_of('/')+1);
+        string path = outputImageFileName.substr(0, outputImageFileName.find_last_of('/')+1);
+        
+        string cutDownFile = file.substr(0, file.find_last_of('.'));
+        string extension = file.substr(file.find_last_of('.'));
+        
+        
+        string newName = cutDownFile;
+        char numericalRepresentation[200];
+        sprintf(numericalRepresentation, "%d", i);
+        newName.append(numericalRepresentation);
+        newName.append(extension);
+        
+        newName = path.append(newName);
+        
+        cout << newName << endl;
+
+        SaveImage((char*)newName.c_str(), buffer, width, height);    
+        clearImageBuffer();
+    } 
+    cleanup();
     
     cout << "RUN FINISHED SUCCESSFULLY!" << endl;
     

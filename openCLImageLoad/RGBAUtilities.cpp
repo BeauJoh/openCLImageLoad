@@ -152,13 +152,15 @@ void write_png_file(char* file_name)
         abort_("[write_png_file] Error during end of write");
     
     png_write_end(png_ptr, NULL);
-    
+        
+    fclose(fp);
+}
+
+void cleanup(void){
     /* cleanup heap allocation */
     for (y=0; y<imageHeight; y++)
         free(row_pointers[y]);
     free(row_pointers);
-    
-    fclose(fp);
 }
 
 void process_file(void)

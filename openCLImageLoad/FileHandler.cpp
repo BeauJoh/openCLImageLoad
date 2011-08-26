@@ -91,3 +91,4 @@ bool areFilesLeft(void){
 int numberOfFiles(void){
     return (int)files.size();
 }
+

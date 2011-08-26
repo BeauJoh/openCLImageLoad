@@ -78,6 +78,6 @@ uint32 getImageSize(void);
 uint8* createBlackTile(void);
 void imageStatistics(uint8 * input, uint32 imageSize);
 void printImage(uint8 * input, uint32 imageSize);
-
+void cleanup(void);
 #endif
 
