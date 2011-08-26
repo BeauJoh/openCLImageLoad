@@ -20,7 +20,6 @@
 #include <string.h>
 #include <stdarg.h>
 #include <math.h>
-#include "FileHandler.h"
 
 #define PNG_DEBUG 3
 
@@ -75,9 +74,6 @@ uint32 getBitsPerSample(void);
 uint32 getSamplesPerPixel(void);
 uint32 getImageRowPitch(void);
 uint32 getImageSize(void);
-uint32 getImageDepth(void);
-
-void generateStackListing(char* filename);
 
 uint8* createBlackTile(void);
 void imageStatistics(uint8 * input, uint32 imageSize);

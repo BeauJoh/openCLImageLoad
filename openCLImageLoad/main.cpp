@@ -28,6 +28,7 @@ int width;
 int height;                         //input and output image specs
 int depth;
 
+
 static inline int parseCommandLine(int argc , char** argv){
     {
         int c;
@@ -201,12 +202,14 @@ int main(int argc, char *argv[])
     input = LoadStackOfImages(context, (char*)imageFileName.c_str(), width, height, depth, format);
     
     //  create output buffer object, to store results
-    output = clCreateImage2D(context, 
+    output = clCreateImage3D(context, 
                              CL_MEM_WRITE_ONLY, 
                              &format, 
                              width, 
                              height,
-                             0, 
+                             depth,
+                             getImageRowPitch(), 
+                             getImageSlicePitch(),
                              NULL, 
                              &err);
 
@@ -243,36 +246,13 @@ int main(int argc, char *argv[])
     err |= clSetKernelArg(kernel, 2, sizeof(cl_sampler), &sampler); 
     err |= clSetKernelArg(kernel, 3, sizeof(cl_int), &width);
     err |= clSetKernelArg(kernel, 4, sizeof(cl_int), &height);
+    err |= clSetKernelArg(kernel, 5, sizeof(cl_int), &depth);
+    //depth arg here!
     
     if(there_was_an_error(err)){
         cout << "Error: Failed to set kernel arguments! " << err << endl;
         cleanKill(EXIT_FAILURE);
     }    
-    
-	// Get the maximum work group size for executing the kernel on the device
-	//
-    //err = clGetKernelWorkGroupInfo(kernel, device_id, CL_KERNEL_WORK_GROUP_SIZE, sizeof(int) * 4 + sizeof(float) * 2, &localWorksize, NULL);
-
-	//err = clGetKernelWorkGroupInfo(kernel, device_id, CL_KERNEL_WORK_GROUP_SIZE, sizeof(unsigned short)* getImageLength()*getImageWidth(), &local, NULL);
-
-//	if (err != CL_SUCCESS)
-//	{
-//        cout << print_cl_errstring(err) << endl;
-//        if(err == CL_INVALID_VALUE){
-//            cout << "if param_name is not valid, or if size in bytes specified by param_value_size "
-//            << "is less than the size of return type as described in the table above and "
-//            << "param_value is not NULL." << endl;
-//        }
-//		cout << "Error: Failed to retrieve kernel work group info!" << err << endl;
-//		cleanKill(EXIT_FAILURE);
-//	}
-	
-	// Execute the kernel over the entire range of our 1d input data set
-	// using the maximum number of work group items for this device
-	//
-//    localWorksize = new size_t[2];
-//    globalWorksize = new size_t[2];
-
     
     // THIS IS POORLY DOCUMENTED ELSEWHERE!
     // each independed image object steam needs its own local & global data spec
@@ -284,13 +264,15 @@ int main(int argc, char *argv[])
 //    globalWorksize[0] = width*height;
 //    globalWorksize[1] = globalWorksize[0];
     
-    size_t localWorksize[2] = { 16, 16 };
-    size_t globalWorksize[2] =  { RoundUp((int)localWorksize[0], width), RoundUp((int)localWorksize[1], height) };
-    
+//    size_t localWorksize[3] = { 16, 16 , 1};
+//    size_t globalWorksize[3] =  { RoundUp((int)localWorksize[0], width), RoundUp((int)localWorksize[1], height), RoundUp((int)localWorksize[2], depth) };
+
+    size_t localWorksize[3] = { 1, 1, 1};
+    size_t globalWorksize[3] =  { getImageWidth(), getImageHeight(), depth};
     
     //  Start up the kernels in the GPUs
     //
-	err = clEnqueueNDRangeKernel(commands, kernel, 2, NULL, globalWorksize, localWorksize, 0, NULL, NULL);
+	err = clEnqueueNDRangeKernel(commands, kernel, 3, NULL, globalWorksize, localWorksize, 0, NULL, NULL);
     
 	if (there_was_an_error(err))
 	{
@@ -305,10 +287,10 @@ int main(int argc, char *argv[])
     
 	// Read back the results from the device to verify the output
 	//
-    uint8* buffer = new uint8[getImageSizeInFloats()];        
+    uint8* buffer = new uint8[getImageSize()*depth];        
     
     size_t origin[3] = { 0, 0, 0 };
-    size_t region[3] = { width, height, 1};
+    size_t region[3] = { width, height, depth};
     
     cl_command_queue queue = clCreateCommandQueue(
                                                   context, 
@@ -319,7 +301,9 @@ int main(int argc, char *argv[])
     // Read image to buffer with implicit row pitch calculation
     //
     err = clEnqueueReadImage(queue, output,
-                             CL_TRUE, origin, region, getImageRowPitch(), 0, buffer, 0, NULL, NULL);
+                             CL_TRUE, origin, region, getImageRowPitch(), getImageSlicePitch(), buffer, 0, NULL, NULL);
+    
+    printImage(buffer, getImageSize()*depth);
     
     SaveImage((char*)outputImageFileName.c_str(), buffer, width, height);    
     

@@ -17,7 +17,9 @@
 #include <iostream>
 
 
-void getListOfAssociatedFiles(char* filename);
-
+void generateListOfAssociatedFiles(char* filename);
+char* getNextFileName(void);
+bool areFilesLeft(void);
+int numberOfFiles(void);
 
 #endif

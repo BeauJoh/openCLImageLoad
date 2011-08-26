@@ -25,7 +25,7 @@ void abort_(const char * s, ...)
 
 int x, y;
 
-int imageWidth, imageHeight, imageDepth;
+int imageWidth, imageHeight;
 png_byte color_type;
 png_byte bit_depth;
 
@@ -517,15 +517,3 @@ uint32 getImageRowPitch(void){
     return _samplesPerPixel * _imageWidth;
 };
 
-void generateStackListing(char* filename){
-    getListOfAssociatedFiles(filename);
-}
-
-bool thereIsAStackOfFiles(void){
-    return true;
-}
-
-uint32 getImageDepth(void){
-    
-    return 1;
-}

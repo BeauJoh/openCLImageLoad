@@ -308,20 +308,30 @@ size_t RoundUp(int groupSize, int globalSize)   {
 
 cl_mem LoadStackOfImages(cl_context context, char *fileName, int &width, int &height, int &depth, cl_image_format &format)
 { 
-    generateStackListing(fileName);
+    generateListOfAssociatedFiles(fileName);
 
-    depth = getImageDepth();
-
-    //read each image and add it to end of buffer
-    read_png_file(fileName);
-
-    width = getImageWidth();
-    height = getImageLength();
+    depth = numberOfFiles();
     
-    uint8 *buffer = new uint8[getImageSize()];    
-
+    uint8*bigBuffer;
+    bool firstRun = true;
     
-    memcpy(buffer, getImage(), getImageSize());
+    //load all images into a buffer
+    for (int i = 0; i < numberOfFiles(); i++) {
+        read_png_file(getNextFileName());
+        width = getImageWidth();
+        height = getImageLength();
+        uint8 *buffer = new uint8[getImageSize()];
+        memcpy(buffer, getImage(), getImageSize());
+        if (firstRun) {
+            //if its the first run we don't know the dimensions of the image
+            //and thus don't know how much memory to statically allocate
+            bigBuffer = new uint8[getImageSize()*depth];
+            firstRun = false;
+        }
+        memcpy(bigBuffer+(i*getImageSize()), buffer, getImageSize());
+    } 
+    
+    //printImage(bigBuffer, getImageSize()*depth);
     
     
     format.image_channel_order = CL_RGBA; 
@@ -336,17 +346,17 @@ cl_mem LoadStackOfImages(cl_context context, char *fileName, int &width, int &he
     //                            size_t image_depth,
     //                            size_t image_row_pitch, size_t image_slice_pitch, void *host_ptr,
     //                            cl_int *errcode_ret)
-//    clImage = clCreateImage2D(context,
-//                              CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, 
-//                              &format, 
-//                              width,
-//                              height,
-//                              depth,
-//                              GetRowPitch(),
-//                              GetSlicePitch(),
-//                              buffer, 
-//                              &errNum);
-//    
+    clImage = clCreateImage3D(context,
+                              CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, 
+                              &format, 
+                              width,
+                              height,
+                              depth,
+                              getImageRowPitch(),
+                              getImageSlicePitch(),
+                              bigBuffer, 
+                              &errNum);
+    
     
     if (errNum != CL_SUCCESS) {
         printf("Error creating CL image object\n"); 
@@ -355,5 +365,7 @@ cl_mem LoadStackOfImages(cl_context context, char *fileName, int &width, int &he
     return clImage; 
 }
 
-
+size_t getImageSlicePitch(){
+    return getImageRowPitch()*getImageLength();
+}
 

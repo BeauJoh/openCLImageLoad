@@ -19,6 +19,8 @@
 #include <fcntl.h>
 #include <string.h>
 #include "RGBAUtilities.h"
+#include "FileHandler.h"
+
 
 // Special automatic include statement, 
 // openCL is dependent on specific libraries, depending on the OS
@@ -57,5 +59,6 @@ bool SaveImage(char *fileName, uint8 *buffer, int width, int height);
 cl_mem FreeImageLoadImage(cl_context context, char *fileName, int &width, int &height, cl_image_format &format);
 bool FreeImageSaveImage(char *fileName, char *buffer, int width, int height);
 size_t RoundUp(int groupSize, int globalSize);
+size_t getImageSlicePitch();
 
 #endif
