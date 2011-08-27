@@ -12,7 +12,8 @@ __kernel void sobel(__read_only image3d_t srcImg,
     
     int4 endImageCoord   = (int4) (get_global_id(0) + 1,
                                    get_global_id(1) + 1, 
-                                   get_global_id(2) + 1, 
+                                   //removed plus 1 to get indexing proper
+                                   get_global_id(2)/* + 1*/, 
                                    1);
     
     int4 outImageCoord = (int4) (get_global_id(0),

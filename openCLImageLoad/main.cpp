@@ -328,21 +328,27 @@ int main(int argc, char *argv[])
         
         cout << newName << endl;
 
-        SaveImage((char*)newName.c_str(), buffer, width, height);    
-        clearImageBuffer();
+        SaveImage((char*)newName.c_str(), buffer, width, height);   
+        
+        //clear buffer was originally used as a test to ensure new images 
+        //are being populated
+        //clearImageBuffer();
+
+        //open our new output image
+        string fincommand = "open ";
+        fincommand += newName;
+        
+        system((char*)fincommand.c_str());
+
     } 
     cleanup();
     
     cout << "RUN FINISHED SUCCESSFULLY!" << endl;
     
-    string fincommand = "open ";
-    fincommand += outputImageFileName;
-    
-    system((char*)fincommand.c_str());
     
     
     // Shutdown and cleanup
 	//
 	cleanKill(EXIT_SUCCESS);
-	return 1;
+	//return 1;
 }
