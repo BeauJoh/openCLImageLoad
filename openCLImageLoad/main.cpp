@@ -334,11 +334,6 @@ int main(int argc, char *argv[])
         //are being populated
         //clearImageBuffer();
 
-        //open our new output image
-        string fincommand = "open ";
-        fincommand += newName;
-        
-        system((char*)fincommand.c_str());
 
     } 
     cleanup();

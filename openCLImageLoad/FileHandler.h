@@ -15,11 +15,12 @@
 #include <vector>
 #include <string>
 #include <iostream>
-
+#include <sstream>
 
 void generateListOfAssociatedFiles(char* filename);
 char* getNextFileName(void);
 bool areFilesLeft(void);
 int numberOfFiles(void);
-
+void printFiles(void);
+void sortFilesNumerically(std::string name, std::string ext);
 #endif
