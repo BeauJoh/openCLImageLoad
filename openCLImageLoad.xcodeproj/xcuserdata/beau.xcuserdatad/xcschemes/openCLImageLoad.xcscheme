@@ -56,7 +56,7 @@
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-i $(PROJECT_DIR)/dataResources/in.png"
+            argument = "-i $(PROJECT_DIR)/dataResources/baby.png"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
